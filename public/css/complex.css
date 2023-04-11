@@ -1,0 +1,102 @@
+.article {
+    width: 100%;
+    max-width: 400px;
+}
+.article header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 400px;
+    padding: 50px;
+    border-radius: 16px;
+    color: #fff;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+article:hover header {
+    filter: blur(4px);
+    transition: filter 0.5s ease-in-out;
+}
+.article header .upper-header {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+}
+.article header .upper-header .mini-title {
+    font-size: 1.125rem;
+    font-weight: bold;
+    letter-spacing: 0.4rem;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+.article header .upper-header .date-since {
+    display: flex;
+    align-items: center;
+    opacity: 0.5;
+    font-size: 0.875rem;
+}
+.article header .upper-header .date-since .date-value {
+    display: inline-block;
+    padding-bottom: 2px;
+}
+.article header .upper-header .date-since svg {
+    width: 20px;
+    margin-left: 10px;
+}
+.article header .lower-header {
+    padding-top: 50px;
+}
+.article header .lower-header .tags-container {
+    display: flex;
+    align-items: center;
+    opacity: 0.75;
+    margin-bottom: 12px;
+}
+.article header .lower-header .tags-container > span:not(:nth-child(2))::before {
+    content: ", ";
+}
+.article header .lower-header .tags-container svg {
+    width: 20px;
+    margin-right: 10px;
+}
+.article header .lower-header .tags-container span {
+    font-size: 0.875rem;
+}
+.article header .lower-header .title {
+    margin: 20px 0;
+    font-size: 3rem;
+    font-weight: bold;
+    opacity: 0.9;
+}
+.article header .lower-header .subtitle {
+    margin-top: 10px;
+    opacity: 0.75;
+    line-height: 1.75;
+}
+
+@media screen and (max-width: 1024px) {
+    .article header .lower-header .subtitle {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 768px) {
+    .article header .lower-header .title {
+        word-break: break-all;
+    }
+    .article .summary {
+        flex-direction: column;
+    }
+    .article .summary .summary-item:not(:last-child) {
+        padding-bottom: 30px;
+    }
+    .article .main-.article .gallery {
+        grid-template-areas: "img1 img1" "img1 img1" "img2 img3" "img4 img5";
+    }
+}
+@media screen and (max-width: 425px) {
+    .article header .upper-header .date-since {
+        display: none;
+    }
+}
