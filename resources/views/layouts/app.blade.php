@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
     <!--begin::Head-->
     <head>
         <title>{{ config('app.name', 'Tandish') }}</title>
         <meta charset="utf-8" />
-        <!-- <meta name="description" content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
-        <meta name="keywords" content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" /> -->
+        <meta name="description" content="Search apartments, find great deals on homes for sale and manage your properties from one place.">
+        <meta name="keywords" content="real estate platform, property search, buy a home, sell a home, rental property management, real estate listings, real estate tools, home buying process, home selling process, rental property listings, real estate management, real estate search, virtual property tours, property valuation calculator, real estate agent directory, home financing assistance, rental application process, real estate market analysis, property management software, landlord resources">
+        <meta name="author" content="Tandish">
+        <meta name="thumbnail" content="{{asset('dashboard/media/logos/test.svg')}}">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <!-- <meta property="og:locale" content="en_US" />
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content="Metronic - Bootstrap 5 HTML, VueJS, React, Angular &amp; Laravel Admin Dashboard Theme" />
-        <meta property="og:url" content="https://keenthemes.com/metronic" />
-        <meta property="og:site_name" content="Keenthemes | Metronic" />
-        <link rel="canonical" href="https://preview.keenthemes.com/metronic8" /> -->
+        
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -66,30 +63,10 @@
         <script src="{{ asset('dashboard/js/scripts.bundle.js') }}"></script>
         <!--end::Global Javascript Bundle-->
 
-        @if(request()->is('login*'))
+        @if(request()->is('login*') || request()->is('/'))
         <!--begin::Page Custom Javascript(used by this page)-->
         <script src="{{ asset('dashboard/js/custom/authentication/sign-in/general.js') }}"></script>
         <!--end::Page Custom Javascript-->
-        @endif
-
-        @if(request()->is('register*'))
-        <!--begin::Page Custom Javascript(used by this page)-->
-        <script src="{{ asset('dashboard/js/custom/authentication/sign-up/general.js') }}"></script>
-        <!--end::Page Custom Javascript-->
-        @endif
-
-        @if(request()->is('business*'))
-
-        <script src="{{ asset('dashboard/js/custom/modals/create-account.js') }}"></script>
-
-        <script type="text/javascript">
-            $('#business_description').maxlength({
-                threshold: 300,
-                warningClass: "badge badge-primary",
-                limitReachedClass: "badge badge-success"
-            });
-        </script>
-        
         @endif
 
         @if(request()->is('password/reset'))

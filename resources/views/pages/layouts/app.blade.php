@@ -173,24 +173,10 @@
             });
         </script>
 
-        @if(request()->is('dashboard*'))
-
-        
-
-        @endif
-
-        @if(request()->is('business_account*'))
-
-        <!--begin::Page Custom Javascript(used by this page)-->
-        <script src="{{ asset('dashboard/js/custom/account/settings/signin-methods.js') }}"></script>
-        <script src="{{ asset('dashboard/js/custom/account/settings/profile-details.js') }}"></script>
-        <script src="{{ asset('dashboard/js/custom/account/settings/deactivate-account.js') }}"></script>
-
-        @endif
-
         @if(request()->is('subscription') || request()->is('subscription/*'))
 
-        <script src="{{ asset('dashboard/js/custom/modals/create-app.js') }} "></script>
+        <script src="{{ asset('dashboard/js/custom/modals/create-app.js') }}"></script>
+        <script src="{{ asset('dashboard/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
 
         <script type="text/javascript">
             $('#name').maxlength({
@@ -207,352 +193,96 @@
 
         </script>
 
-        @endif
-
-        @if(request()->is('listings*'))
-
-        <script src="{{ asset('js/masonry.pkgd.min.js') }} "></script>
-
         <script type="text/javascript">
-            $('.grid').masonry({
-              // options
-              itemSelector: '.grid-item',
-              gutter: 3
-            });
-        </script>
-
-        <script type="text/javascript">
-            $(document).ready(function() {
-                var input = document.getElementById("Search");
-                input.addEventListener('keyup', () => {
-                    var filter = input.value.toLowerCase();
-                    var nodes = document.getElementsByClassName('grid-item');
-
-                    for (i = 0; i < nodes.length; i++) {
-                        if (nodes[i].innerText.toLowerCase().includes(filter)) {
-                            nodes[i].style.display = "block";
-                        } else {
-                            nodes[i].style.display = "none";
-                        }
-                    }
-                });
-            });
-        </script>
-
-        <script src="https://releases.transloadit.com/uppy/v2.12.1/uppy.min.js"></script>
-
-        <!-- Uppy image setup and upload using ajax -->
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('[id*=drag-drop-area]').each(function(){
-                    
-                    var listing_id = $(this).attr('class');
-
-                    var uppy = new Uppy.Core({
-                        allowMultipleUploadBatches: true,
-                        restrictions: {
-                            maxFileSize: 100000000,
-                            // maxNumberOfFiles: 8,
-                            minNumberOfFiles: 3,
-                            allowedFileTypes: ['image/*', '.jpg', '.jpeg', '.png']
-                        }
-                    })
-                    .use(Uppy.Dashboard, {
-                        inline: true,
-                        target: "#"+$(this).attr('id')+""
-                    })
-                    .use(Uppy.XHRUpload, {
-                        endpoint: 'upload',
-                        formData: true,
-                        bundle: true,
-                        headers: {
-                            'X-CSRF-Token': " {{ csrf_token() }} "
-                        },
-                    });
-
-                    uppy.on('upload-success', (file, response) => {
-                        response.body.data.forEach(function (item, index) {
-                            console.log(listing_id);
-                            var token = $('meta[name="csrf-token"]').attr('content');
-
-                            $.ajax({
-                                url: 'attach',
-                                type: 'POST',
-                                data: { '_token' : token, item, listing_id},
-                                success: function(response) 
-                                {
-                                    console.log('Updated');
-                                },
-                                error:function (e) {
-                                    console.log(e);
-                                }
-                            });
-                        });
-
-                        window.location.reload();
-                    });
-
-
-                });
-            });
-        </script>
-
-        <!-- Submit button animation after submit -->
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('form').each(function(){
-                    $(this).submit(function (event) {
-                        if ($(this).hasClass('submitted')) {
-                            event.preventDefault();
-                        }
-                        else {
-                            $(this).find(':submit').html('<i class="las la-ellipsis-h" aria-hidden="true"></i>');
-                            $(this).addClass('submitted');
-                        }
-                    });
-                });
-            });
-        </script>
-
-        <script type="text/javascript">
-            var table = $('#kt_modal_availability_submit').on('click', function() {
-                var $this = $(this);
-                $this.button('loading');
-                setTimeout(function() {
-                   $this.button('reset');
-                }, 8000);
-            });
-        </script>
-
-        @endif
-
-        @if(request()->is('upload/*') || request()->is('listings*'))
-
-        <!--begin::Page Vendors Javascript(used by this page)-->
-        <script src="{{ asset('dashboard/plugins/custom/fslightbox/fslightbox.bundle.js') }}"></script>
-        <!--end::Page Vendors Javascript-->
-
-        @endif
-
-        @if(request()->is('complex*') || request()->is('complex/*'))
-
-        <script src="{{ asset('dashboard/js/custom/modals/create-complex.js') }} "></script>
-
-        <script type="text/javascript">
-            $(document).ready(function() {
-                var input = document.getElementById("Search");
-                input.addEventListener('keyup', () => {
-                    var filter = input.value.toLowerCase();
-                    var nodes = document.getElementsByClassName('complex-item');
-
-                    for (i = 0; i < nodes.length; i++) {
-                        if (nodes[i].innerText.toLowerCase().includes(filter)) {
-                        nodes[i].style.display = "block";
-                        } else {
-                        nodes[i].style.display = "none";
-                        }
-                    }
-                });
-            });
-        </script>
-
-        <!-- Setup select2 for all select tags -->
-        <script type="text/javascript">
-            $(document).ready(function() {
-                const selects = document.getElementsByTagName('select');
-                Array.from(selects).forEach((e) => {
-                    $(e).select2({
-                        dropdownParent: $("#kt_modal_create_app")
-                    });
-                });
-            });
-        </script>
-
-        <script type="text/javascript">
-            $('#title').maxlength({
-                threshold: 60,
-                warningClass: "badge badge-primary",
-                limitReachedClass: "badge badge-success"
-            });
-
-            $('#description').maxlength({
-                threshold: 300,
-                warningClass: "badge badge-primary",
-                limitReachedClass: "badge badge-success"
-            });
-
-            $('#location_description').maxlength({
-                threshold: 400,
-                warningClass: "badge badge-primary",
-                limitReachedClass: "badge badge-success"
-            });
-        </script>
-
-        <script type="text/javascript">
-            $('.hidden').remove();
-        </script>
-
-        @endif
-
-        @if(request()->is('appointments*'))
-
-        <!--begin::Page Vendors Javascript(used by this page)-->
-        <script src="{{ asset('dashboard/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-        <!--end::Page Vendors Javascript-->
-
-       
-        <script type="text/javascript">
-            var table = $(".schedules").DataTable({
-                "searching": true,
-                "responsive": true,
-            });
-
-            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
-              $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
-            });  
-
-            $('#search').on( 'keyup', function () {
-                table
-                    .search( this.value )
-                    .draw();
-            });
-        </script>
-
-        <!--begin::Page Vendors Javascript(used by this page)-->
-        <script src="{{ asset('dashboard/plugins/custom/fullcalendar/fullcalendar.bundle.js') }} "></script>
-        <!--end::Page Vendors Javascript-->
-
-        <script src="https://unpkg.com/@popperjs/core@2"></script>
-        <script src="https://unpkg.com/tippy.js@6"></script>
-
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $.ajax({
-                    url: '/events',
-                    type: 'GET',
-                    success: function(response) 
-                    {
-                        // Define colors
-                        var green =  KTUtil.getCssVariableValue("--bs-active-success");
-                        var red =  KTUtil.getCssVariableValue("--bs-active-danger");
-
-                        // Initialize Fullcalendar -- for more info please visit the official site: https://fullcalendar.io/demos
-                        var calendarEl = document.getElementById("calendar");
-
-                        var calendar = new FullCalendar.Calendar(calendarEl, {
-                            headerToolbar: {
-                                left: "prev,next today",
-                                center: "title",
-                                right: "dayGridMonth,timeGridWeek,timeGridDay"
-                            },
-                            height: 650,
-                            navLinks: true, // can click day/week names to navigate views
-                            businessHours: true, // display business hours
-                            editable: true,
-                            selectable: true,
-                            events:response,
-                            eventDidMount: function (info) {
-                              var tooltip = tippy(info.el, {
-                                content: "Meeting up at " + info.event.extendedProps.time + " for the listing " + info.event.extendedProps.name ,
-                                placement: "top",
-                                interactive: true,
-                                animation: 'scale-subtle',
-                                theme: 'tomato',
-                              });
-                            }
-                            });
-
-                        calendar.render();
+            $('.kt_feature_repeater_basic').each(function() {
+                $(this).repeater({
+                    initEmpty: false,
+                   
+                    show: function() {
+                        $(this).slideDown();
                     },
-                    error:function (e) {
-                        Swal.fire({
-                            text: "Sorry, looks like there are some errors detected, please try again.",
-                            icon: "error",
-                            buttonsStyling: !1,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn btn-light"
-                            }
-                        }).then((function() {
-                            document.scrollTop();
-                        }));
+
+                    hide: function(deleteElement) {
+                        $(this).slideUp(deleteElement);
                     }
                 });
             });
+
         </script>
 
         <script type="text/javascript">
-            const inputs = document.getElementsByClassName('confirm');
+            // Elements to indicate
+            var buttons = document.querySelectorAll("#kt_feautures_button");
+            // Handle button click event
+            buttons.forEach(function(button) {
+                button.addEventListener("click", function() {
+                    // Activate indicator
+                    button.setAttribute("data-kt-indicator", "on");
 
-            Array.from(inputs).forEach((e) => {
-                var max = e.getAttribute('data-max-date');
-                var min = e.getAttribute('data-min-date');
+                    let sub_id = button.getAttribute('data-sub-id');
 
-                $(e).daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    minDate: min,
-                    maxDate: max,
-                    minYear: 1901,
-                    maxYear: parseInt(moment().format("YYYY"),10)
-                });
-            });
-        </script>
+                    // Handle form submission
+                    // Get the form associated with this button using a common class
+                    var formData = $('#kt_modal_add_features_form-'+sub_id).serializeArray();
 
-        @endif
+                    // Create an empty object to store the form values
+                    var formValues = {};
 
-        @if(request()->is('billing*'))
+                    // Loop through the form data and extract the form values
+                    formData.forEach(function(input) {
+                        var inputName = input.name;
+                        var inputValue = input.value;
 
-        <script type="text/javascript">
-            Inputmask({
-                "mask" : "(999) 999-999-999"
-            }).mask("#mobile");
-        </script>
+                        // Check if the input is part of a repeated field
+                        if (inputName.indexOf('[') !== -1) {
+                            var inputNameParts = inputName.split('[');
+                            var repeatedFieldName = inputNameParts[0];
+                            var repeatedFieldIndex = inputNameParts[1].replace(']', '');
 
-        @endif
+                            // Check if the repeated field already exists in the form values
+                            if (!formValues.hasOwnProperty(repeatedFieldName)) {
+                                formValues[repeatedFieldName] = [];
+                            }
 
-        @if(request()->is('subscription*'))
+                            // Check if the repeated field index already exists in the form values
+                            if (!formValues[repeatedFieldName][repeatedFieldIndex]) {
+                                formValues[repeatedFieldName][repeatedFieldIndex] = {};
+                            }
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $(".subscription_plan_submit").on('click', function (e) {
+                            // Add the repeated field value to the form values
+                            formValues[repeatedFieldName][repeatedFieldIndex][inputNameParts[2].replace(']', '')] = inputValue;
+                        } else {
+                            // Add the input value to the form values
+                            formValues[inputName] = inputValue;
+                        }
+                    });
 
-                    var subscription_pan = $(this).attr('id');
+                    let subscription_id = $('input[name = subscription_id]').val();
+
+
                     var token = $('meta[name="csrf-token"]').attr('content');
 
                     $.ajax({
-                        url: '/subscription',
+                        url: '/feature',
                         type: 'POST',
-                        data: { '_token' : token, subscription_pan},
+                        data: { '_token' : token, formValues},
                         success: function(response) 
                         {
                             if(response.status == 200)
-                                window.location.reload();
 
-                            if(response.status == 404)
                                 Swal.fire({
-                                    text: "Sorry, "+response.message,
-                                    icon: "error",
+                                    text: "Success, "+response.message,
+                                    icon: "success",
                                     buttonsStyling: !1,
                                     confirmButtonText: "Ok, got it!",
                                     customClass: {
                                         confirmButton: "btn btn-light"
                                     }
                                 }).then((function() {
-                                    KTUtil.scrollTop()
-                                }));
-
-                            if(response.status == 401)
-                                Swal.fire({
-                                    text: "Sorry, "+response.message,
-                                    icon: "error",
-                                    buttonsStyling: !1,
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-light"
-                                    }
-                                }).then((function() {
-                                    KTUtil.scrollTop()
+                                    button.removeAttribute("data-kt-indicator");
+                                    $('#kt_modal_add_features_form-'+sub_id).trigger("reset");
+                                    $('.modal').modal('hide');
+                                    location.reload(); // reload the page
                                 }));
                         },
                         error:function (e) {
@@ -565,7 +295,7 @@
                                     confirmButton: "btn btn-light"
                                 }
                             }).then((function() {
-                                KTUtil.scrollTop()
+                                button.removeAttribute("data-kt-indicator");
                             }));
                         }
                     });
@@ -573,9 +303,13 @@
             });
         </script>
 
-
         @endif
 
+        @if(request()->is('invoice') || request()->is('invoice/*'))
+
+        <script src="{{ asset('dashboard/js/custom/apps/invoices/create.js') }}"></script>
+
+        @endif
 
     </body>
     <!--end::Body-->

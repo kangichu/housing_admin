@@ -372,8 +372,8 @@
 				<!--end::Wrapper-->
 				<!--begin::Footer-->
 				<div class="flex-column-auto pt-10 px-5" id="kt_aside_secondary_footer">
-					<a href="/listings" class="btn btn-bg-light btn-color-gray-600 btn-flex btn-active-color-primary flex-center w-100 {{ (request()->is('listings') || request()->is('upload/*') || request()->is('statistics/*') || request()->is('appointments*')) ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-trigger="hover" data-bs-offset="0,5" data-bs-dismiss-="click">
-						<span class="btn-label">Listings</span>
+					<a href="/subscription" class="btn btn-bg-light btn-color-gray-600 btn-flex btn-active-color-primary flex-center w-100 {{ (request()->is('subscription') || request()->is('subscription/*')) ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-trigger="hover" data-bs-offset="0,5" data-bs-dismiss-="click">
+						<span class="btn-label">Subscriptions</span>
 						<!--begin::Svg Icon | path: icons/duotune/general/gen005.svg-->
 						<span class="svg-icon btn-icon svg-icon-4 ms-2">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

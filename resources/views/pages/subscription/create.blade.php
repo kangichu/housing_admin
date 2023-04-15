@@ -156,6 +156,7 @@
 												<span class="required">Name</span>
 											</label>
 											<!--end::Label-->
+											<input type="hidden" name="route" value="create">
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-lg form-control-solid" id="name" name="name" maxlength="60" />
 											<!--end::Input-->
@@ -253,14 +254,15 @@
 									<div class="w-100">
 										<div class="row">
 											<div class="col-md-12">
-												<div class="rounded border p-5">
+												<div class="rounded border p-7">
 													<!--begin::Input group-->
 													<div class="fv-row">
 														<!--begin::Label-->
 														<label class="required fs-5 fw-bold mb-2">Description</label>
 														<!--end::Label-->
 														<!--begin::Input-->
-														<textarea class="form-control form-control form-control-solid mb-4" data-kt-autosize="true" id="description" id="description" name="description" maxlength="200" required></textarea >
+														<textarea class="form-control form-control-solid mb-4" data-kt-autosize="false" id="description"
+														 name="description" maxlength="200" style="height: 10em;" required></textarea >
 														<span class="fs-6 text-muted">Provide a concise explanation of this subscription</span>
 														<!--end::Input-->
 													</div>
@@ -283,10 +285,40 @@
 													<!--end::Label-->
 													<!--begin::Input-->
 													<input type="number" class="form-control form-control-lg form-control-solid" name="charge"/>
-													<div class="form-text">Format:  <code>Ksh. 00.00</code></div>
+													<div class="form-text">Format:  <code>USD. 00.00</code></div>
 													<!--end::Input-->
 												</div>
 												<!--end::Input group-->
+											</div>
+											<div class="col-md-12">
+												<div class="fv-row">
+													<!--begin::Wrapper-->
+													<div class="d-flex flex-stack">
+														<!--begin::Label-->
+														<div class="fw-bold me-5">
+															<label class="fs-6">Recommendation</label>
+															<div class="fs-7 text-muted">Is this a subscription plan you recommend?</div>
+														</div>
+														<!--end::Label-->
+														<!--begin::Checkboxes-->
+														<div class="d-flex align-items-center">
+															<!--begin::Checkbox-->
+															<label class="form-check form-check-custom form-check-solid me-10">
+																<input class="form-check-input" type="radio" name="recommend" value="yes" checked="checked">
+																<span class="form-check-label fw-bold">Yes</span>
+															</label>
+															<!--end::Checkbox-->
+															<!--begin::Checkbox-->
+															<label class="form-check form-check-custom form-check-solid">
+																<input class="form-check-input" type="radio" name="recommend" value="no">
+																<span class="form-check-label fw-bold">No</span>
+															</label>
+															<!--end::Checkbox-->
+														</div>
+														<!--end::Checkboxes-->
+													</div>
+													<!--end::Wrapper-->
+												</div>
 											</div>
 										</div>
 									</div>
@@ -299,11 +331,11 @@
 										<h1 class="fw-bolder text-dark mb-3">Success!</h1>
 										<!--end::Heading-->
 										<!--begin::Description-->
-										<div class="text-muted fw-bold fs-3">You are one step closer to publishing your listing. Please move on over to the Listing page and finalize your upload by adding in images of the listing.</div>
+										<div class="text-muted fw-bold fs-3">Your Subscription has been created Successfully.</div>
 										<!--end::Description-->
 										<!--begin::Illustration-->
 										<div class="text-center px-4 py-15">
-											<img src="{{asset('include/dashboard/media/illustrations/dozzy-1/9.png')}}" alt="" class="mw-100 mh-300px" />
+											<img src="{{asset('dashboard/media/illustrations/dozzy-1/9.png')}}" alt="" class="mw-100 mh-300px" />
 										</div>
 										<!--end::Illustration-->
 									</div>

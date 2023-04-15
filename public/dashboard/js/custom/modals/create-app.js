@@ -9,9 +9,9 @@ var KTCreateApp = function() {
             r = t.querySelector('[data-kt-stepper-action="submit"]'),
             a = t.querySelector('[data-kt-stepper-action="next"]'),
             (i = new KTStepper(t)).on("kt.stepper.changed", (function(e) {
-                4 === i.getCurrentStepIndex() ? (r.classList.remove("d-none"),
+                3 === i.getCurrentStepIndex() ? (r.classList.remove("d-none"),
                 r.classList.add("d-inline-block"),
-                a.classList.add("d-none")) : 5 === i.getCurrentStepIndex() ? (r.classList.add("d-none"),
+                a.classList.add("d-none")) : 4 === i.getCurrentStepIndex() ? (r.classList.add("d-none"),
                 a.classList.add("d-none")) : (r.classList.remove("d-inline-block"),
                 r.classList.remove("d-none"),
                 a.classList.remove("d-none"))
@@ -79,13 +79,11 @@ var KTCreateApp = function() {
 
                             let route = $('input[name = route]').val();
 
-                            let listing_id = $('input[name = listing_id]').val();
+                            let subscription_id = $('input[name = subscription_id]').val();
 
 
-                            var final_url = (route == "create") ? '/listing' : '/listing/'+listing_id;
+                            var final_url = (route == "create") ? '/subscription' : '/subscription/'+subscription_id;
                             var final_type = (route == "create") ? 'POST' : 'PUT';
-
-                            console.log(final_url);
 
                             $.ajax({
                                 url: final_url,
@@ -182,6 +180,13 @@ var KTCreateApp = function() {
                         validators: {
                             notEmpty: {
                                 message: "Your subscription charge is required"
+                            }
+                        }
+                    },
+                    recommend: {
+                        validators: {
+                            notEmpty: {
+                                message: "This is required"
                             }
                         }
                     }

@@ -57,12 +57,12 @@
 			<div class="menu-sub menu-sub-dropdown w-175px py-4">
 				<!--begin::Menu item-->
 				<div class="menu-item px-3">
-					<a href="/billing" class="menu-link px-5 {{ (request()->is('billing')) ? 'active' : '' }}">Billing</a>
+					<a href="/billing" class="menu-link px-5 {{ (request()->is('billing')) ? 'active' : '' }}">Invoices</a>
 				</div>
 				<!--end::Menu item-->
 				<!--begin::Menu item-->
 				<div class="menu-item px-3">
-					<a href="/subscription" class="menu-link px-5 {{ (request()->is('subscription')) ? 'active' : '' }}">Subscription</a>
+					<a href="/subscription" class="menu-link px-5 {{ (request()->is('subscription')) ? 'active' : '' }}">Subscriptions</a>
 				</div>
 				<!--end::Menu item-->
 			</div>

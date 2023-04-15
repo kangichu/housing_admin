@@ -2,7 +2,7 @@
 <div class="d-flex flex-shrink-0">
 	<!--begin::Create Complex-->
 	<div class="d-flex ms-3">
-		<a href="/subscription" class="btn btn-flex flex-center bg-body btn-color-gray-700 btn-active-color-primary w-40px w-md-auto h-40px px-0 px-md-6 {{ (request()->is('subscription') || request()->is('subscription/*')) ? 'active' : '' }}" tooltip="New Subscription">
+		<a href="/subscription/create" class="btn btn-flex flex-center bg-body btn-color-gray-700 btn-active-color-primary w-40px w-md-auto h-40px px-0 px-md-6 {{ (request()->is('subscription/create')) ? 'active' : '' }}" tooltip="New Subscription">
 			<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
 			<span class="svg-icon svg-icon-2 svg-icon-primary me-0 me-md-2">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

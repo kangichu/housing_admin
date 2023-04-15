@@ -1,20 +1,20 @@
-@extends('pages.business.layouts.app')
+@extends('pages.layouts.app')
 
 @section('content')
 
-<div id="kt_header" class="header">
+<div id="kt_header" class="header" data-kt-sticky="true" data-kt-sticky-name="header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
 	<!--begin::Container-->
-	<div class="container d-flex align-items-center justify-content-between" id="kt_header_container">
+	<div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
 		<!--begin::Page title-->
-		<div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+		<div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-2 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
 			<!--begin::Heading-->
-			<h1 class="d-flex flex-column text-dark fw-bolder my-0 fs-1">Edit Listing</h1>
+			<h1 class="d-flex flex-column text-dark fw-bolder my-0 fs-1">Edit Subscription</h1>
 			<!--end::Heading-->
 			<!--begin::Breadcrumb-->
 			<ul class="breadcrumb breadcrumb-dot fw-bold fs-base my-1">
 				<li class="breadcrumb-item text-muted">Home</li>
-				<li class="breadcrumb-item text-muted">Property Listing</li>
-				<li class="breadcrumb-item text-dark">Edit Listing</li>
+				<li class="breadcrumb-item text-muted">Subscription</li>
+				<li class="breadcrumb-item text-dark">Edit Subscription</li>
 			</ul>
 			<!--end::Breadcrumb-->
 		</div>
@@ -34,12 +34,12 @@
 			</div>
 			<!--end::Aside mobile toggle-->
 			<!--begin::Logo-->
-			@include('pages.business.include.mobile.mobile')
+			@include('pages.include.mobile.mobile')
 			<!--end::Logo-->
 		</div>
 		<!--end::Wrapper-->
 		<!--begin::Topbar-->
-			@include('pages.business.include.topbar.index')
+			@include('pages.include.topbar.index')
 		<!--end::Topbar-->
 	</div>
 	<!--end::Container-->
@@ -76,7 +76,7 @@
 									<!--begin::Label-->
 									<div class="stepper-label">
 										<h3 class="stepper-title">Details</h3>
-										<div class="stepper-desc">Name your Listing</div>
+										<div class="stepper-desc">Name the Subscription</div>
 									</div>
 									<!--end::Label-->
 								</div>
@@ -95,7 +95,7 @@
 									<!--begin::Label-->
 									<div class="stepper-label">
 										<h3 class="stepper-title">Description</h3>
-										<div class="stepper-desc">Provide your Listing features</div>
+										<div class="stepper-desc">Give a narrative</div>
 									</div>
 									<!--end::Label-->
 								</div>
@@ -113,31 +113,12 @@
 									<!--begin::Icon-->
 									<!--begin::Label-->
 									<div class="stepper-label">
-										<h3 class="stepper-title">Location</h3>
-										<div class="stepper-desc">Plot your listing location</div>
+										<h3 class="stepper-title">Charge</h3>
+										<div class="stepper-desc">Outline the charge</div>
 									</div>
 									<!--begin::Label-->
 								</div>
 								<!--end::Step 3-->
-								<!--begin::Step 4-->
-								<div class="stepper-item" data-kt-stepper-element="nav">
-									<!--begin::Line-->
-									<div class="stepper-line w-40px"></div>
-									<!--end::Line-->
-									<!--begin::Icon-->
-									<div class="stepper-icon w-40px h-40px">
-										<i class="stepper-check fas fa-check"></i>
-										<span class="stepper-number">4</span>
-									</div>
-									<!--end::Icon-->
-									<!--begin::Label-->
-									<div class="stepper-label">
-										<h3 class="stepper-title">Amenities</h3>
-										<div class="stepper-desc">Provide payment details</div>
-									</div>
-									<!--end::Label-->
-								</div>
-								<!--end::Step 4-->
 								<!--begin::Step 5-->
 								<div class="stepper-item" data-kt-stepper-element="nav">
 									<!--begin::Line-->
@@ -172,16 +153,14 @@
 										<div class="fv-row mb-10">
 											<!--begin::Label-->
 											<label class="d-flex align-items-center fs-5 fw-bold mb-2">
-												<span class="required">Listing Name</span>
+												<span class="required">Name</span>
 											</label>
 											<!--end::Label-->
-
 											<input type="hidden" name="route" value="edit">
 
-											<input type="hidden" name="listing_id" value="{{$Listing->id}}">
-
+											<input type="hidden" name="subscription_id" value="{{$subscription->id}}">
 											<!--begin::Input-->
-											<input type="text" class="form-control form-control-lg form-control-solid" value="{{$Listing->name}}" id="name" name="name" maxlength="60" />
+											<input type="text" class="form-control form-control-lg form-control-solid" id="name" name="name" maxlength="60" value="{{$subscription->type}}"/>
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->								
@@ -190,7 +169,7 @@
 										<div class="fv-row">
 											<!--begin::Label-->
 											<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-												<span class="required">Category</span>
+												<span class="required">Billing Category</span>
 											</label>
 											<!--end::Label-->
 											<!--begin:Options-->
@@ -217,15 +196,15 @@
 														<!--end:Icon-->
 														<!--begin:Info-->
 														<span class="d-flex flex-column">
-															<span class="fw-bolder fs-6">Rent</span>
-															<span class="fs-7 text-muted">If you have available properties up for rent</span>
+															<span class="fw-bolder fs-6">Monthly</span>
+															<span class="fs-7 text-muted">Subscription billings are aggregated and charged monthly</span>
 														</span>
 														<!--end:Info-->
 													</span>
 													<!--end:Label-->
 													<!--begin:Input-->
 													<span class="form-check form-check-custom form-check-solid">
-														<input class="form-check-input" type="radio" name="category" value="Rent" @if($Listing->category == "Rent") checked @endif  />
+														<input class="form-check-input" type="radio" name="category" value="Monthly" @if($subscription->category == "Monthly") checked @endif />
 													</span>
 													<!--end:Input-->
 												</label>
@@ -252,15 +231,15 @@
 														<!--end:Icon-->
 														<!--begin:Info-->
 														<span class="d-flex flex-column">
-															<span class="fw-bolder fs-6">Sale</span>
-															<span class="fs-7 text-muted">If you have available properties up for Sale</span>
+															<span class="fw-bolder fs-6">Annually</span>
+															<span class="fs-7 text-muted">Subscription billings are aggregated and charged annually</span>
 														</span>
 														<!--end:Info-->
 													</span>
 													<!--end:Label-->
 													<!--begin:Input-->
 													<span class="form-check form-check-custom form-check-solid">
-														<input class="form-check-input" type="radio" name="category" value="Sale" @if($Listing->category == "Sale") checked @endif />
+														<input class="form-check-input" type="radio" name="category" value="Annually" @if($subscription->category == "Annually") checked @endif />
 													</span>
 													<!--end:Input-->
 												</label>
@@ -277,148 +256,21 @@
 									<div class="w-100">
 										<div class="row">
 											<div class="col-md-12">
-												<div class="fv-row">
-													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-														<span class="required">Property Type</span>
-													</label>
-													<!--end::Label-->
+												<div class="rounded border p-7">
 													<!--begin::Input group-->
-													<div class="fv-row mb-10">
+													<div class="fv-row">
+														<!--begin::Label-->
+														<label class="required fs-5 fw-bold mb-2">Description</label>
+														<!--end::Label-->
 														<!--begin::Input-->
-														<select name="type" class="form-select form-select-solid" data-control="select2" data-hide-search="false" data-placeholder="Select Property Type" name="type">
-												    		<option value="{{$Listing->type}}">{{$Listing->type}}</option>
-												    		<option value="Apartment" @if($Listing->type == "Apartment") class="remove" @endif>Apartment</option>
-												    		<option value="House"  @if($Listing->type == "House") class="remove" @endif>House</option>
-														</select>
+														<textarea class="form-control form-control-solid mb-4" data-kt-autosize="false" id="description"
+														 name="description" maxlength="200" style="height: 10em;" required>{{$subscription->description}}</textarea >
+														<span class="fs-6 text-muted">Provide a concise explanation of this subscription</span>
 														<!--end::Input-->
 													</div>
 													<!--end::Input group-->
 												</div>
 											</div>
-											<div class="col-md-12">
-												<!--begin::Input group-->
-												<div class="fv-row">
-													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-														<span>Select Listing Complex</span>
-														<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Your listing will use the selected complex's location"></i>
-													</label>
-													<!--end::Label-->
-													<!--begin::Input group-->
-													<div class="fv-row mb-10">
-														<!--begin::Input-->
-														<select class="form-select form-select-solid county" data-control="select2" data-hide-search="false" data-placeholder="Select Complex" id="complex_id" name="complex_id">
-															@if(!empty($listing_complex))
-																<option value="{{$listing_complex->id}}">{{$listing_complex->title}}</option>
-																@if(count($complexes) > 0)
-																	@foreach($complexes as $complex)
-															    		<option id="{{$complex->slug}}" value="{{$complex->id}}" @if($complex->id == $listing_complex->id) class="remove" @endif>{{$complex->title}}</option>
-														    		@endforeach
-																@endif
-															@else
-																<option></option>
-																@if(count($complexes) > 0)
-																	@foreach($complexes as $complex)
-															    		<option id="{{$complex->slug}}" value="{{$complex->id}}">{{$complex->title}}</option>
-														    		@endforeach
-																@endif
-															@endif
-																														
-														</select>
-														<!--end::Input-->
-													</div>
-													<!--end::Input group-->
-												</div>
-												<!--end::Input group-->
-											</div>
-											<div class="col-md-4">
-												<!--begin::Input group-->
-												<div class="fv-row">
-													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-														<span class="required">Furnishing</span>
-													</label>
-													<!--end::Label-->
-													<!--begin::Input group-->
-													<div class="fv-row mb-10">
-														<!--begin::Input-->
-														<select name="furnishing" class="form-select form-select-solid county" data-control="select2" data-hide-search="false" data-placeholder="Select Furnishing" id="furnishing" name="furnishing">
-															<option value="{{$Listing->furnishing}}">{{$Listing->furnishing}}</option>
-												    		<option value="Unfurnished" @if($Listing->furnishing == 'Unfurnished') class="remove" @endif>Unfurnished</option>
-												    		<option value="Furnished" @if($Listing->furnishing == 'Furnished') class="remove" @endif>Furnished</option>
-														</select>
-														<!--end::Input-->
-													</div>
-													<!--end::Input group-->
-													<div id="map"></div>
-												</div>
-												<!--end::Input group-->
-											</div>
-											<div class="col-md-4">
-												<!--begin::Input group-->
-												<div class="fv-row">
-													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-														<span class="required">Bedrooms</span>
-													</label>
-													<!--end::Label-->
-													<!--begin::Input group-->
-													<div class="fv-row mb-10">
-														<!--begin::Input-->
-														<select name="bedrooms" class="form-select form-select-solid county" data-control="select2" data-hide-search="false" data-placeholder="How many Bedrooms" id="bedrooms" name="bedrooms">
-															<option value="{{$Listing->bedrooms}}">{{$Listing->bedrooms}}</option>
-															@if(count($bedrooms) > 0)
-																@foreach($bedrooms as $bedroom)
-														    		<option value="{{$bedroom->bedrooms}}" @if($Listing->bedrooms == $bedroom->bedrooms) class="remove" @endif>{{$bedroom->bedrooms}}</option>
-													    		@endforeach
-															@endif
-														</select>
-														<!--end::Input-->
-													</div>
-													<!--end::Input group-->
-												</div>
-												<!--end::Input group-->
-											</div>
-											<div class="col-md-4">
-												<!--begin::Input group-->
-												<div class="fv-row">
-													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-														<span class="required">Bathrooms</span>
-													</label>
-													<!--end::Label-->
-													<!--begin::Input group-->
-													<div class="fv-row mb-10">
-														<!--begin::Input-->
-														<select name="bathrooms" class="form-select form-select-solid county" data-control="select2" data-hide-search="false" data-placeholder="How many Bathrooms" id="bathrooms" name="bathrooms">
-															<option value="{{$Listing->bathrooms}}">{{$Listing->bathrooms}}</option>
-															@if(count($bathrooms) > 0)
-																@foreach($bathrooms as $bathroom)
-														    		<option value="{{$bathroom->bathrooms}}" @if($Listing->bathrooms == $bathroom->bathrooms) class="remove" @endif>{{$bathroom->bathrooms}}</option>
-													    		@endforeach
-															@endif
-														</select>
-														<!--end::Input-->
-													</div>
-													<!--end::Input group-->
-												</div>
-												<!--end::Input group-->
-											</div>
-											<div class="col-md-12">
-												<!--begin::Input group-->
-												<div class="fv-row">
-													<!--begin::Label-->
-													<label class="required fs-5 fw-bold mb-2">Floor area</label>
-													<!--end::Label-->
-													<!--begin::Input-->
-													<input type="number" class="form-control form-control-lg form-control-solid" name="sq_area" value="{{$Listing->sq_area}}"/>
-													<div class="form-text">Format:  <code>00 sqm</code></div>
-													<!--end::Input-->
-												</div>
-												<!--end::Input group-->
-											</div>
-
 										</div>
 									</div>
 								</div>
@@ -429,213 +281,68 @@
 										<div class="row">
 											<div class="col-md-12">
 												<!--begin::Input group-->
-												<div class="fv-row">
+												<div class="mb-7 fv-row">
 													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-														<span class="required">County</span>
-													</label>
+													<label class="required fs-5 fw-bold mb-2">Charge</label>
 													<!--end::Label-->
-													<!--begin::Input group-->
-													<div class="fv-row mb-5">
-														<!--begin::Input-->
-														<p>Select the county your listing is located in.</p>
-														<select class="form-select form-select-solid location" data-control="select2" data-hide-search="false" data-placeholder="Select Property Location" name="county"  id="county">
-															<option value="{{$Listing->county}}">{{$Listing->county}}</option>
-															@if(count($counties) > 0)
-																@foreach($counties as $county)
-																	<option value="{{$county->county}}">{{$county->county}}</option>
-															    @endforeach
-													    	@endif
-														</select>
-														<!--end::Input-->
-													</div>
-
-													<div class="fv-row mb-10">
-														<!--begin::Input-->
-														<p>Please specify the location from the drop down below.</p>
-														<select class="form-select form-select-solid location" data-control="select2" data-hide-search="false" data-placeholder="Select Specific Property Location"  name="county_specific" id="county_specific">
-															<option value="{{$Listing->county_specific}}">{{$Listing->county_specific}}</option>
-															@if(count($counties) > 0)
-																@foreach($wards as $ward)
-															        <option value="{{$ward->ward}}">{{$ward->ward}}</option>
-														        @endforeach
-												        	@endif
-														</select>
-														<!--end::Input-->
-													</div>
-													<!--end::Input group-->
+													<!--begin::Input-->
+													<input type="number" class="form-control form-control-lg form-control-solid" name="charge"  value="{{$subscription->amount}}"/>
+													<div class="form-text">Format:  <code>USD. 00.00</code></div>
+													<!--end::Input-->
 												</div>
 												<!--end::Input group-->
 											</div>
 											<div class="col-md-12">
-												<!--begin::Input group-->
-		                                        <div class="mb-7 fv-row">
-		                                            <!--begin::Label-->
-		                                            <label class="form-label mb-3 required ">Location Co-ordinates</label>
-		                                            <!--end::Label-->
-		                                            <div class="row">
-			                                            <div class="col-md-6">
-				                                            <!--begin::Input-->
-				                                            <input type="number" class="form-control form-control-lg form-control-solid" name="longitude" placeholder="Specify Location Longitude" value="{{$Listing->longitude}}"/>
-				                                            <!--end::Input-->
-			                                           </div>
-			                                           <div class="col-md-6">
-				                                            <!--begin::Input-->
-				                                            <input type="number" class="form-control form-control-lg form-control-solid" name="latitude" placeholder="Specify Location Latitude" value="{{$Listing->latitude}}"/>
-				                                            <!--end::Input-->
-			                                           </div>
-			                                       </div>
-		                                        </div>
-		                                        <!--end::Input group-->
-											</div>
-											<div class="col-md-12">
-												<!--begin::Input group-->
-		                                        <div class="mb-7 fv-row">
-		                                            <!--begin::Label-->
-		                                            <label class="form-label mb-3 required ">Location Description</label>
-		                                            <!--end::Label-->
-		                                            <!--begin::Input-->
-		                                            <textarea class="form-control form-control form-control-solid" data-kt-autosize="true" id="location_description" id="location_description" name="location_description" maxlength="200" rows="4" required>{{$Listing->location_description}}</textarea >
-		                                            <!--end::Input-->
-		                                        </div>
-		                                        <!--end::Input group-->
+												<div class="fv-row">
+													<!--begin::Wrapper-->
+													<div class="d-flex flex-stack">
+														<!--begin::Label-->
+														<div class="fw-bold me-5">
+															<label class="fs-6">Recommendation</label>
+															<div class="fs-7 text-muted">Is this a subscription plan you recommend?</div>
+														</div>
+														<!--end::Label-->
+														<!--begin::Checkboxes-->
+														<div class="d-flex align-items-center">
+															<!--begin::Checkbox-->
+															<label class="form-check form-check-custom form-check-solid me-10">
+																<input class="form-check-input" type="radio" name="recommend" value="yes" @if($subscription->recommended == "yes") checked="checked"  @endif />
+																<span class="form-check-label fw-bold">Yes</span>
+															</label>
+															<!--end::Checkbox-->
+															<!--begin::Checkbox-->
+															<label class="form-check form-check-custom form-check-solid">
+																<input class="form-check-input" type="radio" name="recommend" value="no" @if($subscription->recommended == "no") checked="checked"  @endif />
+																<span class="form-check-label fw-bold">No</span>
+															</label>
+															<!--end::Checkbox-->
+														</div>
+														<!--end::Checkboxes-->
+													</div>
+													<!--end::Wrapper-->
+												</div>
 											</div>
 										</div>
-										
 									</div>
 								</div>
 								<!--end::Step 3-->
 								<!--begin::Step 4-->
-								<div data-kt-stepper-element="content">
-									<div class="w-100">
-										<div class="row">
-											<div class="col-xl-6">
-												<!--begin::Input group-->
-												<div class="mb-7 fv-row">
-													<!--begin::Label-->
-													<label class="form-label mb-3 required ">Amount</label>
-													<!--end::Label-->
-													<!--begin::Input-->
-													<input type="number" class="form-control form-control-lg form-control-solid" name="amount" value="{{$Listing->amount}}"/>
-													<div class="form-text">Format:  <code>Ksh. 00.00</code></div>
-													<!--end::Input-->
-												</div>
-												<!--end::Input group-->
-											</div>
-											<div class="col-xl-6">
-												<!--begin::Input group-->
-												<div class="mb-7 fv-row">
-													<!--begin::Label-->
-													<label class="form-label mb-3 ">Viewing Fees</label>
-													<!--end::Label-->
-													<!--begin::Input-->
-													<input type="number" class="form-control form-control-lg form-control-solid" name="viewing_fee" @if($Listing->viewing_fee) value="{{$Listing->viewing_fee}}" @endif/>
-													<div class="form-text">Format:  <code>Ksh. 00.00</code></div>
-													<!--end::Input-->
-												</div>
-												<!--end::Input group-->
-											</div>
-										</div>
-										<!--begin::Input group-->
-                                        <div class="mb-7 fv-row">
-                                            <!--begin::Label-->
-                                            <label class="form-label mb-3 required ">Property Description</label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            <textarea class="form-control form-control form-control-solid" data-kt-autosize="true" id="property_description" id="property_description" name="property_description" maxlength="200" rows="4" required>{{$Listing->property_description}}</textarea >
-                                            <!--end::Input-->
-                                        </div>
-                                        <!--end::Input group-->
-										<h3 class="text-dark fw-bolder mb-7">Nearby</h3>	
-										<!--begin::Input group-->
-										<div class="d-flex flex-column mb-7 fv-row">
-											<!--begin::Label-->
-											<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-												<span>Other Amenities</span>
-												<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Press 'Enter' when you've typed an amenity to add another i.e. Hospital, School, Shopping Mall etc."></i>
-											</label>
-											<!--end::Label-->
-											<input type="text" class="form-control form-control-solid" name="nearby_amenities" id="nearby_amenities"
-											value="
-											@foreach($amenities as $amenity)
-												@if($amenity->type == 'Nearby Amenities')
-													{{$amenity->amenity}},
-												@endif
-											@endforeach
-											"
-											 />
-											<div class="form-text">Press "Enter" when you've typed an amenity to add another i.e. Hospital, School, Shopping Mall etc.</div>
-										</div>
-										<!--end::Input group-->
-										<div class="row gy-5 g-xl-8">
-											<div class="col-xl-6">
-												<h3 class="text-dark fw-bolder mb-7">External Features</h3>
-												<!--begin::Input group-->
-												<div class="d-flex flex-column mb-7 fv-row">
-													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-														<span>Other Amenities</span>
-														<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Press 'Enter' when you've typed an amenity to add another i.e. 2 Parking Spaces, Borehole, 24hr security etc."></i>
-													</label>
-													<!--end::Label-->
-													<input type="text" class="form-control form-control-solid" name="external_amenities" id="external_amenities" 
-													value=" 
-														@foreach($amenities as $amenity)
-															@if($amenity->type == 'External Amenities')
-																{{$amenity->amenity}},
-															@endif
-														@endforeach
-													"
-													/>
-													<div class="form-text">Press "Enter" when you've typed an amenity to add another i.e. 2 Parking Spaces, Borehole, 24hr security etc.</div>
-												</div>
-												<!--end::Input group-->
-											</div>
-											<div class="col-xl-6">
-												<h3 class="text-dark fw-bolder mb-7">Internal Features</h3>
-												<!--begin::Input group-->
-												<div class="d-flex flex-column mb-7 fv-row">
-													<!--begin::Label-->
-													<label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
-														<span>Other Amenities</span>
-														<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Press 'Enter' when you've typed an amenity to add another i.e. Backup Generator, Fibre Internet etc."></i>
-													</label>
-													<!--end::Label-->
-													<input type="text" class="form-control form-control-solid" name="internal_amenities" id="internal_amenities" 
-													value=" 
-														@foreach($amenities as $amenity)
-															@if($amenity->type == 'Internal Amenities')
-																{{$amenity->amenity}},
-															@endif
-														@endforeach
-													"
-													/>
-													<div class="form-text">Press "Enter" when you've typed an amenity to add another i.e. Backup Generator, Fibre Internet etc.</div>
-												</div>
-												<!--end::Input group-->
-											</div>
-										</div>
-										
-									</div>
-								</div>
-								<!--end::Step 4-->
-								<!--begin::Step 5-->
 								<div data-kt-stepper-element="content">
 									<div class="w-100 text-center">
 										<!--begin::Heading-->
 										<h1 class="fw-bolder text-dark mb-3">Success!</h1>
 										<!--end::Heading-->
 										<!--begin::Description-->
-										<div class="text-muted fw-bold fs-3">Your listing has been successfully updated. Please make your way to the listings page and add your listing images if you haven't.</div>
+										<div class="text-muted fw-bold fs-3">Your Subscription has been updated Successfully.</div>
 										<!--end::Description-->
 										<!--begin::Illustration-->
 										<div class="text-center px-4 py-15">
-											<img src="{{asset('include/dashboard/media/illustrations/dozzy-1/9.png')}}" alt="" class="mw-100 mh-300px" />
+											<img src="{{asset('dashboard/media/illustrations/dozzy-1/9.png')}}" alt="" class="mw-100 mh-300px" />
 										</div>
 										<!--end::Illustration-->
 									</div>
 								</div>
-								<!--end::Step 5-->
+								<!--end::Step 4-->
 								<!--begin::Actions-->
 								<div class="d-flex flex-stack pt-10">
 									<!--begin::Wrapper-->
