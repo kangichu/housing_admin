@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Subscription;
 use App\Models\Feature;
+use App\Models\Subscriber;
+use App\Models\User;
 
 class SubscriptionController extends Controller
 {
@@ -46,6 +48,7 @@ class SubscriptionController extends Controller
             'category' => $request->values['category'],
             'amount' => $request->values['charge'],
             'recommended' => $request->values['recommend'],
+            'status' => 'Pending',
         ]);
 
         $Subscription->save();
@@ -67,9 +70,20 @@ class SubscriptionController extends Controller
         $subscription_id = Crypt::decryptString($id);
         
         $subscription = Subscription::find($subscription_id);
+
         $features = Feature::where('subscription_id', $subscription_id)->get();
 
-        return view('pages.subscription.show')->with(array('subscription'=>$subscription, 'features'=>$features));
+        $subscribers = Subscriber::join('users','active_subscriptions.user_id','users.id')
+        ->join('businesses','users.id','businesses.user_id')
+        ->select('businesses.*','users.first_name','users.last_name','users.email','users.full_name_slug',
+        'users.mobile','active_subscriptions.status as active_subscriptions_status','active_subscriptions.created_at as active_subscriptions_created_at')
+        ->where('active_subscriptions.subscription_id', $subscription_id)->get();
+
+        $subscriptions = Subscription::get();
+        $users = User::where('account_type','Business')->get();
+
+        return view('pages.subscription.show')->with(array('subscription'=>$subscription, 'features'=>$features, 
+        'subscribers'=>$subscribers,'subscriptions'=>$subscriptions, 'users'=>$users ));
     }
 
     /**
@@ -106,6 +120,26 @@ class SubscriptionController extends Controller
 
         return response()->json([
             'message' => 'The Subscription has been successfully updated.',
+            'status' => 200
+        ]);
+    }
+
+    /**
+     * Update the status of the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function subscription_status(Request $request, $id)
+    {
+        $subscription = Subscription::find($id);
+        $subscription->status = $request->status;
+
+        $subscription->update();
+
+        return response()->json([
+            'message' => 'the status has been updated.',
             'status' => 200
         ]);
     }

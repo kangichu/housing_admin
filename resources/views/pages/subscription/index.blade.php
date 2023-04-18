@@ -174,6 +174,11 @@
 										data-bs-toggle="modal" data-bs-target="#delete-{{$key+1}}"><i class="las la-trash-alt"></i></button>
 									</div>
 								</div>
+
+								<label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
+									<span class="form-check-label ms-0 fw-bolder fs-6 text-gray-700">Active Package</span>
+									<input class="form-check-input" type="checkbox" name="subscription_status" @if($subscription->status == "Active") checked="checked" @endif data-subscription-id="{{ $subscription->id }}">
+								</label>
 							</div>
 							<!--end::Body-->
 						</div>

@@ -34,7 +34,7 @@
 
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-        @if(request()->is('appointments'))
+        @if(request()->is('subscription/*'))
 
         <!--begin::Page Vendor Stylesheets(used by this page)-->
         <link href="{{ asset('dashboard/plugins/custom/datatables/datatables.bundle.css') }} " rel="stylesheet" type="text/css" />
@@ -177,6 +177,12 @@
 
         <script src="{{ asset('dashboard/js/custom/modals/create-app.js') }}"></script>
         <script src="{{ asset('dashboard/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
+        <!--begin::Page Vendors Javascript(used by this page)-->
+		<script src="{{ asset('dashboard/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+		<!--end::Page Vendors Javascript-->
+		<!--begin::Page Custom Javascript(used by this page)-->
+		<script src="{{ asset('dashboard/js/custom/apps/subscriptions/list/export.js') }}"></script>
+		<script src="{{ asset('dashboard/js/custom/apps/subscriptions/list/list.js') }}"></script>
 
         <script type="text/javascript">
             $('#name').maxlength({
@@ -303,11 +309,51 @@
             });
         </script>
 
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('input[name=subscription_status]').click(function() {
+                    var subscriptionId = $(this).data('subscription-id');
+                    var status = $(this).prop('checked') ? 'Active' : 'Pending';
+                    $.ajax({
+                        url: '/subscription_status/' + subscriptionId,
+                        type: 'PUT',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            status: status
+                        },
+                        success: function(data) {
+                            Swal.fire({
+                                text: "Success, "+data.message,
+                                icon: "success",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-light"
+                                }
+                            }).then((function() {
+                                button.removeAttribute("data-kt-indicator");
+                                $('#kt_modal_add_features_form-'+sub_id).trigger("reset");
+                                $('.modal').modal('hide');
+                                location.reload(); // reload the page
+                            }));
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle error
+                        }
+                    });
+                });
+            });
+        </script>
+
         @endif
 
         @if(request()->is('invoice') || request()->is('invoice/*'))
 
         <script src="{{ asset('dashboard/js/custom/apps/invoices/create.js') }}"></script>
+
+        @endif
+
+        @if(request()->is('subscriber') || request()->is('subscriber/*'))
 
         @endif
 

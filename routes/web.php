@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController as Home;
 use App\Http\Controllers\Features\SubscriptionController;
 use App\Http\Controllers\Features\FeatureController;
 use App\Http\Controllers\Features\InvoiceController;
+use App\Http\Controllers\Features\SubscriberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,7 @@ use App\Http\Controllers\Features\InvoiceController;
 |
 */
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::get('/', [RouteController::class, 'guard']); 
 
@@ -35,7 +36,11 @@ Route::get('home', [Home::class, 'index'])->name('home');
 
     Route::resource('subscription', SubscriptionController::class);
 
+        Route::put('subscription_status/{id}', [SubscriptionController::class, 'subscription_status']);
+
         Route::resource('feature', FeatureController::class);
+
+        Route::resource('subscriber', SubscriberController::class);
 
 
 /*
