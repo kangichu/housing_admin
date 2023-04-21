@@ -145,13 +145,6 @@
 
         <script src="{{ asset('dashboard/js/custom/modals/two-factor-authentication.js') }}"></script>
 
-        <!--begin::Page Custom Javascript(used by this page)-->
-        @if(request()->is('statistics*'))
-
-        <script src="{{ asset('dashboard/js/custom/widgets.js') }}"></script>
-
-        @endif
-
         <script src="{{ asset('dashboard/js/custom/apps/chat/chat.js') }}"></script>
         <!-- <script src="{{ asset('dashboard/js/custom/modals/upgrade-plan.js') }}"></script> -->
         <!--end::Page Custom Javascript-->
@@ -192,6 +185,12 @@
             });
 
             $('#description').maxlength({
+                threshold: 200,
+                warningClass: "badge badge-primary",
+                limitReachedClass: "badge badge-success"
+            });
+
+            $('#footer').maxlength({
                 threshold: 200,
                 warningClass: "badge badge-primary",
                 limitReachedClass: "badge badge-success"
@@ -341,6 +340,103 @@
                             // Handle error
                         }
                     });
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            var start = moment().subtract(29, "days");
+            var end = moment();
+
+            function cb(start, end) {
+                $("#kt_daterangepicker_subscription_valid_period").html(start.format("MMMM D, YYYY") + " - " + end.format("MMMM D, YYYY"));
+            }
+
+            $("#kt_daterangepicker_subscription_valid_period").daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                "Next 7 Days": [moment(), moment().add(6, "days") ],
+                "Next 30 Days": [moment(), moment().add(29, "days")],
+                "This Month": [moment().startOf("month"), moment().endOf("month")],
+                "Next Month": [moment().add(1, "month").startOf("month"), moment().add(1, "month").endOf("month")]
+                }
+            }, cb);
+
+            cb(start, end);
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#customer').select2({
+                    dropdownParent: $("#kt_modal_add")
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            // Elements to indicate
+            var button = document.querySelector("#kt_button_add_subscriber");
+
+            // Handle button click event
+            button.addEventListener("click", function() {
+                // Activate indicator
+                button.setAttribute("data-kt-indicator", "on");
+
+                // Handle form submission
+                let values = $('#kt_modal_add_subscriber_form').serializeArray().reduce((map, input) => {
+                    let value;
+                    if (map.hasOwnProperty(input.name)) {
+                        value = Array.isArray(map[input.name]) ?
+                            map[input.name] : [map[input.name]];
+                        value.push(input.value);
+                    } else {
+                        value = input.value;
+                    }
+                    map[input.name] = value;
+                    return map;
+                }, {});
+
+                let subscription_id = $('input[name = subscription_id]').val();
+
+                var token = $('meta[name="csrf-token"]').attr('content');
+
+                $.ajax({
+                    url: '/subscriber',
+                    type: 'POST',
+                    data: { '_token' : token, values},
+                    success: function(response) 
+                    {
+                        if(response.status == 200)
+
+                            Swal.fire({
+                                text: "Success, "+response.message,
+                                icon: "success",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-light"
+                                }
+                            }).then((function() {
+                                button.removeAttribute("data-kt-indicator");
+                                $('#kt_modal_add_subscriber_form').trigger("reset");
+                                $('.modal').modal('hide');
+                                location.reload(); // reload the page
+                            }));
+                    },
+                    error:function (e) {
+                        Swal.fire({
+                            text: "Sorry, looks like there are some errors detected, please try again.",
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-light"
+                            }
+                        }).then((function() {
+                            button.removeAttribute("data-kt-indicator");
+                        }));
+                    }
                 });
             });
         </script>

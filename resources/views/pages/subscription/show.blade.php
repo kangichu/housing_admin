@@ -229,9 +229,10 @@
 									</th>
 									<th class="min-w-125px">Customer</th>
 									<th class="min-w-125px">Status</th>
+									<th class="min-w-125px">Subscription Date</th>
+									<th class="min-w-125px">Duration</th>
 									<th class="min-w-125px">Billing</th>
 									<th class="min-w-125px">Product</th>
-									<th class="min-w-125px">Created Date</th>
 									<th class="text-end min-w-70px">Actions</th>
 								</tr>
 								<!--end::Table row-->
@@ -251,7 +252,9 @@
 											<!--end::Checkbox-->
 											<!--begin::Customer=-->
 											<td>
-												<a href="/subscriber/{{$subscriber->full_name_slug}}" class="text-gray-800 text-hover-primary mb-1">{{$subscriber->first_name}} {{$subscriber->last_name}}</a>
+												<a href="/subscriber/{{$subscriber->full_name_slug}}" class="text-gray-800 text-hover-primary mb-1">
+													@if($subscriber->account_type == "agency") {{$subscriber->business_name}} @else {{$subscriber->first_name}} {{$subscriber->last_name}} @endif
+												</a>
 											</td>
 											<!--end::Customer=-->
 											<!--begin::Status=-->
@@ -259,6 +262,14 @@
 												<div class="badge badge-light-success">{{$subscriber->active_subscriptions_status}}</div>
 											</td>
 											<!--end::Status=-->
+											<!--begin::Date=-->
+											<td>{{ date('F, jS Y', strtotime($subscriber->active_subscriptions_start_date)) }}</td>
+											<!--end::Date=-->
+											<!--begin::Duration=-->
+											<td>
+												<div class="badge badge-light">{{$subscriber->duration}} Days</div>
+											</td>
+											<!--end::Duration=-->
 											<!--begin::Billing=-->
 											<td>
 												<div class="badge badge-light">Auto-debit</div>
@@ -267,9 +278,6 @@
 											<!--begin::Product=-->
 											<td>{{$subscription->type}}</td>
 											<!--end::Product=-->
-											<!--begin::Date=-->
-											<td>{{$subscriber->active_subscriptions_created_at}}</td>
-											<!--end::Date=-->
 											<!--begin::Action=-->
 											<td class="text-end">
 												<a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
@@ -418,53 +426,88 @@
 				</div>
 
 				<div class="modal fade" tabindex="-1" id="kt_modal_add">
-					<div class="modal-dialog modal-dialog-centered mw-650px">
+					<div class="modal-dialog mw-650px">
 						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title">Add Subscriber</h5>
-				
-								<!--begin::Close-->
-								<div data-bs-dismiss="modal" aria-label="Close" class="btn btn-icon btn-sm btn-active-icon-primary">
-									<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-									<span class="svg-icon svg-icon-1">
-										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-											<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-											<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-										</svg>
-									</span>
-									<!--end::Svg Icon-->
+							<form class="form" novalidate="novalidate" id="kt_modal_add_subscriber_form">
+								<div class="modal-header">
+									<h5 class="modal-title">Add Subscriber</h5>
+					
+									<!--begin::Close-->
+									<div data-bs-dismiss="modal" aria-label="Close" class="btn btn-icon btn-sm btn-active-icon-primary">
+										<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+										<span class="svg-icon svg-icon-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+												<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+												<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+											</svg>
+										</span>
+										<!--end::Svg Icon-->
+									</div>
+									<!--end::Close-->
 								</div>
-								<!--end::Close-->
-							</div>
-				
-							<div class="modal-body">
-								<div class="fv-row">
-									<!--begin::Label-->
-									<label class="d-flex align-items-center fs-5 fw-bold mb-4">
-										<span class="required">Select a customer to add:</span>
-									</label>
-									<!--end::Label-->
+					
+								<div class="modal-body">
+									<!--begin::Section-->
+									<div class="mb-7">
+										<!--begin::Title-->
+										<h5 class="mb-3">Product details</h5>
+										<!--end::Title-->
+										<!--begin::Details-->
+										<div class="mb-0">
+											<!--begin::Plan-->
+											<span class="badge badge-light-info me-2">{{$subscription->type}} Bundle</span>
+											<!--end::Plan-->
+											<!--begin::Price-->
+											<span class="fw-bold text-gray-600">${{$subscription->amount}}/ {{$subscription->category}}</span>
+											<!--end::Price-->
+										</div>
+										<!--end::Details-->
+									</div>
+									<!--end::Section-->
+									<input type="hidden" name="subscription_id" value="{{$subscription->id}}">
+									
 									<!--begin::Input group-->
-									<div class="fv-row mb-10">
-										<!--begin::Input-->
-										<select name="type" class="form-select form-select-solid" data-control="select2" data-hide-search="false" data-placeholder="Select Property Type" name="type">
-											<option></option>
-											@if(count($users) > 0)
-												@foreach($users as $user)
-													<option value="{{$user->full_name_slug}}">{{$user->first_name}} {{$user->last_name}}</option>
-												@endforeach
-											@endif
-										</select>
-										<!--end::Input-->
+									<div class="input-group mb-6">
+										<span class="input-group-text"><i class="bi bi-people fs-4"></i></span>
+										<div class="flex-grow-1">
+											<select class="form-select rounded-start-0" data-control="select2" data-placeholder="Select an option" name="customer" id='customer'>
+												<option></option>
+												@if(count($users) > 0)
+													@foreach($users as $user)
+														<option value="{{$user->full_name_slug}}">
+															@if($user->account_type == "agency") {{$user->business_name}} @else {{$user->first_name}} {{$user->last_name}} @endif
+														</option>
+													@endforeach
+												@endif
+											</select>
+										</div>
 									</div>
 									<!--end::Input group-->
+									<!--begin::Input group-->
+									<div class="input-group mb-7">
+										<span class="input-group-text"><i class="bi bi-calendar-event fs-4"></i></span>
+										<div class="flex-grow-1">
+											<input class="form-select rounded-start-0" placeholder="Pick date rage" id="kt_daterangepicker_subscription_valid_period" name="subscription_valid_period" />
+										</div>
+									</div>
+									<!--end::Input group-->
+									<div class="d-flex flex-column fv-row">
+										<textarea class="form-control form-control-solid rounded-3" placeholder="Add a subscription footer note." maxlength="200" name="footer" id="footer" data-kt-autosize="true"></textarea>
+									</div>
 								</div>
-							</div>
-				
-							<div class="modal-footer">
-								<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save changes</button>
-							</div>
+					
+								<div class="modal-footer">
+									<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-primary me-10" id="kt_button_add_subscriber" data-sub-id="{{$subscription->id}}">
+										<span class="indicator-label">
+											Submit
+										</span>
+										<span class="indicator-progress">
+											Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+										</span>
+									</button>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>

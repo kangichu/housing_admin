@@ -76,11 +76,13 @@ class SubscriptionController extends Controller
         $subscribers = Subscriber::join('users','active_subscriptions.user_id','users.id')
         ->join('businesses','users.id','businesses.user_id')
         ->select('businesses.*','users.first_name','users.last_name','users.email','users.full_name_slug',
-        'users.mobile','active_subscriptions.status as active_subscriptions_status','active_subscriptions.created_at as active_subscriptions_created_at')
+        'users.mobile','active_subscriptions.status as active_subscriptions_status','active_subscriptions.start_date as active_subscriptions_start_date'
+        ,'active_subscriptions.duration')
         ->where('active_subscriptions.subscription_id', $subscription_id)->get();
 
         $subscriptions = Subscription::get();
-        $users = User::where('account_type','Business')->get();
+
+        $users = User::join('businesses','users.id','businesses.user_id')->where('users.account_type','Business')->get();
 
         return view('pages.subscription.show')->with(array('subscription'=>$subscription, 'features'=>$features, 
         'subscribers'=>$subscribers,'subscriptions'=>$subscriptions, 'users'=>$users ));

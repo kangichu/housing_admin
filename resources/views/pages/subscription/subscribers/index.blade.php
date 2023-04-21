@@ -121,7 +121,7 @@
                                                 <!--begin::Row-->
                                                 <tr>
                                                     <td class="text-gray-400">Customer Name:</td>
-                                                    <td class="text-gray-800">{{$subscriber->first_name}} {{$subscriber->last_name}}</td>
+                                                    <td class="text-gray-800">@if($subscriber->account_type == "agency") {{$subscriber->business_name}} @else {{$subscriber->first_name}} {{$subscriber->last_name}} @endif </td>
                                                 </tr>
                                                 <!--end::Row-->
                                                 <!--begin::Row-->
@@ -246,101 +246,7 @@
                             <!--end::Card body-->
                         </div>
                         <!--end::Card-->
-                        <!--begin::Card-->
-                        <div class="card card-flush pt-3 mb-5 mb-xl-10">
-                            <!--begin::Card header-->
-                            <div class="card-header justify-content-between">
-                                <!--begin::Card title-->
-                                <div class="card-title">
-                                    <h2>Recent Events</h2>
-                                </div>
-                                <!--end::Card title-->
-                                <!--begin::Card toolbar-->
-                                <div class="card-toolbar">
-                                    <a href="#" class="btn btn-light-primary">View All Events</a>
-                                </div>
-                                <!--end::Card toolbar-->
-                            </div>
-                            <!--end::Card header-->
-                            <!--begin::Card body-->
-                            <div class="card-body pt-0">
-                                <!--begin::Table wrapper-->
-                                <div class="table-responsive">
-                                    <!--begin::Table-->
-                                    <table class="table align-middle table-row-dashed fs-6 text-gray-600 fw-bold gy-5" id="kt_table_customers_events">
-                                        <!--begin::Table body-->
-                                        <tbody>
-                                            <!--begin::Table row-->
-                                            <tr>
-                                                <!--begin::Event=-->
-                                                <td class="min-w-400px">
-                                                <a href="#" class="fw-bolder text-gray-800 text-hover-primary me-1">Max Smith</a>has made payment to
-                                                <a href="#" class="fw-bolder text-gray-800 text-hover-primary">2470-7303</a></td>
-                                                <!--end::Event=-->
-                                                <!--begin::Timestamp=-->
-                                                <td class="pe-0 text-gray-600 text-end min-w-200px">25 Oct 2021, 11:05 am</td>
-                                                <!--end::Timestamp=-->
-                                            </tr>
-                                            <!--end::Table row-->
-                                            <!--begin::Table row-->
-                                            <tr>
-                                                <!--begin::Event=-->
-                                                <td class="min-w-400px">Invoice
-                                                <a href="#" class="fw-bolder text-gray-800 text-hover-primary me-1">6963-6505</a>status has changed from
-                                                <span class="badge badge-light-warning me-1">Pending</span>to
-                                                <span class="badge badge-light-info">In Progress</span></td>
-                                                <!--end::Event=-->
-                                                <!--begin::Timestamp=-->
-                                                <td class="pe-0 text-gray-600 text-end min-w-200px">24 Jun 2021, 6:43 am</td>
-                                                <!--end::Timestamp=-->
-                                            </tr>
-                                            <!--end::Table row-->
-                                            <!--begin::Table row-->
-                                            <tr>
-                                                <!--begin::Event=-->
-                                                <td class="min-w-400px">Invoice
-                                                <a href="#" class="fw-bolder text-gray-800 text-hover-primary me-1">3095-1306</a>is
-                                                <span class="badge badge-light-info">In Progress</span></td>
-                                                <!--end::Event=-->
-                                                <!--begin::Timestamp=-->
-                                                <td class="pe-0 text-gray-600 text-end min-w-200px">10 Nov 2021, 6:05 pm</td>
-                                                <!--end::Timestamp=-->
-                                            </tr>
-                                            <!--end::Table row-->
-                                            <!--begin::Table row-->
-                                            <tr>
-                                                <!--begin::Event=-->
-                                                <td class="min-w-400px">
-                                                <a href="#" class="fw-bolder text-gray-800 text-hover-primary me-1">Melody Macy</a>has made payment to
-                                                <a href="#" class="fw-bolder text-gray-800 text-hover-primary">7845-1158</a></td>
-                                                <!--end::Event=-->
-                                                <!--begin::Timestamp=-->
-                                                <td class="pe-0 text-gray-600 text-end min-w-200px">10 Mar 2021, 10:30 am</td>
-                                                <!--end::Timestamp=-->
-                                            </tr>
-                                            <!--end::Table row-->
-                                            <!--begin::Table row-->
-                                            <tr>
-                                                <!--begin::Event=-->
-                                                <td class="min-w-400px">
-                                                <a href="#" class="fw-bolder text-gray-800 text-hover-primary me-1">Emma Smith</a>has made payment to
-                                                <a href="#" class="fw-bolder text-gray-800 text-hover-primary">7922-1131</a></td>
-                                                <!--end::Event=-->
-                                                <!--begin::Timestamp=-->
-                                                <td class="pe-0 text-gray-600 text-end min-w-200px">05 May 2021, 10:10 pm</td>
-                                                <!--end::Timestamp=-->
-                                            </tr>
-                                            <!--end::Table row-->
-                                        </tbody>
-                                        <!--end::Table body-->
-                                    </table>
-                                    <!--end::Table-->
-                                </div>
-                                <!--end::Table wrapper-->
-                            </div>
-                            <!--end::Card body-->
-                        </div>
-                        <!--end::Card-->
+                        
                         <!--begin::Card-->
                         <div class="card card-flush pt-3 mb-5 mb-xl-10">
                             <!--begin::Card header-->
@@ -356,15 +262,6 @@
                                     <ul class="nav nav-stretch fs-5 fw-bold nav-line-tabs nav-line-tabs-2x border-transparent" role="tablist">
                                         <li class="nav-item" role="presentation">
                                             <a id="kt_referrals_year_tab" class="nav-link text-active-primary active" data-bs-toggle="tab" role="tab" href="#kt_customer_details_invoices_1">This Year</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a id="kt_referrals_2019_tab" class="nav-link text-active-primary ms-3" data-bs-toggle="tab" role="tab" href="#kt_customer_details_invoices_2">2020</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a id="kt_referrals_2018_tab" class="nav-link text-active-primary ms-3" data-bs-toggle="tab" role="tab" href="#kt_customer_details_invoices_3">2019</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a id="kt_referrals_2017_tab" class="nav-link text-active-primary ms-3" data-bs-toggle="tab" role="tab" href="#kt_customer_details_invoices_4">2018</a>
                                         </li>
                                     </ul>
                                     <!--end::Tab nav-->
@@ -456,282 +353,6 @@
                                                             <span class="badge badge-light-danger">Rejected</span>
                                                         </td>
                                                         <td>May 30, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <!--end::Tbody-->
-                                            </table>
-                                            <!--end::Table-->
-                                        </div>
-                                        <!--end::Table wrapper-->
-                                    </div>
-                                    <!--end::Tab panel-->
-                                    <!--begin::Tab panel-->
-                                    <div id="kt_customer_details_invoices_2" class="tab-pane fade" role="tabpanel">
-                                        <!--begin::Table wrapper-->
-                                        <div class="table-responsive">
-                                            <!--begin::Table-->
-                                            <table id="kt_customer_details_invoices_table_2" class="table align-middle table-row-dashed fs-6 fw-bolder gs-0 gy-4 p-0 m-0">
-                                                <!--begin::Thead-->
-                                                <thead class="border-bottom border-gray-200 fs-7 text-uppercase fw-bolder">
-                                                    <tr class="text-start text-gray-400">
-                                                        <th class="min-w-100px">Order ID</th>
-                                                        <th class="min-w-100px">Amount</th>
-                                                        <th class="min-w-100px">Status</th>
-                                                        <th class="min-w-125px">Date</th>
-                                                        <th class="w-100px">Invoice</th>
-                                                    </tr>
-                                                </thead>
-                                                <!--end::Thead-->
-                                                <!--begin::Tbody-->
-                                                <tbody class="fs-6 fw-bold text-gray-600">
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">523445943</a>
-                                                        </td>
-                                                        <td class="text-danger">$-1.30</td>
-                                                        <td>
-                                                            <span class="badge badge-light-danger">Rejected</span>
-                                                        </td>
-                                                        <td>May 30, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">231445943</a>
-                                                        </td>
-                                                        <td class="text-success">$204.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-info">In progress</span>
-                                                        </td>
-                                                        <td>Apr 22, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">426445943</a>
-                                                        </td>
-                                                        <td class="text-success">$31.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-danger">Rejected</span>
-                                                        </td>
-                                                        <td>Feb 09, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">984445943</a>
-                                                        </td>
-                                                        <td class="text-success">$52.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-warning">Pending</span>
-                                                        </td>
-                                                        <td>Nov 01, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">324442313</a>
-                                                        </td>
-                                                        <td class="text-danger">$-0.80</td>
-                                                        <td>
-                                                            <span class="badge badge-light-warning">Pending</span>
-                                                        </td>
-                                                        <td>Jan 04, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <!--end::Tbody-->
-                                            </table>
-                                            <!--end::Table-->
-                                        </div>
-                                        <!--end::Table wrapper-->
-                                    </div>
-                                    <!--end::Tab panel-->
-                                    <!--begin::Tab panel-->
-                                    <div id="kt_customer_details_invoices_3" class="tab-pane fade" role="tabpanel">
-                                        <!--begin::Table wrapper-->
-                                        <div class="table-responsive">
-                                            <!--begin::Table-->
-                                            <table id="kt_customer_details_invoices_table_3" class="table align-middle table-row-dashed fs-6 fw-bolder gs-0 gy-4 p-0 m-0">
-                                                <!--begin::Thead-->
-                                                <thead class="border-bottom border-gray-200 fs-7 text-uppercase fw-bolder">
-                                                    <tr class="text-start text-gray-400">
-                                                        <th class="min-w-100px">Order ID</th>
-                                                        <th class="min-w-100px">Amount</th>
-                                                        <th class="min-w-100px">Status</th>
-                                                        <th class="min-w-125px">Date</th>
-                                                        <th class="w-100px">Invoice</th>
-                                                    </tr>
-                                                </thead>
-                                                <!--end::Thead-->
-                                                <!--begin::Tbody-->
-                                                <tbody class="fs-6 fw-bold text-gray-600">
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">426445943</a>
-                                                        </td>
-                                                        <td class="text-success">$31.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-success">Approved</span>
-                                                        </td>
-                                                        <td>Feb 09, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">984445943</a>
-                                                        </td>
-                                                        <td class="text-success">$52.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-warning">Pending</span>
-                                                        </td>
-                                                        <td>Nov 01, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">324442313</a>
-                                                        </td>
-                                                        <td class="text-danger">$-0.80</td>
-                                                        <td>
-                                                            <span class="badge badge-light-success">Approved</span>
-                                                        </td>
-                                                        <td>Jan 04, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">312445984</a>
-                                                        </td>
-                                                        <td class="text-success">$5.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-warning">Pending</span>
-                                                        </td>
-                                                        <td>Sep 15, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">102445788</a>
-                                                        </td>
-                                                        <td class="text-success">$38.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-danger">Rejected</span>
-                                                        </td>
-                                                        <td>Nov 01, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                                <!--end::Tbody-->
-                                            </table>
-                                            <!--end::Table-->
-                                        </div>
-                                        <!--end::Table wrapper-->
-                                    </div>
-                                    <!--end::Tab panel-->
-                                    <!--begin::Tab panel-->
-                                    <div id="kt_customer_details_invoices_4" class="tab-pane fade" role="tabpanel">
-                                        <!--begin::Table wrapper-->
-                                        <div class="table-responsive">
-                                            <!--begin::Table-->
-                                            <table id="kt_customer_details_invoices_table_4" class="table align-middle table-row-dashed fs-6 fw-bolder gs-0 gy-4 p-0 m-0">
-                                                <!--begin::Thead-->
-                                                <thead class="border-bottom border-gray-200 fs-7 text-uppercase fw-bolder">
-                                                    <tr class="text-start text-gray-400">
-                                                        <th class="min-w-100px">Order ID</th>
-                                                        <th class="min-w-100px">Amount</th>
-                                                        <th class="min-w-100px">Status</th>
-                                                        <th class="min-w-125px">Date</th>
-                                                        <th class="w-100px">Invoice</th>
-                                                    </tr>
-                                                </thead>
-                                                <!--end::Thead-->
-                                                <!--begin::Tbody-->
-                                                <tbody class="fs-6 fw-bold text-gray-600">
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">102445788</a>
-                                                        </td>
-                                                        <td class="text-success">$38.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-success">Approved</span>
-                                                        </td>
-                                                        <td>Nov 01, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">423445721</a>
-                                                        </td>
-                                                        <td class="text-danger">$-2.60</td>
-                                                        <td>
-                                                            <span class="badge badge-light-success">Approved</span>
-                                                        </td>
-                                                        <td>Oct 24, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">102445788</a>
-                                                        </td>
-                                                        <td class="text-success">$38.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-info">In progress</span>
-                                                        </td>
-                                                        <td>Nov 01, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">423445721</a>
-                                                        </td>
-                                                        <td class="text-danger">$-2.60</td>
-                                                        <td>
-                                                            <span class="badge badge-light-warning">Pending</span>
-                                                        </td>
-                                                        <td>Oct 24, 2020</td>
-                                                        <td class="">
-                                                            <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <a href="#" class="text-gray-600 text-hover-primary">426445943</a>
-                                                        </td>
-                                                        <td class="text-success">$31.00</td>
-                                                        <td>
-                                                            <span class="badge badge-light-danger">Rejected</span>
-                                                        </td>
-                                                        <td>Feb 09, 2020</td>
                                                         <td class="">
                                                             <button class="btn btn-sm btn-light btn-active-light-primary">Download</button>
                                                         </td>
@@ -854,7 +475,7 @@
                                         <!--begin::Row-->
                                         <tr class="">
                                             <td class="text-gray-400">Started:</td>
-                                            <td class="text-gray-800">{{ \Carbon\Carbon::parse($subscriber->active_subscriptions_created_at)->format('d M Y') }}</td>
+                                            <td class="text-gray-800">{{ \Carbon\Carbon::parse($subscriber->active_subscriptions_start_date)->format('d M Y') }}</td>
                                         </tr>
                                         <!--end::Row-->
                                         <!--begin::Row-->
@@ -868,7 +489,7 @@
                                         <!--begin::Row-->
                                         <tr class="">
                                             <td class="text-gray-400">Next Invoice:</td>
-                                            <td class="text-gray-800">{{ \Carbon\Carbon::parse($subscriber->expiry_date_time)->format('d M Y') }}
+                                            <td class="text-gray-800">{{ \Carbon\Carbon::parse($subscriber->end_date)->format('d M Y') }}
                                             </td>
                                         </tr>
                                         <!--end::Row-->
