@@ -92,6 +92,34 @@ class FeatureController extends Controller
     }
 
     /**
+     * Bulk remove the specified resource from storage.
+     *
+     * @param  \App\Models\Feature  $feature
+     * @return \Illuminate\Http\Response
+     */
+    public function bulk_destroy(Request $request)
+    {
+        $features = $request->values;
+
+        if (is_array($features['feature'])) {
+            foreach($features['feature'] as $feature)
+            {
+                $this_feature = Feature::find($feature);
+                $this_feature->delete();  
+            }
+        }else{
+            $this_feature = Feature::find($features['feature']);
+            $this_feature->delete();  
+        }
+       
+
+        return response()->json([
+            'message' => 'your features have been deleted.',
+            'status' => 200
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Feature  $feature
@@ -101,4 +129,5 @@ class FeatureController extends Controller
     {
         //
     }
+    
 }

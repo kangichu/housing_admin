@@ -232,7 +232,6 @@
 									<th class="min-w-125px">Subscription Date</th>
 									<th class="min-w-125px">Duration</th>
 									<th class="min-w-125px">Billing</th>
-									<th class="min-w-125px">Product</th>
 									<th class="text-end min-w-70px">Actions</th>
 								</tr>
 								<!--end::Table row-->
@@ -275,9 +274,6 @@
 												<div class="badge badge-light">Auto-debit</div>
 											</td>
 											<!--end::Billing=-->
-											<!--begin::Product=-->
-											<td>{{$subscription->type}}</td>
-											<!--end::Product=-->
 											<!--begin::Action=-->
 											<td class="text-end">
 												<a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions

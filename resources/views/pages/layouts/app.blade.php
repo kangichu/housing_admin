@@ -441,6 +441,263 @@
             });
         </script>
 
+        <script type="text/javascript">
+            $(document).ready(function() {
+                // create selectButton and add click event listener
+                $(document).on('click', '[id^="selectButton"]', function() {
+                    var featureId = $(this).closest(".features").attr("id");
+                    var $inputs = $("#"+featureId+" input[type='checkbox']");
+                    var allChecked = $inputs.length === $inputs.filter(":checked").length;
+                    $inputs.prop("checked", !allChecked);
+                    toggleButtonVisibility(featureId);
+                });
+
+                // add click event listener to checkboxes
+                $(document).on('click', ".features input[type='checkbox']", function() {
+                    var featureId = $(this).closest(".features").attr("id");
+                    toggleButtonVisibility(featureId);
+                });
+
+                // toggle selectButton and deleteButton visibility
+                function toggleButtonVisibility(featureId) {
+                    var $selectButton = $("#"+featureId+" [id^='selectButton']");
+                    var $deleteButton = $("#"+featureId+" [id^='deleteButton']");
+                    var anyChecked = $("#"+featureId+" input[type='checkbox']:checked").length > 0;
+                    if (anyChecked) {
+                        $deleteButton.show();
+                    } else {
+                        $deleteButton.hide();
+                    }
+                    if ($("#"+featureId+" input[type='checkbox']").length === $("#"+featureId+" input[type='checkbox']:checked").length) {
+                        $selectButton.prop("checked", true);
+                    } else {
+                        $selectButton.prop("checked", false);
+                    }
+                }
+
+
+                // hide deleteButton by default
+                $("[id^='deleteButton']").hide();
+
+                // show/hide selectButton and deleteButton on page load
+                $(".features").each(function() {
+                    toggleButtonVisibility($(this).attr("id"));
+                });
+            });
+
+        </script>
+
+        <script type="text/javascript">
+            // Add event listener to all buttons with class delete_selected_features
+            var buttons = document.querySelectorAll(".delete_selected_features");
+            buttons.forEach(function(button) {
+                button.addEventListener("click", function() {
+
+                    // Get the dynamic value from the id attribute
+                    var dynamicValue = button.id.split("-")[1];
+                    button.setAttribute("data-kt-indicator", "on");
+                    console.log($('#form-'+dynamicValue));
+                    // Handle form submission
+                    let values = $('#form-'+dynamicValue).serializeArray().reduce((map, input) => {
+                        let value;
+                        if (map.hasOwnProperty(input.name)) {
+                            value = Array.isArray(map[input.name]) ?
+                                map[input.name] : [map[input.name]];
+                            value.push(input.value);
+                        } else {
+                            value = input.value;
+                        }
+                        map[input.name] = value instanceof Array && value.length === 1 ? value[0] : value;
+                        return map;
+                    }, {});
+
+                    console.log(values);
+
+
+                    // Your code to delete selected features using dynamicValue goes here
+                    var token = $('meta[name="csrf-token"]').attr('content');
+
+                    $.ajax({
+                        url: '/bulk/feature/delete',
+                        type: 'POST',
+                        data: { '_token' : token, values},
+                        success: function(response) 
+                        {
+                            if(response.status == 200)
+                                Swal.fire({
+                                    text: "Success, "+response.message,
+                                    icon: "success",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-light"
+                                    }
+                                }).then((function() {
+                                    button.removeAttribute("data-kt-indicator");
+                                    $('#delete-selected').modal('hide');
+                                    location.reload(); // reload the page
+                                }));
+                        },
+                        error:function (e) {
+                            Swal.fire({
+                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                icon: "error",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-light"
+                                }
+                            }).then((function() {
+                                button.removeAttribute("data-kt-indicator");
+                            }));
+                        }
+                    });
+
+                });
+            });
+
+        </script>
+
+        <script type="text/javascript">
+            // Elements to indicate
+            var buttons = document.querySelectorAll("#kt_limitations_button");
+
+            // Handle button click event
+            buttons.forEach(function(button) {
+                button.addEventListener("click", function() {
+                    // Activate indicator
+                    button.setAttribute("data-kt-indicator", "on");
+
+                    let sub_id = button.getAttribute('data-sub-id');
+
+                    // Handle form submission
+                    // Get the form associated with this button using a common class
+                    var formData = $('#kt_modal_add_limitations_form-'+sub_id).serializeArray();
+
+                    // Create an empty object to store the form values
+                    var formValues = {};
+
+                    // Loop through the form data and extract the form values
+                    var allFieldsFilled = true; // flag to check if all form fields are filled
+                    formData.forEach(function(input) {
+                        var inputName = input.name;
+                        var inputValue = input.value;
+
+                        // Check if the input is part of a repeated field
+                        if (inputName.indexOf('[') !== -1) {
+                            var inputNameParts = inputName.split('[');
+                            var repeatedFieldName = inputNameParts[0];
+                            var repeatedFieldIndex = inputNameParts[1].replace(']', '');
+
+                            // Check if the repeated field already exists in the form values
+                            if (!formValues.hasOwnProperty(repeatedFieldName)) {
+                                formValues[repeatedFieldName] = [];
+                            }
+
+                            // Check if the repeated field index already exists in the form values
+                            if (!formValues[repeatedFieldName][repeatedFieldIndex]) {
+                                formValues[repeatedFieldName][repeatedFieldIndex] = {};
+                            }
+
+                            // Add the repeated field value to the form values
+                            formValues[repeatedFieldName][repeatedFieldIndex][inputNameParts[2].replace(']', '')] = inputValue;
+                        } else {
+                            // Add the input value to the form values
+                            formValues[inputName] = inputValue;
+                        }
+
+                        // check if the input field is empty
+                        if (inputValue === '') {
+                            allFieldsFilled = false;
+                            return false; // exit the loop if a field is empty
+                        }
+                    });
+
+                    var form = $('#kt_modal_add_limitations_form-' + sub_id);
+
+                    if (allFieldsFilled) {
+
+                        console.log(formValues);
+
+                        let subscription_id = $('input[name = subscription_id]').val();
+
+                        var token = $('meta[name="csrf-token"]').attr('content');
+
+                        $.ajax({
+                            url: '/subscription_limits',
+                            type: 'POST',
+                            data: { '_token' : token, formValues},
+                            success: function(response) 
+                            {
+                                if(response.status == 200)
+
+                                    Swal.fire({
+                                        text: "Success, "+response.message,
+                                        icon: "success",
+                                        buttonsStyling: !1,
+                                        confirmButtonText: "Ok, got it!",
+                                        customClass: {
+                                            confirmButton: "btn btn-light"
+                                        }
+                                    }).then((function() {
+                                        button.removeAttribute("data-kt-indicator");
+                                        $('#kt_modal_add_features_form-'+sub_id).trigger("reset");
+                                        $('.modal').modal('hide');
+                                        location.reload(); // reload the page
+                                    }));
+                            },
+                            error:function (e) {
+                                Swal.fire({
+                                    text: "Sorry, looks like there are some errors detected, please try again.",
+                                    icon: "error",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-light"
+                                    }
+                                }).then((function() {
+                                    button.removeAttribute("data-kt-indicator");
+                                }));
+                            }
+                        });
+                    } else{
+                        Swal.fire({
+                            text: "Sorry, looks like there are some empty fields, please fill them.",
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-light"
+                            }
+                        }).then((function() {
+
+                            button.removeAttribute("data-kt-indicator");
+                           
+                            form.find(':input[required]:not(:disabled)').each(function() {
+                                if ($(this).val() === '') {
+                                    $(this).addClass('is-invalid');
+                                }
+                            });
+                        }));
+                    }
+
+                    var inputs = document.querySelectorAll("#kt_modal_add_limitations_form-" + sub_id + " input");
+                    inputs.forEach(function(input) {
+                        input.addEventListener("input", function() {
+                            // Remove existing is-invalid class
+                            input.classList.remove("is-invalid");
+
+                            // Check if input is empty
+                            if (input.value.trim() === "") {
+                                // Add is-invalid class
+                                input.classList.add("is-invalid");
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
+
         @endif
 
         @if(request()->is('invoice') || request()->is('invoice/*'))

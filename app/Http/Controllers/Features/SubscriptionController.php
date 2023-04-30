@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Features;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use App\Models\Subscription;
 use App\Models\Feature;
 use App\Models\Subscriber;
@@ -20,8 +22,10 @@ class SubscriptionController extends Controller
     public function index()
     {
         $subscriptions = Subscription::get();
+        $features = Feature::get();
+        $limits = DB::table('subscription_plan_limitations')->get();
 			
-        return view('pages.subscription.index')->with(array('subscriptions'=>$subscriptions));
+        return view('pages.subscription.index')->with(array('subscriptions'=>$subscriptions, 'features'=>$features, 'limits'=>$limits));
     }
 
     /**
@@ -139,6 +143,49 @@ class SubscriptionController extends Controller
         $subscription->status = $request->status;
 
         $subscription->update();
+
+        return response()->json([
+            'message' => 'the status has been updated.',
+            'status' => 200
+        ]);
+    }
+
+    /**
+     * Add the limits of the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function subscription_limits(Request $request)
+    {
+        $subscription_id = $request->formValues['subscription_id'];
+        DB::table('subscription_plan_limitations')->where('subscription_id', $subscription_id)->delete();
+        $listing = $request->formValues['Listing'];
+        $complex = $request->formValues['Complex'];
+
+        $types = [
+            [
+                'type' => 'Listing',
+                'limit' => $listing,
+
+            ],
+            [
+                'type' => 'Complex',
+                'limit' => $complex,
+            ],
+        ];
+
+        $current_date_time = Carbon::now();
+
+        foreach($types as $type)
+        {
+            DB::insert('insert into subscription_plan_limitations 
+                (`type`, `limit`, `subscription_id`, `created_at`, `updated_at`) 
+                values (?, ?, ?, ?, ?)', [$type['type'], $type['limit'], $subscription_id, $current_date_time->format('Y-m-d H:i:s'), 
+                $current_date_time->format('Y-m-d H:i:s')]);
+
+        }
 
         return response()->json([
             'message' => 'the status has been updated.',

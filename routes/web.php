@@ -38,7 +38,11 @@ Route::get('home', [Home::class, 'index'])->name('home');
 
         Route::put('subscription_status/{id}', [SubscriptionController::class, 'subscription_status']);
 
+        Route::post('subscription_limits', [SubscriptionController::class, 'subscription_limits']);
+
         Route::resource('feature', FeatureController::class);
+
+            Route::post('bulk/feature/delete', [FeatureController::class, 'bulk_destroy']); // Deletes bulk Bookmarks
 
         Route::resource('subscriber', SubscriberController::class);
 
