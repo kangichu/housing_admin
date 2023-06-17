@@ -9,6 +9,7 @@ use App\Http\Controllers\Features\SubscriptionController;
 use App\Http\Controllers\Features\FeatureController;
 use App\Http\Controllers\Features\InvoiceController;
 use App\Http\Controllers\Features\SubscriberController;
+use App\Http\Controllers\Features\DescriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,3 +55,12 @@ Route::get('home', [Home::class, 'index'])->name('home');
 */
 
     Route::resource('invoice', InvoiceController::class); 
+
+
+/*
+|--------------------------------------------------------------------------
+| Descriptions
+|--------------------------------------------------------------------------
+*/
+
+    Route::resource('description', DescriptionController::class); 
