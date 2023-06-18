@@ -63,4 +63,4 @@ Route::get('home', [Home::class, 'index'])->name('home');
 |--------------------------------------------------------------------------
 */
 
-    Route::resource('description', DescriptionController::class); 
+    Route::resource('descriptions', DescriptionController::class); 

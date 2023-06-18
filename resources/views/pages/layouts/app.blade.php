@@ -706,7 +706,162 @@
 
         @endif
 
-        @if(request()->is('subscriber') || request()->is('subscriber/*'))
+        @if(request()->is('descriptions'))
+
+        <!--CKEditor Build Bundles:: Only include the relevant bundles accordingly-->
+        <script src="{{ asset('dashboard/plugins/custom/ckeditor/ckeditor-classic.bundle.js') }}"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                // Get the dropdown select input
+                const dropdown = $('select[name="type"]');
+
+                // Get the 3 divs with the class name "non-commercial"
+                const newTypeContainer = $('#newTypeContainer');
+                newTypeContainer.hide();
+
+                // Add an event listener to the dropdown select input
+                dropdown.on("change", function() {
+                    console.log($(this).val());
+
+                    // If the selected option is "Commercial Unit"
+                    if ($(this).val() === "Other") {
+                        // Hide the 3 divs with fadeOut animation
+                        newTypeContainer.show(); // Adjust the animation speed as needed
+                    } else {
+                        // Show the 3 divs with fadeIn animation
+                        newTypeContainer.hide(); // Adjust the animation speed as needed
+                    }
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            ClassicEditor
+            .create(document.querySelector('#description'))
+            .then(editor => instance = editor);
+
+            // Element to indecate
+            var button = document.querySelector("#kt_button_description");
+
+            // Handle button click event
+            button.addEventListener("click", function() {
+                // Activate indicator
+                button.setAttribute("data-kt-indicator", "on");
+
+                let values = $('#kt_modal_add_description_form').serializeArray().reduce((map, input) => {
+                    let value;
+                    if (map.hasOwnProperty(input.name)) {
+                        value = Array.isArray(map[input.name]) ?
+                            map[input.name] : [map[input.name]];
+                        value.push(input.value);
+                    } else {
+                        value = input.value;
+                    }
+                    map[input.name] = value;
+                    return map;
+                }, {});
+
+                var description = instance.getData();
+
+                var token = $('meta[name="csrf-token"]').attr('content');
+
+                $.ajax({
+                    url: 'descriptions',
+                    type: 'POST',
+                    data: { '_token' : token, values, description},
+                    success: function(response) 
+                    {
+                        if(response.status == 200)
+                            Swal.fire({
+                                text: "Success, "+response.message,
+                                icon: "success",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-light"
+                                }
+                            }).then((function() {
+                                button.removeAttribute("data-kt-indicator");
+                                location.reload(); // reload the page
+                            }));
+                    },
+                    error:function (e) {
+                        Swal.fire({
+                            text: "Sorry, looks like there are some errors detected, please try again.",
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-light"
+                            }
+                        }).then((function() {
+                            button.removeAttribute("data-kt-indicator");
+                        }));
+                    }
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            const editors = document.querySelectorAll('#description_edit');
+            Array.from(editors).forEach((textarea) => {
+                ClassicEditor
+                .create(textarea)
+                .then(editor => {
+                    // Find the corresponding button for each editor
+                    var descriptionId = textarea.dataset.descripton_id;
+                    var button = document.querySelector("#kt_button_description_edit-"+descriptionId);
+
+                    // Handle button click event
+                    button.addEventListener("click", function(event) {
+                        // Activate indicator
+                        button.setAttribute("data-kt-indicator", "on");
+
+                        var description = editor.getData();
+
+                        var token = $('meta[name="csrf-token"]').attr('content');
+
+                        $.ajax({
+                            url: 'descriptions/'+descriptionId,
+                            type: 'PUT',
+                            data: { '_token' : token, description},
+                            success: function(response) 
+                            {
+                                if(response.status == 200)
+                                    Swal.fire({
+                                        text: "Success, "+response.message,
+                                        icon: "success",
+                                        buttonsStyling: !1,
+                                        confirmButtonText: "Ok, got it!",
+                                        customClass: {
+                                            confirmButton: "btn btn-light"
+                                        }
+                                    }).then((function() {
+                                        button.removeAttribute("data-kt-indicator");
+                                        location.reload(); // reload the page
+                                    }));
+                            },
+                            error:function (e) {
+                                Swal.fire({
+                                    text: "Sorry, looks like there are some errors detected, please try again.",
+                                    icon: "error",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-light"
+                                    }
+                                }).then((function() {
+                                    button.removeAttribute("data-kt-indicator");
+                                }));
+                            }
+                        });
+                    });
+
+                });
+            });
+
+        </script>
 
         @endif
 

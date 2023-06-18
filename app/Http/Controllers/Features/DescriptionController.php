@@ -15,7 +15,8 @@ class DescriptionController extends Controller
      */
     public function index()
     {
-        return view('pages.description.index');
+        $descriptions = Description::get();
+        return view('pages.description.index')->with(['descriptions'=>$descriptions]);
     }
 
     /**
@@ -36,7 +37,21 @@ class DescriptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $type = ($request->values['type'] != 'Other') ? $request->values['type'] : $request->values['new_type'];
+        $description = $request->description;
+
+        $description = new Description([
+            'type' => $type,
+            'description' => $description,
+        ]);
+
+        $description->save();
+
+        return response()->json([
+            'message' => 'A new description has been successfully added.',
+            'status' => 200
+        ]);
+
     }
 
     /**
@@ -68,9 +83,19 @@ class DescriptionController extends Controller
      * @param  \App\Models\Decription  $decription
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Description $decription)
+    public function update(Request $request, $id)
     {
-        //
+        $description = $request->description;
+
+        $Description = Description::find($id);
+        $Description->update([
+            'description' => $description,
+        ]);
+
+        return response()->json([
+            'message' => 'The description has been successfully updated.',
+            'status' => 200
+        ]);
     }
 
     /**

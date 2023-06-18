@@ -17,7 +17,7 @@ class CreateDescriptionsTable extends Migration
             $table->id();
             $table->string('type');
             $table->text('description');
-            $table->string('section');
+            $table->unsignedInteger('section')->default(1);
             $table->timestamps();
         });
     }
