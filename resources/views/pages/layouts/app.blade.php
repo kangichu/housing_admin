@@ -708,6 +708,17 @@
 
         @if(request()->is('descriptions'))
 
+        <!--begin::Page Vendors Javascript(used by this page)-->
+        <script src="{{ asset('dashboard/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+        <!--end::Page Vendors Javascript-->
+
+        <script>
+            $("#kt_table_descriptions").DataTable({
+                "searching": true,
+                "responsive": true,
+            });
+        </script>
+
         <!--CKEditor Build Bundles:: Only include the relevant bundles accordingly-->
         <script src="{{ asset('dashboard/plugins/custom/ckeditor/ckeditor-classic.bundle.js') }}"></script>
 

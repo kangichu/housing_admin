@@ -159,8 +159,8 @@
                                                     <!--begin::Input-->
                                                     <select class="form-select form-select-solid" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" data-dropdown-parent="#kt_modal_add_description" name="type" >
                                                         <option></option>
-                                                        @foreach($descriptions->unique('type') as $description)
-                                                            <option value="{{$description->type}}">{{$description->type}}</option>
+                                                        @foreach($description_types as $description_type)
+                                                            <option value="{{$description_type->type}}">{{$description_type->type}}</option>
                                                         @endforeach
                                                         <option value="Other">Other</option>
                                                     </select>
@@ -214,14 +214,14 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
                     <!--begin::Table-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_descriptions">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-1px">ID</th>
                                 <th class="min-w-125px">Type</th>
                                 <th class="min-w-125px">Description</th>
-                                <th class="min-w-125px">Section</th>
                                 <th class="text-end min-w-125px">Actions</th>
                             </tr>
                             <!--end::Table row-->
@@ -230,17 +230,15 @@
                         <!--begin::Table body-->
                         <tbody class="text-gray-600 fw-bold">
                             <!--begin::Table row-->
-                            @foreach($descriptions as $description)
+                            @foreach($descriptions as $key=>$description)
                             <tr>
-                                <!--begin::Checkbox-->
+                                <td>{{$key+1}}</td>
+                                <!--begin::type-->
                                 <td>{{$description->type}}</td>
-                                <!--end::Checkbox-->
-                                <!--begin::User=-->
+                                <!--end::type-->
+                                <!--begin::description=-->
                                 <td>{!! $description->description !!}</td>
-                                <!--end::User=-->
-                                <!--begin::Role=-->
-                                <td>{{$description->section}}</td>
-                                <!--end::Role=-->
+                                <!--end::description=-->
                                 <!--begin::Action=-->
                                 <td class="text-end">
                                     <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
@@ -260,7 +258,7 @@
                                         <!--end::Menu item-->
                                         <!--begin::Menu item-->
                                         <div class="menu-item px-3">
-                                            <a href="#" class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
+                                            <a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_delete_description-{{$description->type}}-{{$description->section}}">Delete</a>
                                         </div>
                                         <!--end::Menu item-->
                                     </div>
@@ -293,10 +291,10 @@
                                             <!--end::Close-->
                                         </div>
                                         <!--end::Modal header-->
-                                        <!--begin::Modal body-->
-                                        <div class="modal-body scroll-y">
-                                            <!--begin::Form-->
-                                            <form id="kt_modal_add_description_form-{{$description->type}}-{{$description->section}}" class="form">
+                                        <!--begin::Form-->
+                                        <form id="kt_modal_add_description_form-{{$description->type}}-{{$description->section}}" class="form">
+                                            <!--begin::Modal body-->
+                                            <div class="modal-body scroll-y">
                                                 <!--begin::Scroll-->
                                                 <div class="d-flex flex-column " style="overflow-x: hidden !important;" id="kt_modal_add_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
                                                     <!--begin::Input group-->
@@ -312,23 +310,86 @@
                                                     <!--end::Input group-->
                                                 </div>
                                                 <!--end::Scroll-->
-                                                <!--begin::Actions-->
-                                                <div class="modal-footer text-center">
-                                                    <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">Discard</button>
-                                                    <button type="button" data-descripton_id="{{$description->id}}" class="btn btn-primary me-10" id="kt_button_description_edit-{{$description->id}}">
-                                                        <span class="indicator-label">
-                                                            Submit
-                                                        </span>
-                                                        <span class="indicator-progress">
-                                                            Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                                        </span>
-                                                    </button>
+                                            </div>
+                                            <!--end::Modal body-->
+                                            <!--begin::Actions-->
+                                            <div class="modal-footer text-center">
+                                                <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">Discard</button>
+                                                <button type="button" data-descripton_id="{{$description->id}}" class="btn btn-primary me-10" id="kt_button_description_edit-{{$description->id}}">
+                                                    <span class="indicator-label">
+                                                        Submit
+                                                    </span>
+                                                    <span class="indicator-progress">
+                                                        Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                            <!--end::Actions-->
+                                        </form>
+                                        <!--end::Form-->
+                                    </div>
+                                    <!--end::Modal content-->
+                                </div>
+                                <!--end::Modal dialog-->
+                            </div>
+
+                            <div class="modal fade" id="kt_modal_delete_description-{{$description->type}}-{{$description->section}}" tabindex="-1" aria-hidden="true">
+                                <!--begin::Modal dialog-->
+                                <div class="modal-dialog modal-dialog-centered modal-sm ">
+                                    <!--begin::Modal content-->
+                                    <div class="modal-content">
+                                        <!--begin::Modal header-->
+                                        <div class="modal-header" id="kt_modal_add_user_header">
+                                            <!--begin::Modal title-->
+                                            <h2 class="fw-bolder">Delete Description</h2>
+                                            <!--end::Modal title-->
+                                            <!--begin::Close-->
+                                            <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                                <span class="svg-icon svg-icon-1">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                                        <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </div>
+                                            <!--end::Close-->
+                                        </div>
+                                        <!--end::Modal header-->
+                                        <!--begin::Modal body-->
+                                        <div class="modal-body scroll-y">
+                                            <!--begin::Form-->
+                                            <form id="kt_modal_delete_description_form-{{$description->type}}-{{$description->section}}" class="form">
+                                                <!--begin::Scroll-->
+                                                <div class="d-flex flex-column " style="overflow-x: hidden !important;" id="kt_modal_add_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
+                                                    <!--begin::Input group-->
+                                                    <div class="fv-row mb-7">
+                                                        
+                                                        <input type="hidden" name="description_id" value="{{$description->id}}">
+                                                        <div class="form-text">Are you sure you want to delete this description?</div>
+                                                    </div>
+                                                    <!--end::Input group-->
                                                 </div>
-                                                <!--end::Actions-->
+                                                <!--end::Scroll-->
+                                               
                                             </form>
                                             <!--end::Form-->
                                         </div>
                                         <!--end::Modal body-->
+                                         <!--begin::Actions-->
+                                         <div class="modal-footer">
+                                            <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">Discard</button>
+                                            <button type="button" class="btn btn-primary me-10" id="kt_button_description_edit-{{$description->id}}">
+                                                <span class="indicator-label">
+                                                    Submit
+                                                </span>
+                                                <span class="indicator-progress">
+                                                    Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <!--end::Actions-->
                                     </div>
                                     <!--end::Modal content-->
                                 </div>

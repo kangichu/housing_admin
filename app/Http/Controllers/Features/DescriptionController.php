@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Features;
 
 use App\Models\Description;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class DescriptionController extends Controller
 {
@@ -16,7 +18,9 @@ class DescriptionController extends Controller
     public function index()
     {
         $descriptions = Description::get();
-        return view('pages.description.index')->with(['descriptions'=>$descriptions]);
+        $description_types = DB::table('description_type')->get();
+
+        return view('pages.description.index')->with(['descriptions'=>$descriptions, 'description_types'=>$description_types]);
     }
 
     /**
@@ -39,6 +43,16 @@ class DescriptionController extends Controller
     {
         $type = ($request->values['type'] != 'Other') ? $request->values['type'] : $request->values['new_type'];
         $description = $request->description;
+
+        if($request->values['type'] == 'Other')
+        {   
+            $now = Carbon::now();
+            DB::table('description_type')->insert([
+                'type' => $request->values['new_type'],
+                'created_at' => $now->format('Y-m-d H:i:s'),
+                'updated_at' => $now->format('Y-m-d H:i:s')
+            ]);
+        }
 
         $description = new Description([
             'type' => $type,
@@ -104,7 +118,7 @@ class DescriptionController extends Controller
      * @param  \App\Models\Decription  $decription
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Decription $decription)
+    public function destroy($id)
     {
         //
     }
