@@ -1,8 +1,10 @@
 /node_modules
 /public/hot
 /public/storage
+/storage/app/public
 /storage/*.key
 /vendor
+vendor/laravel/
 .env
 .env.backup
 .phpunit.result.cache

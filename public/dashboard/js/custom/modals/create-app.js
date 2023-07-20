@@ -156,6 +156,14 @@ var KTCreateApp = function() {
             })),
             n.push(FormValidation.formValidation(o, {
                 fields: {
+                    account_type: {
+                        validators: {
+                            notEmpty: {
+                                message: "An account type is required",
+                            }
+
+                        }
+                    },
                     description: {
                         validators: {
                             notEmpty: {

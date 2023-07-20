@@ -10,6 +10,9 @@ use App\Http\Controllers\Features\FeatureController;
 use App\Http\Controllers\Features\InvoiceController;
 use App\Http\Controllers\Features\SubscriberController;
 use App\Http\Controllers\Features\DescriptionController;
+use App\Http\Controllers\Features\MemberController;
+use App\Http\Controllers\Features\CommunicationController;
+use App\Http\Controllers\Features\TicketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,3 +67,29 @@ Route::get('home', [Home::class, 'index'])->name('home');
 */
 
     Route::resource('descriptions', DescriptionController::class); 
+
+
+/*
+|--------------------------------------------------------------------------
+| Members
+|--------------------------------------------------------------------------
+*/
+
+    Route::resource('members', MemberController::class); 
+
+/*
+|--------------------------------------------------------------------------
+| Members
+|--------------------------------------------------------------------------
+*/
+
+    Route::resource('communications', CommunicationController::class); 
+
+
+/*
+|--------------------------------------------------------------------------
+| Tickets
+|--------------------------------------------------------------------------
+*/
+
+    Route::resource('tickets', TicketController::class); 

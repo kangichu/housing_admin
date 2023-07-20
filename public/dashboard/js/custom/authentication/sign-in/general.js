@@ -38,9 +38,7 @@ var KTSigninGeneral = function() {
                     "Valid" == i ? (e.setAttribute("data-kt-indicator", "on"),
                     e.disabled = !0,
                     setTimeout((function() {
-                        e.removeAttribute("data-kt-indicator"),
-                        e.disabled = !1,
-                        $('#kt_sign_in_form').submit()
+                        $('#kt_sign_in_form').submit();
                     }
                     ), 2e3)) : Swal.fire({
                         text: "Sorry, looks like there are some errors detected, please try again.",

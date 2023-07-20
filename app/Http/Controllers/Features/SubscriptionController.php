@@ -51,6 +51,7 @@ class SubscriptionController extends Controller
             'description' => $request->values['description'],
             'category' => $request->values['category'],
             'amount' => $request->values['charge'],
+            'account_type' => $request->values['account_type'],
             'recommended' => $request->values['recommend'],
             'status' => 'Pending',
         ]);
@@ -120,6 +121,7 @@ class SubscriptionController extends Controller
         $subscription->description = $request->values['description'];
         $subscription->category = $request->values['category'];
         $subscription->amount = $request->values['charge'];
+        $subscription->account_type = $request->values['account_type'];
         $subscription->recommended = $request->values['recommend'];
 
         $subscription->update();

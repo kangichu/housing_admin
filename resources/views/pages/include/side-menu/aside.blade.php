@@ -50,7 +50,7 @@
 					<!--begin::Nav item-->
 					<li class="nav-item mb-2" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="right" data-bs-dismiss="click" title="Communications">
 						<!--begin::Nav link-->
-						<a class="nav-link btn btn-icon btn-active-color-primary btn-color-gray-400 btn-active-light" href="/appointments">
+						<a class="nav-link btn btn-icon btn-active-color-primary btn-color-gray-400 btn-active-light" href="/communications">
 							<!--begin::Svg Icon | path: assets/media/icons/duotune/general/gen001.svg-->
 							<span class="svg-icon svg-icon-2x">
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -99,7 +99,7 @@
 					<!--begin::Nav item-->
 					<li class="nav-item mb-2" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="right" data-bs-dismiss="click" title="Members">
 						<!--begin::Nav link-->
-						<a class="nav-link btn btn-icon btn-active-color-primary btn-color-gray-400 btn-active-light" href="/memebers">
+						<a class="nav-link btn btn-icon btn-active-color-primary btn-color-gray-400 btn-active-light" href="/members">
 							<!--begin::Svg Icon | path: icons/duotune/files/fil005.svg-->
 							<span class="svg-icon svg-icon-2x">
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -148,9 +148,9 @@
 				<!--end::Wrapper-->
 				<!--begin::Footer-->
 				<div class="flex-column-auto pt-10 px-5" id="kt_aside_secondary_footer">
-					<a href="/subscription" class="btn btn-bg-light btn-color-gray-600 btn-flex btn-active-color-primary flex-center w-100 
-					{{ (request()->is('subscription/*') || request()->is('subscriber/*')) ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-trigger="hover" data-bs-offset="0,5" data-bs-dismiss-="click">
-						<span class="btn-label">Subscriptions</span>
+					<a href="/tickets" class="btn btn-bg-light btn-color-gray-600 btn-flex btn-active-color-primary flex-center w-100 
+					{{ (request()->is('tickets/*') || request()->is('subscriber/*')) ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-trigger="hover" data-bs-offset="0,5" data-bs-dismiss-="click">
+						<span class="btn-label">Tickets</span>
 						<!--begin::Svg Icon | path: icons/duotune/general/gen005.svg-->
 						<span class="svg-icon btn-icon svg-icon-4 ms-2">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

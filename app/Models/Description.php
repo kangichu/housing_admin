@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Description extends Model
 {
-    protected $fillable = ['type', 'description','section',];
+    protected $fillable = ['type', 'description','section','allocation',];
 
     // Event listener for creating a new description
     protected static function boot()

@@ -258,6 +258,29 @@
 											<div class="col-md-12">
 												<div class="rounded border p-7">
 													<!--begin::Input group-->
+													<div class="fv-row mb-5">
+														<!--begin::Label-->
+														<label class="d-flex align-items-center fs-5 fw-bold mb-4">
+															<span class="required">Account Type</span>
+														</label>
+														<!--end::Label-->
+														<!--begin::Input group-->
+														<div class="fv-row mb-5">
+															<!--begin::Input-->
+															<select class="form-select form-select-solid location" data-control="select2" data-hide-search="false" data-placeholder="Select Account Type" name="account_type" id="account_type">
+																<option value="{{$subscription->account_type}}">{{ucfirst($subscription->account_type)}} Accounts</option>
+																@if($subscription->account_type == 'agency')
+																	<option value="individual">Individual Accounts</option>
+																@else
+																	<option value="agency">Agency Accounts</option>
+																@endif
+															</select>
+															<!--end::Input-->
+														</div>
+														<!--end::Input group-->
+													</div>
+													<!--end::Input group-->
+													<!--begin::Input group-->
 													<div class="fv-row">
 														<!--begin::Label-->
 														<label class="required fs-5 fw-bold mb-2">Description</label>

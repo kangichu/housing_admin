@@ -16,6 +16,7 @@ class CreateDescriptionsTable extends Migration
         Schema::create('descriptions', function (Blueprint $table) {
             $table->id();
             $table->string('type');
+            $table->string('allocation');
             $table->text('description');
             $table->unsignedInteger('section')->default(1);
             $table->timestamps();

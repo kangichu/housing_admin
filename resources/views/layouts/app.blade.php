@@ -69,6 +69,23 @@
         <!--end::Page Custom Javascript-->
         @endif
 
+        <!--begin::Page Custom Javascript(used by this page)-->
+        <script src="{{ asset('include/dashboard/js/custom/authentication/sign-in/general.js') }}"></script>
+        <!--end::Page Custom Javascript-->
+            @if ($errors->has('email'))
+                <script type="text/javascript">
+                    Swal.fire({
+                        text: '{{ $errors->first('email') }}',
+                        icon: "error",
+                        buttonsStyling: !1,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    })
+                </script>
+            @endif
+
         @if(request()->is('password/reset'))
 
         <script src="{{ asset('dashboard/js/custom/authentication/password-reset/password-reset.js') }}"></script>

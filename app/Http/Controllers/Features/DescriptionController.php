@@ -43,6 +43,8 @@ class DescriptionController extends Controller
     {
         $type = ($request->values['type'] != 'Other') ? $request->values['type'] : $request->values['new_type'];
         $description = $request->description;
+        $allocation = $request->values['allocation'];
+
 
         if($request->values['type'] == 'Other')
         {   
@@ -56,13 +58,14 @@ class DescriptionController extends Controller
 
         $description = new Description([
             'type' => $type,
+            'allocation' => $allocation,
             'description' => $description,
         ]);
 
         $description->save();
 
         return response()->json([
-            'message' => 'A new description has been successfully added.',
+            'message' => 'a new description has been successfully added.',
             'status' => 200
         ]);
 
@@ -107,7 +110,7 @@ class DescriptionController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'The description has been successfully updated.',
+            'message' => 'the description has been successfully updated.',
             'status' => 200
         ]);
     }
