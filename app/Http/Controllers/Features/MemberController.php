@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Features;
 
+use PDF;
 use App\Models\Member;
+use App\Exports\MembersExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -39,6 +42,31 @@ class MemberController extends Controller
     public function store(Request $request)
     {
         //
+    }
+
+    public function export(Request $request)
+    {
+        $role = $request->values['role'];
+        $format = $request->values['format'];
+
+        $members = Member::where('account_type', $role)->get(); // Fetch users based on the selected role
+
+        switch ($format) {
+            case 'excel':
+                return Excel::download(new MembersExport($members), $role.' Account Members.xlsx');
+                break;
+
+            case 'csv':
+                return Excel::download(new MembersExport($members), $role.' Account Members.csv', \Maatwebsite\Excel\Excel::CSV, [
+                    'Content-Type' => 'text/csv',
+                ]);
+                break;
+
+            default:
+                return response()->json(['status' => 'error', 'message' => 'Invalid export format selected']);
+        }
+
+        return response()->json(['status' => 'success']);
     }
 
     /**

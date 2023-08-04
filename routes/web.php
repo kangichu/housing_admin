@@ -77,6 +77,8 @@ Route::get('home', [Home::class, 'index'])->name('home');
 
     Route::resource('members', MemberController::class); 
 
+        Route::post('/export', [MemberController::class, 'export'])->name('export');
+
 /*
 |--------------------------------------------------------------------------
 | Members

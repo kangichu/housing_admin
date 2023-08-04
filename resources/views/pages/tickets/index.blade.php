@@ -8,12 +8,12 @@
 		<!--begin::Page title-->
 		<div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-2 pb-lg-0">
 			<!--begin::Heading-->
-			<h1 class="d-flex flex-column text-dark fw-bolder my-0 fs-1">Members</h1>
+			<h1 class="d-flex flex-column text-dark fw-bolder my-0 fs-1">Tickets</h1>
 			<!--end::Heading-->
 			<!--begin::Breadcrumb-->
 			<ul class="breadcrumb breadcrumb-dot fw-bold fs-base my-1">
 				<li class="breadcrumb-item text-muted">Home</li>
-				<li class="breadcrumb-item text-dark">Members</li>
+				<li class="breadcrumb-item text-dark">Tickets</li>
 			</ul>
 			<!--end::Breadcrumb-->
 		</div>
@@ -71,7 +71,7 @@
                 <!--end::Wrapper-->
             </div>
         @endif
-
+			
 		<!--begin::Card-->
 		<div class="card">
 			<!--begin::Card header-->
@@ -88,7 +88,7 @@
 							</svg>
 						</span>
 						<!--end::Svg Icon-->
-						<input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search Member" />
+						<input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search user" />
 					</div>
 					<!--end::Search-->
 				</div>
@@ -123,9 +123,11 @@
 									<label class="form-label fs-6 fw-bold">Role:</label>
 									<select class="form-select form-select-solid fw-bolder" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-kt-user-table-filter="role" data-hide-search="true">
 										<option></option>
-										@foreach($members->unique('account_type') as $account_type)
-											<option value="{{$account_type->account_type}}">{{$account_type->account_type}}</option>
-										@endforeach
+										<option value="Administrator">Administrator</option>
+										<option value="Analyst">Analyst</option>
+										<option value="Developer">Developer</option>
+										<option value="Support">Support</option>
+										<option value="Trial">Trial</option>
 									</select>
 								</div>
 								<!--end::Input group-->
@@ -135,7 +137,6 @@
 									<select class="form-select form-select-solid fw-bolder" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-kt-user-table-filter="two-step" data-hide-search="true">
 										<option></option>
 										<option value="Enabled">Enabled</option>
-										<option value="Unavailable">Unavailable</option>
 									</select>
 								</div>
 								<!--end::Input group-->
@@ -161,6 +162,18 @@
 							</svg>
 						</span>
 						<!--end::Svg Icon-->Export</button>
+						<!--end::Export-->
+						<!--begin::Add user-->
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">
+						<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+						<span class="svg-icon svg-icon-2">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+								<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+								<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+							</svg>
+						</span>
+						<!--end::Svg Icon-->Add User</button>
+						<!--end::Add user-->
 					</div>
 					<!--end::Toolbar-->
 					<!--begin::Group actions-->
@@ -179,7 +192,7 @@
 								<!--begin::Modal header-->
 								<div class="modal-header">
 									<!--begin::Modal title-->
-									<h2 class="fw-bolder">Export Members</h2>
+									<h2 class="fw-bolder">Export Users</h2>
 									<!--end::Modal title-->
 									<!--begin::Close-->
 									<div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close">
@@ -198,7 +211,7 @@
 								<!--begin::Modal body-->
 								<div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
 									<!--begin::Form-->
-									<form id="kt_modal_export_users_form" class="form">
+									<form id="kt_modal_export_users_form" class="form" action="#">
 										<!--begin::Input group-->
 										<div class="fv-row mb-10">
 											<!--begin::Label-->
@@ -207,9 +220,11 @@
 											<!--begin::Input-->
 											<select name="role" data-control="select2" data-placeholder="Select a role" data-hide-search="true" class="form-select form-select-solid fw-bolder">
 												<option></option>
-												@foreach($members->unique('account_type') as $account_type)
-													<option value="{{$account_type->account_type}}">{{$account_type->account_type}}</option>
-												@endforeach
+												<option value="Administrator">Administrator</option>
+												<option value="Analyst">Analyst</option>
+												<option value="Developer">Developer</option>
+												<option value="Support">Support</option>
+												<option value="Trial">Trial</option>
 											</select>
 											<!--end::Input-->
 										</div>
@@ -223,7 +238,9 @@
 											<select name="format" data-control="select2" data-placeholder="Select a format" data-hide-search="true" class="form-select form-select-solid fw-bolder">
 												<option></option>
 												<option value="excel">Excel</option>
-												<option value="csv">CSV</option>
+												<option value="pdf">PDF</option>
+												<option value="cvs">CVS</option>
+												<option value="zip">ZIP</option>
 											</select>
 											<!--end::Input-->
 										</div>
@@ -248,6 +265,213 @@
 						<!--end::Modal dialog-->
 					</div>
 					<!--end::Modal - New Card-->
+					<!--begin::Modal - Add task-->
+					<div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
+						<!--begin::Modal dialog-->
+						<div class="modal-dialog modal-dialog-centered mw-650px">
+							<!--begin::Modal content-->
+							<div class="modal-content">
+								<!--begin::Modal header-->
+								<div class="modal-header" id="kt_modal_add_user_header">
+									<!--begin::Modal title-->
+									<h2 class="fw-bolder">Add User</h2>
+									<!--end::Modal title-->
+									<!--begin::Close-->
+									<div class="btn btn-icon btn-sm btn-active-icon-primary" data-kt-users-modal-action="close">
+										<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+										<span class="svg-icon svg-icon-1">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+												<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+												<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+											</svg>
+										</span>
+										<!--end::Svg Icon-->
+									</div>
+									<!--end::Close-->
+								</div>
+								<!--end::Modal header-->
+								<!--begin::Modal body-->
+								<div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+									<!--begin::Form-->
+									<form id="kt_modal_add_user_form" class="form" action="#">
+										<!--begin::Scroll-->
+										<div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px">
+											<!--begin::Input group-->
+											<div class="fv-row mb-7">
+												<!--begin::Label-->
+												<label class="d-block fw-bold fs-6 mb-5">Avatar</label>
+												<!--end::Label-->
+												<!--begin::Image input-->
+												<div class="image-input image-input-outline" data-kt-image-input="true" style="background-image: url(assets/media/avatars/blank.png)">
+													<!--begin::Preview existing avatar-->
+													<div class="image-input-wrapper w-125px h-125px" style="background-image: url(assets/media/avatars/150-1.jpg);"></div>
+													<!--end::Preview existing avatar-->
+													<!--begin::Label-->
+													<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
+														<i class="bi bi-pencil-fill fs-7"></i>
+														<!--begin::Inputs-->
+														<input type="file" name="avatar" accept=".png, .jpg, .jpeg" />
+														<input type="hidden" name="avatar_remove" />
+														<!--end::Inputs-->
+													</label>
+													<!--end::Label-->
+													<!--begin::Cancel-->
+													<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel avatar">
+														<i class="bi bi-x fs-2"></i>
+													</span>
+													<!--end::Cancel-->
+													<!--begin::Remove-->
+													<span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove avatar">
+														<i class="bi bi-x fs-2"></i>
+													</span>
+													<!--end::Remove-->
+												</div>
+												<!--end::Image input-->
+												<!--begin::Hint-->
+												<div class="form-text">Allowed file types: png, jpg, jpeg.</div>
+												<!--end::Hint-->
+											</div>
+											<!--end::Input group-->
+											<!--begin::Input group-->
+											<div class="fv-row mb-7">
+												<!--begin::Label-->
+												<label class="required fw-bold fs-6 mb-2">Full Name</label>
+												<!--end::Label-->
+												<!--begin::Input-->
+												<input type="text" name="user_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Full name" value="Emma Smith" />
+												<!--end::Input-->
+											</div>
+											<!--end::Input group-->
+											<!--begin::Input group-->
+											<div class="fv-row mb-7">
+												<!--begin::Label-->
+												<label class="required fw-bold fs-6 mb-2">Email</label>
+												<!--end::Label-->
+												<!--begin::Input-->
+												<input type="email" name="user_email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com" value="e.smith@kpmg.com.au" />
+												<!--end::Input-->
+											</div>
+											<!--end::Input group-->
+											<!--begin::Input group-->
+											<div class="mb-7">
+												<!--begin::Label-->
+												<label class="required fw-bold fs-6 mb-5">Role</label>
+												<!--end::Label-->
+												<!--begin::Roles-->
+												<!--begin::Input row-->
+												<div class="d-flex fv-row">
+													<!--begin::Radio-->
+													<div class="form-check form-check-custom form-check-solid">
+														<!--begin::Input-->
+														<input class="form-check-input me-3" name="user_role" type="radio" value="0" id="kt_modal_update_role_option_0" checked='checked' />
+														<!--end::Input-->
+														<!--begin::Label-->
+														<label class="form-check-label" for="kt_modal_update_role_option_0">
+															<div class="fw-bolder text-gray-800">Administrator</div>
+															<div class="text-gray-600">Best for business owners and company administrators</div>
+														</label>
+														<!--end::Label-->
+													</div>
+													<!--end::Radio-->
+												</div>
+												<!--end::Input row-->
+												<div class='separator separator-dashed my-5'></div>
+												<!--begin::Input row-->
+												<div class="d-flex fv-row">
+													<!--begin::Radio-->
+													<div class="form-check form-check-custom form-check-solid">
+														<!--begin::Input-->
+														<input class="form-check-input me-3" name="user_role" type="radio" value="1" id="kt_modal_update_role_option_1" />
+														<!--end::Input-->
+														<!--begin::Label-->
+														<label class="form-check-label" for="kt_modal_update_role_option_1">
+															<div class="fw-bolder text-gray-800">Developer</div>
+															<div class="text-gray-600">Best for developers or people primarily using the API</div>
+														</label>
+														<!--end::Label-->
+													</div>
+													<!--end::Radio-->
+												</div>
+												<!--end::Input row-->
+												<div class='separator separator-dashed my-5'></div>
+												<!--begin::Input row-->
+												<div class="d-flex fv-row">
+													<!--begin::Radio-->
+													<div class="form-check form-check-custom form-check-solid">
+														<!--begin::Input-->
+														<input class="form-check-input me-3" name="user_role" type="radio" value="2" id="kt_modal_update_role_option_2" />
+														<!--end::Input-->
+														<!--begin::Label-->
+														<label class="form-check-label" for="kt_modal_update_role_option_2">
+															<div class="fw-bolder text-gray-800">Analyst</div>
+															<div class="text-gray-600">Best for people who need full access to analytics data, but don't need to update business settings</div>
+														</label>
+														<!--end::Label-->
+													</div>
+													<!--end::Radio-->
+												</div>
+												<!--end::Input row-->
+												<div class='separator separator-dashed my-5'></div>
+												<!--begin::Input row-->
+												<div class="d-flex fv-row">
+													<!--begin::Radio-->
+													<div class="form-check form-check-custom form-check-solid">
+														<!--begin::Input-->
+														<input class="form-check-input me-3" name="user_role" type="radio" value="3" id="kt_modal_update_role_option_3" />
+														<!--end::Input-->
+														<!--begin::Label-->
+														<label class="form-check-label" for="kt_modal_update_role_option_3">
+															<div class="fw-bolder text-gray-800">Support</div>
+															<div class="text-gray-600">Best for employees who regularly refund payments and respond to disputes</div>
+														</label>
+														<!--end::Label-->
+													</div>
+													<!--end::Radio-->
+												</div>
+												<!--end::Input row-->
+												<div class='separator separator-dashed my-5'></div>
+												<!--begin::Input row-->
+												<div class="d-flex fv-row">
+													<!--begin::Radio-->
+													<div class="form-check form-check-custom form-check-solid">
+														<!--begin::Input-->
+														<input class="form-check-input me-3" name="user_role" type="radio" value="4" id="kt_modal_update_role_option_4" />
+														<!--end::Input-->
+														<!--begin::Label-->
+														<label class="form-check-label" for="kt_modal_update_role_option_4">
+															<div class="fw-bolder text-gray-800">Trial</div>
+															<div class="text-gray-600">Best for people who need to preview content data, but don't need to make any updates</div>
+														</label>
+														<!--end::Label-->
+													</div>
+													<!--end::Radio-->
+												</div>
+												<!--end::Input row-->
+												<!--end::Roles-->
+											</div>
+											<!--end::Input group-->
+										</div>
+										<!--end::Scroll-->
+										<!--begin::Actions-->
+										<div class="text-center pt-15">
+											<button type="reset" class="btn btn-light me-3" data-kt-users-modal-action="cancel">Discard</button>
+											<button type="submit" class="btn btn-primary" data-kt-users-modal-action="submit">
+												<span class="indicator-label">Submit</span>
+												<span class="indicator-progress">Please wait...
+												<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+											</button>
+										</div>
+										<!--end::Actions-->
+									</form>
+									<!--end::Form-->
+								</div>
+								<!--end::Modal body-->
+							</div>
+							<!--end::Modal content-->
+						</div>
+						<!--end::Modal dialog-->
+					</div>
+					<!--end::Modal - Add task-->
 				</div>
 				<!--end::Card toolbar-->
 			</div>
@@ -260,15 +484,10 @@
 					<thead>
 						<!--begin::Table row-->
 						<tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-							<th class="w-10px pe-2">
-								<div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-									<input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_table_users .form-check-input" value="1" />
-								</div>
-							</th>
 							<th class="min-w-125px">User</th>
 							<th class="min-w-125px">Role</th>
+							<th class="min-w-125px">Last login</th>
 							<th class="min-w-125px">Two-step</th>
-							<th class="min-w-125px">Suspended</th>
 							<th class="min-w-125px">Joined Date</th>
 							<th class="text-end min-w-100px">Actions</th>
 						</tr>
@@ -278,52 +497,39 @@
 					<!--begin::Table body-->
 					<tbody class="text-gray-600 fw-bold">
 						<!--begin::Table row-->
-						@foreach($members as $key=>$member)
 						<tr>
-							<!--begin::Checkbox-->
-							<td>
-								<div class="form-check form-check-sm form-check-custom form-check-solid">
-									<input class="form-check-input" type="checkbox" value="1" />
-								</div>
-							</td>
-							<!--end::Checkbox-->
 							<!--begin::User=-->
 							<td class="d-flex align-items-center">
 								<!--begin:: Avatar -->
-								<div class="symbol symbol-50px overflow-hidden me-3">
-									<a href="#">
+								<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+									<a href="../../demo7/dist/apps/user-management/users/view.html">
 										<div class="symbol-label">
-											<identicon-svg class="pt-1" username="{{$member->first_name}} {{$member->last_name}}"></identicon-svg>
+											<img src="assets/media/avatars/150-1.jpg" alt="Emma Smith" class="w-100" />
 										</div>
 									</a>
 								</div>
 								<!--end::Avatar-->
 								<!--begin::User details-->
 								<div class="d-flex flex-column">
-									<a href="#" class="text-gray-800 text-hover-primary mb-1">{{$member->first_name}} {{$member->last_name}}</a>
-									<span>{{$member->email}}</span>
+									<a href="../../demo7/dist/apps/user-management/users/view.html" class="text-gray-800 text-hover-primary mb-1">Emma Smith</a>
+									<span>e.smith@kpmg.com.au</span>
 								</div>
 								<!--begin::User details-->
 							</td>
 							<!--end::User=-->
 							<!--begin::Role=-->
-							<td>{{$member->account_type}}</td>
+							<td>Administrator</td>
 							<!--end::Role=-->
-							<!--begin::Two step=-->
-							<td>@if($member->account_type == "Business") 
-								<div class="badge badge-success fw-bolder"> Enabled </div> @else
-								<div class="badge badge-info fw-bolder"> Unavailable </div> @endif
-							</td>
-							<!--end::Two step=-->
-							<!--begin::Suspended=-->
+							<!--begin::Last login=-->
 							<td>
-								@if($member->is_suspended == 1) 
-								<div class="badge badge-danger fw-bolder cursor-pointer" data-bs-toggle="modal" data-bs-target="#kt_modal_suspended_{{$key+1}}">Suspended</div>
-								@else <div class="badge badge-light fw-bolder">Active</div> @endif
+								<div class="badge badge-light fw-bolder">Yesterday</div>
 							</td>
-							<!--end::Suspended=-->
+							<!--end::Last login=-->
+							<!--begin::Two step=-->
+							<td></td>
+							<!--end::Two step=-->
 							<!--begin::Joined-->
-							<td>{{ DateTime::createFromFormat('Y-m-d H:i:s', $member->created_at)->format('l, jS M Y H:i') }}</td>
+							<td>20 Dec 2021, 11:30 am</td>
 							<!--begin::Joined-->
 							<!--begin::Action=-->
 							<td class="text-end">
@@ -337,20 +543,11 @@
 								<!--end::Svg Icon--></a>
 								<!--begin::Menu-->
 								<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
-									@if($member->is_suspended != 1)
 									<!--begin::Menu item-->
 									<div class="menu-item px-3">
-										<a href="#" class="menu-link px-3">Suspend</a>
+										<a href="../../demo7/dist/apps/user-management/users/view.html" class="menu-link px-3">Edit</a>
 									</div>
 									<!--end::Menu item-->
-									@endif
-									@if($member->account_type == 'Business')
-									<!--begin::Menu item-->
-									<div class="menu-item px-3">
-										<a href="#" class="menu-link px-3">Subscription</a>
-									</div>
-									<!--end::Menu item-->
-									@endif
 									<!--begin::Menu item-->
 									<div class="menu-item px-3">
 										<a href="#" class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
@@ -361,43 +558,6 @@
 							</td>
 							<!--end::Action=-->
 						</tr>
-
-						<div class="modal fade" tabindex="-1" id="kt_modal_suspended_{{$key+1}}">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<!--begin::Modal title-->
-										<h2 class="fw-bolder">Activate Member</h2>
-										<!--end::Modal title-->
-
-										<!--begin::Close-->
-										<div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
-											<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-											<span class="svg-icon svg-icon-1">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-													<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-												</svg>
-											</span>
-											<!--end::Svg Icon-->
-										</div>
-										<!--end::Close-->
-									</div>
-						
-									<div class="modal-body">
-										<p>This account was suspended @if($member->incorrect_attempts == 3) after exceeding the number of login attempts @else  @endif. Are you sure you 
-											want to activate it?</p>
-									</div>
-						
-									<div class="modal-footer">
-										<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-primary">Save changes</button>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						@endforeach
 						<!--end::Table row-->
 					</tbody>
 					<!--end::Table body-->
@@ -407,6 +567,7 @@
 			<!--end::Card body-->
 		</div>
 		<!--end::Card-->
+		
 		
 	</div>
 	<!--end::Container-->

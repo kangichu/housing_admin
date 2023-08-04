@@ -34,13 +34,13 @@
 		<!--end::Menu separator-->
 		<!--begin::Menu item-->
 		<div class="menu-item px-5">
-			<a href="/business_account" class="menu-link px-5 {{ (request()->is('business_account')) ? 'active' : '' }}">My Profile</a>
+			<a href="/business_account" class="menu-link px-5 {{ (request()->is('business_account')) ? 'active' : '' }}">Platform Profile</a>
 		</div>
 		<!--end::Menu item-->
 		<!--begin::Menu item-->
 		<div class="menu-item px-5">
 			<a href="/listings" class="menu-link px-5  {{ (request()->is('listings')) ? 'active' : '' }}">
-				<span class="menu-text">My Listings</span>
+				<span class="menu-text">Platform Listings</span>
 				<span class="menu-badge">
 					<span class="badge badge-light-success badge-circle fw-bolder fs-7">0</span>
 				</span>
@@ -50,7 +50,7 @@
 		<!--begin::Menu item-->
 		<div class="menu-item px-5" data-kt-menu-trigger="hover" data-kt-menu-placement="right-end">
 			<a href="#" class="menu-link px-5 {{ (request()->is('billing') || request()->is('subscription')) ? 'active' : '' }}">
-				<span class="menu-title">My Subscription</span>
+				<span class="menu-title">Platform Subscriptions</span>
 				<span class="menu-arrow"></span>
 			</a>
 			<!--begin::Menu sub-->
@@ -74,7 +74,7 @@
 		<!--end::Menu separator-->
 		<!--begin::Menu item-->
 		<div class="menu-item px-5 my-1">
-			<a href="/business_account" class="menu-link px-5 {{ (request()->is('business_account')) ? 'active' : '' }}">Account Settings</a>
+			<a href="/settings" class="menu-link px-5 {{ (request()->is('settings')) ? 'active' : '' }}">Platform Settings</a>
 		</div>
 		<!--end::Menu item-->
 		<!--begin::Menu item-->

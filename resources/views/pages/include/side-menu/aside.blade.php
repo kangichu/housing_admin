@@ -149,7 +149,7 @@
 				<!--begin::Footer-->
 				<div class="flex-column-auto pt-10 px-5" id="kt_aside_secondary_footer">
 					<a href="/tickets" class="btn btn-bg-light btn-color-gray-600 btn-flex btn-active-color-primary flex-center w-100 
-					{{ (request()->is('tickets/*') || request()->is('subscriber/*')) ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-trigger="hover" data-bs-offset="0,5" data-bs-dismiss-="click">
+					{{ (request()->is('tickets*')) ? 'active' : '' }}" data-bs-toggle="tooltip" data-bs-custom-class="tooltip-dark" data-bs-trigger="hover" data-bs-offset="0,5" data-bs-dismiss-="click">
 						<span class="btn-label">Tickets</span>
 						<!--begin::Svg Icon | path: icons/duotune/general/gen005.svg-->
 						<span class="svg-icon btn-icon svg-icon-4 ms-2">

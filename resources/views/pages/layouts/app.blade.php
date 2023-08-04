@@ -34,30 +34,9 @@
 
         <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-        @if(request()->is('subscription/*'))
-
         <!--begin::Page Vendor Stylesheets(used by this page)-->
         <link href="{{ asset('dashboard/plugins/custom/datatables/datatables.bundle.css') }} " rel="stylesheet" type="text/css" />
         <!--end::Page Vendor Stylesheets-->
-
-        @endif
-
-        @if(request()->is('listings*'))
-
-        <link href="https://releases.transloadit.com/uppy/v2.12.1/uppy.min.css" rel="stylesheet">
-
-        <style type="text/css">
-            .grid-item { width: 33%;}
-
-            .empty-cart {
-              width: 50vw;
-              margin: 0 auto;
-              text-align: center;
-            }
-
-        </style>
-
-        @endif
 
         <style type="text/css">
             #map {
@@ -145,6 +124,10 @@
 
         <script src="{{ asset('dashboard/js/custom/modals/two-factor-authentication.js') }}"></script>
 
+        <!--begin::Page Vendors Javascript(used by this page)-->
+		<script src="{{ asset('dashboard/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+		<!--end::Page Vendors Javascript-->
+
         <script src="{{ asset('dashboard/js/custom/apps/chat/chat.js') }}"></script>
         <!-- <script src="{{ asset('dashboard/js/custom/modals/upgrade-plan.js') }}"></script> -->
         <!--end::Page Custom Javascript-->
@@ -170,9 +153,7 @@
 
         <script src="{{ asset('dashboard/js/custom/modals/create-app.js') }}"></script>
         <script src="{{ asset('dashboard/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
-        <!--begin::Page Vendors Javascript(used by this page)-->
-		<script src="{{ asset('dashboard/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-		<!--end::Page Vendors Javascript-->
+        
 		<!--begin::Page Custom Javascript(used by this page)-->
 		<script src="{{ asset('dashboard/js/custom/apps/subscriptions/list/export.js') }}"></script>
 		<script src="{{ asset('dashboard/js/custom/apps/subscriptions/list/list.js') }}"></script>
@@ -706,11 +687,7 @@
 
         @endif
 
-        @if(request()->is('descriptions'))
-
-        <!--begin::Page Vendors Javascript(used by this page)-->
-        <script src="{{ asset('dashboard/plugins/custom/datatables/datatables.bundle.js') }}"></script>
-        <!--end::Page Vendors Javascript-->
+        @if(request()->is('descriptions')) 
 
         <script>
             $("#kt_table_descriptions").DataTable({
@@ -873,6 +850,13 @@
             });
 
         </script>
+
+        @endif
+
+        @if(request()->is('descriptions') || request()->is('members') || request()->is('communications'))
+
+        <script src="{{ asset('dashboard/js/custom/apps/user-management/users/list/table.js' ) }}"></script>
+		<script src="{{ asset('dashboard/js/custom/apps/user-management/users/list/export-users.js' ) }}"></script>
 
         @endif
 
