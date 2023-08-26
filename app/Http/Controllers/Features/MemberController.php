@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Features;
 
 use PDF;
 use App\Models\Member;
-use App\Exports\MembersExport;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Controllers\Controller;
+use App\Models\Rating;
 use Illuminate\Http\Request;
+use App\Exports\MembersExport;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MemberController extends Controller
 {
@@ -18,8 +20,58 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $members = Member::get();
-        return view('pages.member.index')->with(['members'=>$members]);
+        $members = Member::leftjoin('businesses','users.id','businesses.user_id')
+        ->select('users.*','businesses.id as business_id', 'businesses.business_name')
+        ->get();
+        
+        $ratings = Rating::leftJoin('reviews','ratings.id','reviews.ratings_id')
+        ->select('ratings.*', DB::raw('COUNT(reviews.id) as review_count'))
+        ->addSelect('reviews.user_id as liked_rating_user_id')
+        ->groupBy('ratings.id','liked_rating_user_id')
+        ->get();
+
+        $ratingValues = [
+            'Fair' => 1,
+            'Satisfied' => 2,
+            'Unsure' => 3,
+            'Disappointed' => 4,
+            'Aggrevated' => 5,
+        ];
+        
+        $businessRatings = $ratings->groupBy('business_id');
+        
+        $businessesWithAverageRatings = [];
+        
+        foreach ($businessRatings as $businessId => $businessRatingsCollection) {
+            $totalRatings = $businessRatingsCollection->count();
+            
+            if ($totalRatings > 0) {
+                $totalRatingSum = $businessRatingsCollection->sum(function ($rating) use ($ratingValues) {
+                    return $ratingValues[$rating->rating]; // Get numeric value based on rating text
+                });
+            
+                $averageRating = $totalRatingSum / $totalRatings;
+            
+                $rating_index = max(0, min(4, floor($averageRating) - 1));
+            
+                $ratingTexts = array_keys($ratingValues);
+            
+                $actual_average_rating = $ratingTexts[$rating_index];
+            } else {
+                // Handle the case where there are no ratings
+                $actual_average_rating = 'No Ratings';
+            }
+            
+            $businessesWithAverageRatings[] = [
+                'business_id' => $businessId,
+                'average_rating' => $averageRating,
+                'actual_average_rating' => $actual_average_rating,
+            ];
+        }
+
+        $responses = DB::table('ratings_response')->get();
+
+        return view('pages.member.index', compact('members', 'businessesWithAverageRatings', 'ratings', 'responses'));
 
     }
 
