@@ -90,7 +90,7 @@
 				<div class="tab-content" id="myTabContent">
 					<div class="tab-pane fade show active" id="agency" role="tabpanel">
 						<!--begin::Row-->
-						<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9 mt-2">
+						<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9">
 							@if(count($subscriptions) > 0)
 								@foreach($subscriptions as $key=>$subscription)
 									@if($subscription->account_type == 'agency')
@@ -168,7 +168,7 @@
 													<!--begin::Desc-->
 													<p class="mb-4">
 														{{ Str::words($subscription->description) }} 
-														<span class="badge badge-light-success" style="cursor: pointer" data-kt-drawer-show="true" data-kt-drawer-target="#kt_drawer_feature-{{$subscription->type}}">Features</span>
+														<span class="badge badge-light-success mt-5" style="cursor: pointer" data-kt-drawer-show="true" data-kt-drawer-target="#kt_drawer_feature-{{$subscription->id}}">Features</span>
 													</p>
 													{{-- @if($subscription->recommended == "yes")<span class="badge badge-primary mb-4">Recommended</span>@endif --}}
 
@@ -199,11 +199,11 @@
 										</div>
 
 										<!--begin::View component-->
-										<div id="kt_drawer_feature-{{$subscription->type}}" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" 
-											data-kt-drawer-toggle="kt_drawer_feature-{{$subscription->type}}_button" data-kt-drawer-close="#kt_drawer_feature-{{$subscription->type}}_close"
+										<div id="kt_drawer_feature-{{$subscription->id}}" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" 
+											data-kt-drawer-toggle="kt_drawer_feature-{{$subscription->id}}_button" data-kt-drawer-close="#kt_drawer_feature-{{$subscription->id}}_close"
 											data-kt-drawer-overlay="true" data-kt-drawer-direction="end" data-kt-drawer-width="{default:'300px', 'md': '500px'}" style="margin-top: 0 !important;">
 											<div class="card rounded-0 w-100">
-												<form id="form-{{$subscription->type}}">
+												<form id="form-{{$subscription->id}}">
 													<!--begin::Card header-->
 													<div class="card-header pe-5 justify-content-between">
 														<!--begin::Title-->
@@ -218,7 +218,7 @@
 														<!--begin::Card toolbar-->
 														<div class="card-toolbar">
 															<!--begin::Close-->
-															<div class="btn btn-sm btn-icon btn-active-light-primary" id="kt_drawer_feature-{{$subscription->type}}_close">
+															<div class="btn btn-sm btn-icon btn-active-light-primary" id="kt_drawer_feature-{{$subscription->id}}_close">
 																<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
 																<span class="svg-icon svg-icon-2">
 																	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -511,7 +511,7 @@
 		
 					<div class="tab-pane fade" id="individual" role="tabpanel">
 						<!--begin::Row-->
-						<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9 mt-2">
+						<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-5 g-xl-9">
 							@if(count($subscriptions) > 0)
 								@foreach($subscriptions as $key=>$subscription)
 									@if($subscription->account_type == 'individual')
@@ -589,7 +589,7 @@
 													<!--begin::Desc-->
 													<p class="mb-4">
 														{{ Str::words($subscription->description) }} 
-														<span class="badge badge-light-success" style="cursor: pointer" data-kt-drawer-show="true" data-kt-drawer-target="#kt_drawer_feature-{{$subscription->type}}">Features</span>
+														<span class="badge badge-light-success mt-5" style="cursor: pointer" data-kt-drawer-show="true" data-kt-drawer-target="#kt_drawer_feature-{{$subscription->id}}">Features</span>
 													</p>
 													{{-- @if($subscription->recommended == "yes")<span class="badge badge-primary mb-4">Recommended</span>@endif --}}
 
@@ -620,11 +620,11 @@
 										</div>
 
 										<!--begin::View component-->
-										<div id="kt_drawer_feature-{{$subscription->type}}" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" 
-											data-kt-drawer-toggle="kt_drawer_feature-{{$subscription->type}}_button" data-kt-drawer-close="#kt_drawer_feature-{{$subscription->type}}_close"
+										<div id="kt_drawer_feature-{{$subscription->id}}" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" 
+											data-kt-drawer-toggle="kt_drawer_feature-{{$subscription->id}}_button" data-kt-drawer-close="#kt_drawer_feature-{{$subscription->id}}_close"
 											data-kt-drawer-overlay="true" data-kt-drawer-direction="end" data-kt-drawer-width="{default:'300px', 'md': '500px'}" style="margin-top: 0 !important;">
 											<div class="card rounded-0 w-100">
-												<form id="form-{{$subscription->type}}">
+												<form id="form-{{$subscription->id}}">
 													<!--begin::Card header-->
 													<div class="card-header pe-5 justify-content-between">
 														<!--begin::Title-->
