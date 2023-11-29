@@ -78,6 +78,9 @@
 				<div class="card-toolbar">
 					<ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
 						<li class="nav-item">
+							<a href="#" style="padding-top: 1.7em; margin-right: 3em;" data-bs-toggle="modal" data-bs-target="#subscription_features">Features</a>
+						</li>
+						<li class="nav-item">
 							<a class="nav-link active" data-bs-toggle="tab" href="#agency">Agency</a>
 						</li>
 						<li class="nav-item">
@@ -261,11 +264,14 @@
 																</button>
 															</a>
 														</div>
-														@foreach($features as $feature)
+														<input type="hidden" name="subscription_id" value="{{$subscription->id}}">
+														@foreach($linkedFeatures as $feature)
 															@if($feature->subscription_id == $subscription->id)
 																<!--begin::Item-->
 																<label class="d-flex align-items-center mb-5" style="cursor: pointer">
-																	<span class="pe-3"><input type="checkbox" name="feature" value="{{$feature->id}}" style="display: block; margin: 1em auto; cursor: pointer;"></span>
+																	<span class="pe-3">
+																		<input type="checkbox" name="feature" value="{{$feature->id}}" style="display: block; margin: 1em auto; cursor: pointer;">
+																	</span>
 																	<span class="fw-semibold fs-6 text-gray-800 flex-grow-1 pe-3">{{$feature->feature}}</span>
 																	<!--begin::Svg Icon | path: icons/duotune/general/gen043.svg-->
 																	<span class="svg-icon svg-icon-1 svg-icon-success">
@@ -292,7 +298,7 @@
 										<div class="modal fade" tabindex="-1" id="features-{{$subscription->id}}">
 											<div class="modal-dialog modal-dialog-centered mw-500px">
 												<div class="modal-content">
-													<form class="form" novalidate="novalidate" id="kt_modal_add_features_form-{{$subscription->id}}">
+													<form class="form" novalidate="novalidate" id="kt_modal_add_subscription_features_form-{{$subscription->id}}">
 														<div class="modal-header">
 															<h5 class="modal-title" id="exampleModalLongTitle">Subscription Features</h5>
 															<!--begin::Close-->
@@ -309,44 +315,21 @@
 															<!--end::Close-->
 														</div>
 														<div class="modal-body">
-															<div class="scroll h-150px" style="overflow-x: hidden;">
-																<input type="hidden" name="subscription_id" value="{{$subscription->id}}">
-																<!--begin::Repeater-->
-																<div class="kt_feature_repeater_basic">
-																	<!--begin::Form group-->
-																	<div class="form-group">
-																		<div data-repeater-list="kt_feature_repeater_basic">
-																			<div data-repeater-item class="form-group row mb-4">
-																				<div class="col-md-8">
-																					<label class="form-label">Feature:</label>
-																					<input type="email" class="form-control mb-2 mb-md-0" name="feature" style="width: 100%;" />
-																				</div>
-																				<div class="col-md-4">
-																					<a href="javascript:;" data-repeater-delete class="btn btn-lg btn-light-danger mt-3 mt-md-8" style="widht: 100%;">
-																						<i class="la la-trash-o"></i>Delete
-																					</a>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<!--end::Form group-->
-
-																	<!--begin::Form group-->
-																	<div class="form-group mt-5">
-																		<a href="javascript:;" data-repeater-create class="btn btn-light-primary">
-																			<i class="la la-plus"></i>Add
-																		</a>
-																	</div>
-																	<!--end::Form group-->
-																</div>
-																<!--end::Repeater-->
-															</div>
+															<input type="hidden" name="subscription_id" value="{{$subscription->id}}">
+															<!--begin::Select-->
+															<select class="form-select" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" multiple="multiple" name="feature_ids">
+																<option></option>
+																@foreach($features as $feature)
+																	<option value="{{ $feature->id }}">{{ $feature->feature }}</option>
+																@endforeach
+															</select>
+															<!--end::Select-->
 														</div>
 														<div class="modal-footer">
 															<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-															<button type="button" class="btn btn-primary me-10 kt_feautures_button" id="kt_feautures_button" data-sub-id="{{$subscription->id}}">
+															<button type="button" class="btn btn-primary me-10 kt_subscription_feautures_button" id="kt_subscription_feautures_button" data-sub-id="{{$subscription->id}}">
 																<span class="indicator-label">
-																	Save Features
+																	Link Features
 																</span>
 																<span class="indicator-progress">
 																	Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -412,7 +395,7 @@
 														</div>
 														<div class="modal-footer">
 															<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-															<button type="button" class="btn btn-primary me-10 kt_feautures_button" id="kt_limitations_button" data-sub-id="{{$subscription->id}}">
+															<button type="button" class="btn btn-primary me-10" id="kt_limitations_button" data-sub-id="{{$subscription->id}}">
 																<span class="indicator-label">
 																	Save Limits
 																</span>
@@ -489,7 +472,7 @@
 													</div>
 
 													<div class="modal-footer" style="justify-content: center !important;">
-														<button type="button" class="btn btn-danger me-10 delete_selected_features" id="delete_selected_features-{{$subscription->type}}" style="width: 100%">
+														<button type="button" class="btn btn-danger me-10 delete_selected_features" id="delete_selected_features-{{$subscription->id}}" style="width: 100%">
 															<span class="indicator-label">
 																Delete
 															</span>
@@ -682,11 +665,14 @@
 																</button>
 															</a>
 														</div>
-														@foreach($features as $feature)
+														<input type="hidden" name="subscription_id" value="{{$subscription->id}}">
+														@foreach($linkedFeatures as $feature)
 															@if($feature->subscription_id == $subscription->id)
 																<!--begin::Item-->
 																<label class="d-flex align-items-center mb-5" style="cursor: pointer">
-																	<span class="pe-3"><input type="checkbox" name="feature" value="{{$feature->id}}" style="display: block; margin: 1em auto; cursor: pointer;"></span>
+																	<span class="pe-3">
+																		<input type="checkbox" name="feature" value="{{$feature->id}}" style="display: block; margin: 1em auto; cursor: pointer;">
+																	</span>
 																	<span class="fw-semibold fs-6 text-gray-800 flex-grow-1 pe-3">{{$feature->feature}}</span>
 																	<!--begin::Svg Icon | path: icons/duotune/general/gen043.svg-->
 																	<span class="svg-icon svg-icon-1 svg-icon-success">
@@ -699,7 +685,7 @@
 																</label>
 																<!--end::Item-->
 															@endif
-														@endforeach
+														@endforeach	
 														
 													</div>
 													<!--end::Card body-->
@@ -713,7 +699,7 @@
 										<div class="modal fade" tabindex="-1" id="features-{{$subscription->id}}">
 											<div class="modal-dialog modal-dialog-centered mw-500px">
 												<div class="modal-content">
-													<form class="form" novalidate="novalidate" id="kt_modal_add_features_form-{{$subscription->id}}">
+													<form class="form" novalidate="novalidate" id="kt_modal_add_subscription_features_form-{{$subscription->id}}">
 														<div class="modal-header">
 															<h5 class="modal-title" id="exampleModalLongTitle">Subscription Features</h5>
 															<!--begin::Close-->
@@ -730,44 +716,21 @@
 															<!--end::Close-->
 														</div>
 														<div class="modal-body">
-															<div class="scroll h-150px" style="overflow-x: hidden;">
-																<input type="hidden" name="subscription_id" value="{{$subscription->id}}">
-																<!--begin::Repeater-->
-																<div class="kt_feature_repeater_basic">
-																	<!--begin::Form group-->
-																	<div class="form-group">
-																		<div data-repeater-list="kt_feature_repeater_basic">
-																			<div data-repeater-item class="form-group row mb-4">
-																				<div class="col-md-8">
-																					<label class="form-label">Feature:</label>
-																					<input type="email" class="form-control mb-2 mb-md-0" name="feature" style="width: 100%;" />
-																				</div>
-																				<div class="col-md-4">
-																					<a href="javascript:;" data-repeater-delete class="btn btn-lg btn-light-danger mt-3 mt-md-8" style="widht: 100%;">
-																						<i class="la la-trash-o"></i>Delete
-																					</a>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<!--end::Form group-->
-
-																	<!--begin::Form group-->
-																	<div class="form-group mt-5">
-																		<a href="javascript:;" data-repeater-create class="btn btn-light-primary">
-																			<i class="la la-plus"></i>Add
-																		</a>
-																	</div>
-																	<!--end::Form group-->
-																</div>
-																<!--end::Repeater-->
-															</div>
+															<input type="hidden" name="subscription_id" value="{{$subscription->id}}">
+															<!--begin::Select-->
+															<select class="form-select" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" multiple="multiple" name="feature_ids">
+																<option></option>
+																@foreach($features as $feature)
+																	<option value="{{ $feature->id }}">{{ $feature->feature }}</option>
+																@endforeach
+															</select>
+															<!--end::Select-->
 														</div>
 														<div class="modal-footer">
 															<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-															<button type="button" class="btn btn-primary me-10 kt_feautures_button" id="kt_feautures_button" data-sub-id="{{$subscription->id}}">
+															<button type="button" class="btn btn-primary me-10 kt_subscription_feautures_button" id="kt_subscription_feautures_button" data-sub-id="{{$subscription->id}}">
 																<span class="indicator-label">
-																	Save Features
+																	Link Features
 																</span>
 																<span class="indicator-progress">
 																	Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -833,7 +796,7 @@
 														</div>
 														<div class="modal-footer">
 															<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-															<button type="button" class="btn btn-primary me-10 kt_feautures_button" id="kt_limitations_button" data-sub-id="{{$subscription->id}}">
+															<button type="button" class="btn btn-primary me-10" id="kt_limitations_button" data-sub-id="{{$subscription->id}}">
 																<span class="indicator-label">
 																	Save Limits
 																</span>
@@ -932,6 +895,78 @@
 					</div>
 				</div>
 			</div>
+
+			<!--begin::Modal-->
+
+			<div class="modal fade" tabindex="-1" id="subscription_features">
+				<div class="modal-dialog modal-dialog-centered mw-600px">
+					<div class="modal-content">
+						<form class="form" novalidate="novalidate" id="kt_modal_add_features_form">
+							<div class="modal-header">
+								<h5 class="modal-title" id="Features">Features</h5>
+								<!--begin::Close-->
+								<div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+									<span class="svg-icon svg-icon-1">
+										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+											<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+											<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</div>
+								<!--end::Close-->
+							</div>
+							<div class="modal-body">
+								<div class="scroll h-150px" style="overflow-x: hidden;">
+									<!--begin::Repeater-->
+									<div class="kt_feature_repeater_basic">
+										<!--begin::Form group-->
+										<div class="form-group">
+											<div data-repeater-list="kt_feature_repeater_basic">
+												<div data-repeater-item class="form-group row mb-4">
+													<div class="col-md-8">
+														<label class="form-label">Feature:</label>
+														<input type="email" class="form-control mb-2 mb-md-0" name="feature" style="width: 100%;" />
+													</div>
+													<div class="col-md-4">
+														<a href="javascript:;" data-repeater-delete class="btn btn-lg btn-light-danger mt-3 mt-md-8" style="widht: 100%;">
+															<i class="la la-trash-o"></i>Delete
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!--end::Form group-->
+
+										<!--begin::Form group-->
+										<div class="form-group mt-5">
+											<a href="javascript:;" data-repeater-create class="btn btn-light-primary">
+												<i class="la la-plus"></i>Add
+											</a>
+										</div>
+										<!--end::Form group-->
+									</div>
+									<!--end::Repeater-->
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary me-10" id="kt_add_feautures_button">
+									<span class="indicator-label">
+										Save Features
+									</span>
+									<span class="indicator-progress">
+										Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+									</span>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!--end:: Modal-->
 		</div>
 		
 	</div>

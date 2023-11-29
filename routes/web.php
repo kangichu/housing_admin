@@ -48,6 +48,8 @@ Route::get('home', [Home::class, 'index'])->name('home');
 
             Route::post('bulk/feature/delete', [FeatureController::class, 'bulk_destroy']); // Deletes bulk Bookmarks
 
+            Route::post('subscription_features', [FeatureController::class, 'subscription_features']);
+
         Route::resource('subscriber', SubscriberController::class);
 
 

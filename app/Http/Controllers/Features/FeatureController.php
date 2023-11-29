@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Features;
 
 use App\Models\Feature;
+use App\Models\FeatureSubscription;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -37,14 +39,13 @@ class FeatureController extends Controller
     public function store(Request $request)
     {
 
-        $subscription_id = $request->formValues['subscription_id'];
         $features = $request->formValues['kt_feature_repeater_basic'];
-
 
         foreach($features as $feature)
         {
+            $feature_permission = Str::slug($feature['feature']);
             $feature = new Feature([
-                'subscription_id' => $subscription_id,
+                'feature_permission' => $feature_permission,
                 'feature' => $feature['feature'],
             ]);
 
@@ -53,6 +54,45 @@ class FeatureController extends Controller
 
         return response()->json([
             'message' => 'all features have been added.',
+            'status' => 200
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function subscription_features(Request $request)
+    {
+
+        $feature_ids = $request->values["feature_ids"];
+        $subscription_id = $request->values["subscription_id"];
+
+        if (is_array($feature_ids)) {
+            foreach($feature_ids as $feature_id)
+            {
+                $FeatureSubscription = new FeatureSubscription([
+                    'feature_id' => $feature_id,
+                    'subscription_id' => $subscription_id,
+                ]);
+
+                $FeatureSubscription->save();
+            }
+        }else{
+            $FeatureSubscription = new FeatureSubscription([
+                'feature_id' => $feature_ids,
+                'subscription_id' => $subscription_id,
+            ]);
+
+            $FeatureSubscription->save();
+        }
+
+
+
+        return response()->json([
+            'message' => 'all features have been linked.',
             'status' => 200
         ]);
     }
@@ -99,22 +139,35 @@ class FeatureController extends Controller
      */
     public function bulk_destroy(Request $request)
     {
-        $features = $request->values;
 
-        if (is_array($features['feature'])) {
-            foreach($features['feature'] as $feature)
+        $features = $request->values['feature'];
+
+        if (is_array($features)) {
+            foreach($features as $feature)
             {
-                $this_feature = Feature::find($feature);
-                $this_feature->delete();  
+                $this_feature = FeatureSubscription::where([
+                    "feature_id" => $feature, 
+                    "subscription_id" => $request->values["subscription_id"]
+                ])->first();
+
+                if ($this_feature) {
+                    $this_feature->delete();
+                }  
             }
+            
         }else{
-            $this_feature = Feature::find($features['feature']);
+            $this_feature = FeatureSubscription::where(
+                ["feature_id"=> $features, 
+                "subscription_id" => $request->values["subscription_id"]
+            ])
+            ->first();
+
             $this_feature->delete();  
         }
        
 
         return response()->json([
-            'message' => 'your features have been deleted.',
+            'message' => 'your features have been unlinked.',
             'status' => 200
         ]);
     }

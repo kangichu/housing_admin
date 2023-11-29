@@ -198,93 +198,88 @@
 
         <script type="text/javascript">
             // Elements to indicate
-            var buttons = document.querySelectorAll("#kt_feautures_button");
+            var kt_add_feautures_button = document.querySelector("#kt_add_feautures_button");
+
             // Handle button click event
-            buttons.forEach(function(button) {
-                button.addEventListener("click", function() {
-                    // Activate indicator
-                    button.setAttribute("data-kt-indicator", "on");
+            kt_add_feautures_button.addEventListener("click", function() {
+               
+                // Activate indicator
+                kt_add_feautures_button.setAttribute("data-kt-indicator", "on");
 
-                    let sub_id = button.getAttribute('data-sub-id');
+                // Handle form submission
+                // Get the form associated with this button using a common class
+                var formData = $('#kt_modal_add_features_form').serializeArray();
 
-                    // Handle form submission
-                    // Get the form associated with this button using a common class
-                    var formData = $('#kt_modal_add_features_form-'+sub_id).serializeArray();
+                // Create an empty object to store the form values
+                var formValues = {};
 
-                    // Create an empty object to store the form values
-                    var formValues = {};
+                // Loop through the form data and extract the form values
+                formData.forEach(function(input) {
+                    var inputName = input.name;
+                    var inputValue = input.value;
 
-                    // Loop through the form data and extract the form values
-                    formData.forEach(function(input) {
-                        var inputName = input.name;
-                        var inputValue = input.value;
+                    // Check if the input is part of a repeated field
+                    if (inputName.indexOf('[') !== -1) {
+                        var inputNameParts = inputName.split('[');
+                        var repeatedFieldName = inputNameParts[0];
+                        var repeatedFieldIndex = inputNameParts[1].replace(']', '');
 
-                        // Check if the input is part of a repeated field
-                        if (inputName.indexOf('[') !== -1) {
-                            var inputNameParts = inputName.split('[');
-                            var repeatedFieldName = inputNameParts[0];
-                            var repeatedFieldIndex = inputNameParts[1].replace(']', '');
-
-                            // Check if the repeated field already exists in the form values
-                            if (!formValues.hasOwnProperty(repeatedFieldName)) {
-                                formValues[repeatedFieldName] = [];
-                            }
-
-                            // Check if the repeated field index already exists in the form values
-                            if (!formValues[repeatedFieldName][repeatedFieldIndex]) {
-                                formValues[repeatedFieldName][repeatedFieldIndex] = {};
-                            }
-
-                            // Add the repeated field value to the form values
-                            formValues[repeatedFieldName][repeatedFieldIndex][inputNameParts[2].replace(']', '')] = inputValue;
-                        } else {
-                            // Add the input value to the form values
-                            formValues[inputName] = inputValue;
+                        // Check if the repeated field already exists in the form values
+                        if (!formValues.hasOwnProperty(repeatedFieldName)) {
+                            formValues[repeatedFieldName] = [];
                         }
-                    });
 
-                    let subscription_id = $('input[name = subscription_id]').val();
+                        // Check if the repeated field index already exists in the form values
+                        if (!formValues[repeatedFieldName][repeatedFieldIndex]) {
+                            formValues[repeatedFieldName][repeatedFieldIndex] = {};
+                        }
 
+                        // Add the repeated field value to the form values
+                        formValues[repeatedFieldName][repeatedFieldIndex][inputNameParts[2].replace(']', '')] = inputValue;
+                    } else {
+                        // Add the input value to the form values
+                        formValues[inputName] = inputValue;
+                    }
+                });
 
-                    var token = $('meta[name="csrf-token"]').attr('content');
+                var token = $('meta[name="csrf-token"]').attr('content');
 
-                    $.ajax({
-                        url: '/feature',
-                        type: 'POST',
-                        data: { '_token' : token, formValues},
-                        success: function(response) 
-                        {
-                            if(response.status == 200)
+                $.ajax({
+                    url: '/feature',
+                    type: 'POST',
+                    data: { '_token' : token, formValues},
+                    success: function(response) 
+                    {
+                        if(response.status == 200)
 
-                                Swal.fire({
-                                    text: "Success, "+response.message,
-                                    icon: "success",
-                                    buttonsStyling: !1,
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-light"
-                                    }
-                                }).then((function() {
-                                    button.removeAttribute("data-kt-indicator");
-                                    $('#kt_modal_add_features_form-'+sub_id).trigger("reset");
-                                    $('.modal').modal('hide');
-                                    location.reload(); // reload the page
-                                }));
-                        },
-                        error:function (e) {
                             Swal.fire({
-                                text: "Sorry, looks like there are some errors detected, please try again.",
-                                icon: "error",
+                                text: "Success, "+response.message,
+                                icon: "success",
                                 buttonsStyling: !1,
                                 confirmButtonText: "Ok, got it!",
                                 customClass: {
                                     confirmButton: "btn btn-light"
                                 }
                             }).then((function() {
-                                button.removeAttribute("data-kt-indicator");
+                                kt_add_feautures_button.removeAttribute("data-kt-indicator");
+                                $('#kt_modal_add_features_form').trigger("reset");
+                                $('.modal').modal('hide');
+                                location.reload(); // reload the page
                             }));
-                        }
-                    });
+                    },
+                    error:function (e) {
+                        Swal.fire({
+                            text: "Sorry, looks like there are some errors detected, please try again.",
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-light"
+                            }
+                        }).then((function() {
+                            kt_add_feautures_button.removeAttribute("data-kt-indicator");
+                        }));
+                    }
                 });
             });
         </script>
@@ -470,13 +465,14 @@
 
         <script type="text/javascript">
             // Add event listener to all buttons with class delete_selected_features
-            var buttons = document.querySelectorAll(".delete_selected_features");
-            buttons.forEach(function(button) {
-                button.addEventListener("click", function() {
+            var delete_selected_features = document.querySelectorAll(".delete_selected_features");
+            
+            delete_selected_features.forEach(function(delete_selected_feature) {
+                delete_selected_feature.addEventListener("click", function() {
 
                     // Get the dynamic value from the id attribute
-                    var dynamicValue = button.id.split("-")[1];
-                    button.setAttribute("data-kt-indicator", "on");
+                    var dynamicValue = delete_selected_feature.id.split("-")[1];
+                    delete_selected_feature.setAttribute("data-kt-indicator", "on");
                     console.log($('#form-'+dynamicValue));
                     // Handle form submission
                     let values = $('#form-'+dynamicValue).serializeArray().reduce((map, input) => {
@@ -514,7 +510,7 @@
                                         confirmButton: "btn btn-light"
                                     }
                                 }).then((function() {
-                                    button.removeAttribute("data-kt-indicator");
+                                    delete_selected_feature.removeAttribute("data-kt-indicator");
                                     $('#delete-selected').modal('hide');
                                     location.reload(); // reload the page
                                 }));
@@ -529,7 +525,7 @@
                                     confirmButton: "btn btn-light"
                                 }
                             }).then((function() {
-                                button.removeAttribute("data-kt-indicator");
+                                delete_selected_feature.removeAttribute("data-kt-indicator");
                             }));
                         }
                     });
@@ -541,15 +537,15 @@
 
         <script type="text/javascript">
             // Elements to indicate
-            var buttons = document.querySelectorAll("#kt_limitations_button");
+            var kt_limitations_buttons = document.querySelectorAll("#kt_limitations_button");
 
             // Handle button click event
-            buttons.forEach(function(button) {
-                button.addEventListener("click", function() {
+            kt_limitations_buttons.forEach(function(kt_limitations_button) {
+                kt_limitations_button.addEventListener("click", function() {
                     // Activate indicator
-                    button.setAttribute("data-kt-indicator", "on");
+                    kt_limitations_button.setAttribute("data-kt-indicator", "on");
 
-                    let sub_id = button.getAttribute('data-sub-id');
+                    let sub_id = kt_limitations_button.getAttribute('data-sub-id');
 
                     // Handle form submission
                     // Get the form associated with this button using a common class
@@ -621,7 +617,7 @@
                                             confirmButton: "btn btn-light"
                                         }
                                     }).then((function() {
-                                        button.removeAttribute("data-kt-indicator");
+                                        kt_limitations_button.removeAttribute("data-kt-indicator");
                                         $('#kt_modal_add_features_form-'+sub_id).trigger("reset");
                                         $('.modal').modal('hide');
                                         location.reload(); // reload the page
@@ -637,7 +633,7 @@
                                         confirmButton: "btn btn-light"
                                     }
                                 }).then((function() {
-                                    button.removeAttribute("data-kt-indicator");
+                                    kt_limitations_button.removeAttribute("data-kt-indicator");
                                 }));
                             }
                         });
@@ -675,6 +671,105 @@
                             }
                         });
                     });
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            // Elements to indicate
+            var kt_subscription_feautures_buttons = document.querySelectorAll("#kt_subscription_feautures_button");
+
+            // Handle button click event
+            kt_subscription_feautures_buttons.forEach(function(kt_subscription_feautures_button) {
+                kt_subscription_feautures_button.addEventListener("click", function() {
+                    // Activate indicator
+                    kt_subscription_feautures_button.setAttribute("data-kt-indicator", "on");
+
+                    let sub_id = kt_subscription_feautures_button.getAttribute('data-sub-id');
+
+                    // Handle form submission
+
+                    // Loop through the form data and extract the form values
+                    let values = $('#kt_modal_add_subscription_features_form-'+sub_id).serializeArray().reduce((map, input) => {
+                        let value;
+                        if (map.hasOwnProperty(input.name)) {
+                            value = Array.isArray(map[input.name]) ?
+                                map[input.name] : [map[input.name]];
+                            value.push(input.value);
+                        } else {
+                            value = input.value;
+                        }
+                        map[input.name] = value;
+                        return map;
+                    }, {});
+                    
+                    // Check if all form inputs have been entered
+                    let allFieldsFilled = true;
+                    let formInputs = document.querySelectorAll("#kt_modal_add_subscription_features_form-" + sub_id + " input");
+                    formInputs.forEach(function(input) {
+                        if (input.value.trim() === "") {
+                            allFieldsFilled = false;
+                            input.classList.add("is-invalid");
+                        }
+                    });
+
+                    if (allFieldsFilled) {
+
+                        let subscription_id = $('input[name = subscription_id]').val();
+
+                        var token = $('meta[name="csrf-token"]').attr('content');
+
+                        $.ajax({
+                            url: '/subscription_features',
+                            type: 'POST',
+                            data: { '_token' : token, values},
+                            success: function(response) 
+                            {
+                                if(response.status == 200)
+
+                                    Swal.fire({
+                                        text: "Success, "+response.message,
+                                        icon: "success",
+                                        buttonsStyling: !1,
+                                        confirmButtonText: "Ok, got it!",
+                                        customClass: {
+                                            confirmButton: "btn btn-light"
+                                        }
+                                    }).then((function() {
+                                        kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
+                                        location.reload(); // reload the page
+                                    }));
+                            },
+                            error:function (e) {
+                                Swal.fire({
+                                    text: "Sorry, looks like there are some errors detected, please try again.",
+                                    icon: "error",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-light"
+                                    }
+                                }).then((function() {
+                                    kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
+                                }));
+                            }
+                        });
+
+                    } else{
+                        Swal.fire({
+                            text: "Sorry, looks like there are some empty fields, please fill them.",
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-light"
+                            }
+                        }).then((function() {
+                            kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
+                        }));
+                    }
+
+                   
                 });
             });
         </script>

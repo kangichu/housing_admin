@@ -23,9 +23,12 @@ class SubscriptionController extends Controller
     {
         $subscriptions = Subscription::get();
         $features = Feature::get();
+        $linkedFeatures = Feature::join('feature_subscription','subscription_features.id','feature_subscription.feature_id')
+        ->select('subscription_features.*','feature_subscription.subscription_id')
+        ->get();
         $limits = DB::table('subscription_plan_limitations')->get();
 			
-        return view('pages.subscription.index')->with(array('subscriptions'=>$subscriptions, 'features'=>$features, 'limits'=>$limits));
+        return view('pages.subscription.index', compact('subscriptions', 'features', 'limits', 'linkedFeatures'));
     }
 
     /**
