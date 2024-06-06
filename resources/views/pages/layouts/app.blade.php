@@ -140,6 +140,7 @@
             import { identiconSvg } from "{{ asset('js/minidenticons.min.js')}}"
         </script>
 
+
         <script type="text/javascript">
             $(document).ready(function() {
                 // show the alert
@@ -186,6 +187,7 @@
                    
                     show: function() {
                         $(this).slideDown();
+                        $(this).find('[data-kt-repeater="select2"]').select2();
                     },
 
                     hide: function(deleteElement) {
@@ -197,50 +199,55 @@
         </script>
 
         <script type="text/javascript">
-            // Elements to indicate
-            var kt_add_feautures_button = document.querySelector("#kt_add_feautures_button");
+            $('.kt_feature_repeater_edit').each(function() {
+                $(this).repeater({
+                    initEmpty: false,
+                   
+                    show: function() {
+                        $(this).slideDown();
+                        $(this).find('[data-kt-repeater="select2"]').select2();
+                    },
 
-            // Handle button click event
-            kt_add_feautures_button.addEventListener("click", function() {
-               
-                // Activate indicator
-                kt_add_feautures_button.setAttribute("data-kt-indicator", "on");
-
-                // Handle form submission
-                // Get the form associated with this button using a common class
-                var formData = $('#kt_modal_add_features_form').serializeArray();
-
-                // Create an empty object to store the form values
-                var formValues = {};
-
-                // Loop through the form data and extract the form values
-                formData.forEach(function(input) {
-                    var inputName = input.name;
-                    var inputValue = input.value;
-
-                    // Check if the input is part of a repeated field
-                    if (inputName.indexOf('[') !== -1) {
-                        var inputNameParts = inputName.split('[');
-                        var repeatedFieldName = inputNameParts[0];
-                        var repeatedFieldIndex = inputNameParts[1].replace(']', '');
-
-                        // Check if the repeated field already exists in the form values
-                        if (!formValues.hasOwnProperty(repeatedFieldName)) {
-                            formValues[repeatedFieldName] = [];
-                        }
-
-                        // Check if the repeated field index already exists in the form values
-                        if (!formValues[repeatedFieldName][repeatedFieldIndex]) {
-                            formValues[repeatedFieldName][repeatedFieldIndex] = {};
-                        }
-
-                        // Add the repeated field value to the form values
-                        formValues[repeatedFieldName][repeatedFieldIndex][inputNameParts[2].replace(']', '')] = inputValue;
-                    } else {
-                        // Add the input value to the form values
-                        formValues[inputName] = inputValue;
+                    hide: function(deleteElement) {
+                        $(this).slideUp(deleteElement);
                     }
                 });
+            });
+
+        </script>
+
+        <script type="text/javascript">
+
+            var kt_add_feautures_button = document.querySelector("#kt_add_feautures_button");
+
+            kt_add_feautures_button.addEventListener("click", function() {
+               
+                kt_add_feautures_button.setAttribute("data-kt-indicator", "on");
+
+                var formValues = [];
+
+                var repeatedItems = $('[data-repeater-item]');
+
+                repeatedItems.each(function() {
+                    var repeatedItemValues = {};
+                    var inputs = $(this).find('input, select');
+
+                    inputs.each(function() {
+                        var input = $(this);
+                        var inputName = input.attr('name').replace(/kt_feature_repeater_basic\[\d+\]\[/g, '').replace(/\]\[/g, '').replace(/\]/g, '');
+                        var inputValue = input.val();
+
+                        if (input.is('select')) {
+                            inputValue = input.val();
+                        }
+
+                        repeatedItemValues[inputName] = inputValue;
+                    });
+
+                    formValues.push(repeatedItemValues);
+                });
+
+                console.log(formValues);
 
                 var token = $('meta[name="csrf-token"]').attr('content');
 
@@ -278,6 +285,82 @@
                             }
                         }).then((function() {
                             kt_add_feautures_button.removeAttribute("data-kt-indicator");
+                        }));
+                    }
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+                
+            var kt_edit_feautures_button = document.querySelector("#kt_edit_feautures_button");
+
+            kt_edit_feautures_button.addEventListener("click", function() {
+            
+                kt_edit_feautures_button.setAttribute("data-kt-indicator", "on");
+
+                var formValues = [];
+
+                var repeatedItems = $('[data-repeater-item-edit]');
+
+                repeatedItems.each(function() {
+                    var repeatedItemValues = {};
+                    var inputs = $(this).find('input, select');
+
+                    inputs.each(function() {
+                        var input = $(this);
+                        var inputName = input.attr('name').replace(/kt_feature_repeater_edit\[\d+\]\[/g, '').replace(/\]\[/g, '').replace(/\]/g, '');
+                        var inputValue = input.val();
+
+                        if (input.is('select')) {
+                            inputValue = input.val();
+                        }
+
+                        repeatedItemValues[inputName] = inputValue;
+                    });
+
+                    formValues.push(repeatedItemValues);
+                });
+
+                console.log(formValues);
+                var random = Math.floor(Math.random() * 1000);
+
+                var token = $('meta[name="csrf-token"]').attr('content');
+
+                $.ajax({
+                    url: '/feature/'+ random,
+                    type: 'PUT',
+                    data: { '_token' : token, formValues},
+                    success: function(response) 
+                    {
+                        if(response.status == 200)
+
+                            Swal.fire({
+                                text: "Success, "+response.message,
+                                icon: "success",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-light"
+                                }
+                            }).then((function() {
+                                kt_edit_feautures_button.removeAttribute("data-kt-indicator");
+                                $('#kt_modal_edit_features_form').trigger("reset");
+                                $('.modal').modal('hide');
+                                location.reload(); // reload the page
+                            }));
+                    },
+                    error:function (e) {
+                        Swal.fire({
+                            text: "Sorry, looks like there are some errors detected, please try again.",
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-light"
+                            }
+                        }).then((function() {
+                            kt_edit_feautures_button.removeAttribute("data-kt-indicator");
                         }));
                     }
                 });

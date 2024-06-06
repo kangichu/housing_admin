@@ -899,69 +899,170 @@
 			<!--begin::Modal-->
 
 			<div class="modal fade" tabindex="-1" id="subscription_features">
-				<div class="modal-dialog modal-dialog-centered mw-600px">
+				<div class="modal-dialog modal-dialog-centered mw-750px">
 					<div class="modal-content">
-						<form class="form" novalidate="novalidate" id="kt_modal_add_features_form">
-							<div class="modal-header">
-								<h5 class="modal-title" id="Features">Features</h5>
-								<!--begin::Close-->
-								<div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
-									<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-									<span class="svg-icon svg-icon-1">
-										<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-											<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-											<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-										</svg>
-									</span>
-									<!--end::Svg Icon-->
-								</div>
-								<!--end::Close-->
+						<div class="modal-header">
+							<ul class="nav nav-tabs nav-line-tabs d-flex flex-row justify-content-between" style="width: 90%; border: none !important;">
+								<li class="nav-item">
+									<a class="nav-link active" data-bs-toggle="tab" href="#kt_tab_pane_create">Create Features</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" data-bs-toggle="tab" href="#kt_tab_pane_edit">Edit Features</a>
+								</li>
+							</ul>
+							<!--begin::Close-->
+							<div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
+								<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+								<span class="svg-icon svg-icon-1">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+										<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+										<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+									</svg>
+								</span>
+								<!--end::Svg Icon-->
 							</div>
-							<div class="modal-body">
-								<div class="scroll h-150px" style="overflow-x: hidden;">
-									<!--begin::Repeater-->
-									<div class="kt_feature_repeater_basic">
-										<!--begin::Form group-->
-										<div class="form-group">
-											<div data-repeater-list="kt_feature_repeater_basic">
-												<div data-repeater-item class="form-group row mb-4">
-													<div class="col-md-8">
-														<label class="form-label">Feature:</label>
-														<input type="email" class="form-control mb-2 mb-md-0" name="feature" style="width: 100%;" />
-													</div>
-													<div class="col-md-4">
-														<a href="javascript:;" data-repeater-delete class="btn btn-lg btn-light-danger mt-3 mt-md-8" style="widht: 100%;">
-															<i class="la la-trash-o"></i>Delete
-														</a>
+							<!--end::Close-->
+						</div>
+						<div class="modal-body">
+							<div class="tab-content" id="myTabContent">
+								<div class="tab-pane fade show active" id="kt_tab_pane_create" role="tabpanel">
+									<form class="form" novalidate="novalidate" id="kt_modal_add_features_form">
+										<div class="scroll h-150px" style="overflow-x: hidden;">
+											<!--begin::Repeater-->
+											<div class="kt_feature_repeater_basic">
+												<!--begin::Form group-->
+												<div class="form-group">
+													<div data-repeater-list="kt_feature_repeater_basic">
+														<div data-repeater-item class="form-group row mb-4">
+															<div class="col-md-4">
+																<label class="form-label">Feature:</label>
+																<input type="email" class="form-control mb-2 mb-md-0" name="feature" style="width: 100%;" />
+															</div>
+															<div class="col-md-8">
+																<!--begin::Select-->
+																<label class="form-label">Route:</label>
+																@php
+																	$groupedRoutes = collect($routes)->groupBy(function ($route) {
+																		return $route->url; // Group by the actual URL
+																	});
+																@endphp
+																<select class="form-select" style="width: 100% !important" data-kt-repeater="select2" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" multiple="multiple" name="route_groups[]">
+																	<option></option>
+																	@foreach($groupedRoutes as $group => $groupedRoute)
+																		<option value="{{ $group }}">{{ $group }}</option>
+																	@endforeach
+																</select>
+																<!--end::Select-->
+															</div>
+															<div class="col-md-4" style="justify-content : center">
+																<a href="javascript:;" data-repeater-delete class="btn btn-lg btn-light-danger mt-3 mt-md-8" style="widht: 100%;">
+																	<i class="la la-trash-o"></i>Delete
+																</a>
+															</div>
+														</div>
 													</div>
 												</div>
+												<!--end::Form group-->
+		
+												<!--begin::Form group-->
+												<div class="form-group mt-5">
+													<a href="javascript:;" data-repeater-create class="btn btn-light-primary">
+														<i class="la la-plus"></i>Add
+													</a>
+												</div>
+												<!--end::Form group-->
 											</div>
+											<!--end::Repeater-->
 										</div>
-										<!--end::Form group-->
-
-										<!--begin::Form group-->
-										<div class="form-group mt-5">
-											<a href="javascript:;" data-repeater-create class="btn btn-light-primary">
-												<i class="la la-plus"></i>Add
-											</a>
+										<hr>
+										<div class="d-flex flex-row justify-content-between">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-primary" id="kt_add_feautures_button">
+												<span class="indicator-label">
+													Save Features
+												</span>
+												<span class="indicator-progress">
+													Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+												</span>
+											</button>
 										</div>
-										<!--end::Form group-->
-									</div>
-									<!--end::Repeater-->
+									</form>
 								</div>
+					
+								<div class="tab-pane fade" id="kt_tab_pane_edit" role="tabpanel">
+									<form class="form" novalidate="novalidate" id="kt_modal_edit_features_form">
+										<div class="scroll h-350px" style="overflow-x: hidden;">
+											<!--begin::Repeater-->
+											@php
+												$groupedFeatures = $featureURLS->groupBy('feature');
+												$counter = 0;
+											@endphp
+
+											@foreach($groupedFeatures as $featureName => $features)
+											<div class="kt_feature_repeater_edit">
+												<!--begin::Form group-->
+												<div class="form-group">
+													<div data-repeater-list="kt_feature_repeater_edit">
+														<div data-repeater-item data-repeater-item-edit class="form-group row mb-4">
+
+															<div class="col-md-4">
+																<label class="form-label">Feature:</label>
+																<input type="email" class="form-control mb-2 mb-md-0" name="feature" style="width: 100%;" value="{{ $featureName }}"/>
+															</div>
+
+															<div class="col-md-8">
+																<!--begin::Select-->
+																<label class="form-label">Route:</label>
+																
+																@php
+																	$groupedRoutes = collect($routes)->groupBy(function ($route) {
+																		return $route->url; // Group by the actual URL
+																	});
+																@endphp
+
+																<select class="form-select" style="width: 100% !important" data-kt-repeater="select2" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" multiple="multiple" name="formValues[{{ $counter }}][route_groups][]">
+																	<option></option>
+																	@foreach($groupedRoutes as $url => $groupedRoute)
+																		<option value="{{ $url }}" {{ in_array($url, $features->pluck('route_url')->toArray()) ? 'selected' : '' }}>{{ $url }}</option>
+																	@endforeach
+																</select>
+
+																@php
+																	$counter++;
+																@endphp
+																<!--end::Select-->
+															</div>
+															<div class="col-md-4" style="justify-content : center">
+																<a href="javascript:;" data-repeater-delete class="btn btn-lg btn-light-danger mt-3 mt-md-8" style="widht: 100%;">
+																	<i class="la la-trash-o"></i>Delete
+																</a>
+															</div>
+														</div><br>
+													</div>
+												</div>
+												<!--end::Form group-->
+											</div>
+											@endforeach
+											<!--end::Repeater-->
+										</div>
+										<hr>
+										<div class="d-flex flex-row justify-content-between">
+											<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-primary" id="kt_edit_feautures_button">
+												<span class="indicator-label">
+													Save Features
+												</span>
+												<span class="indicator-progress">
+													Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+												</span>
+											</button>
+										</div>
+									</form>
+								</div>
+					
 							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary me-10" id="kt_add_feautures_button">
-									<span class="indicator-label">
-										Save Features
-									</span>
-									<span class="indicator-progress">
-										Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-									</span>
-								</button>
-							</div>
-						</form>
+							
+						</div>
 					</div>
 				</div>
 			</div>

@@ -91,7 +91,7 @@ class SubscriberController extends Controller
                 'status' => 200
             ]);
 
-        } catch(Exception $e) {
+        } catch(\Exception $e) {
             return response()->json([
                 'message' => 'looks like we are experincing an issue at the moment. Please try again later.',
                 'status' => 404

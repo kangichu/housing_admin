@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Features;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use App\Models\Subscription;
+use App\Models\User;
+use App\Models\Route;
 use App\Models\Feature;
 use App\Models\Subscriber;
-use App\Models\User;
+use App\Models\Subscription;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 
 class SubscriptionController extends Controller
 {
@@ -22,13 +23,24 @@ class SubscriptionController extends Controller
     public function index()
     {
         $subscriptions = Subscription::get();
+
+        $routes = Route::get();
+
         $features = Feature::get();
+
+        $featureURLS = Feature::leftJoin('route_has_features','route_has_features.feature_id','subscription_features.id')
+        ->leftJoin('routes','routes.id','route_has_features.route_id')
+        ->select('subscription_features.*','routes.url as route_url')
+        ->get();
+
+
         $linkedFeatures = Feature::join('feature_subscription','subscription_features.id','feature_subscription.feature_id')
         ->select('subscription_features.*','feature_subscription.subscription_id')
         ->get();
+        
         $limits = DB::table('subscription_plan_limitations')->get();
 			
-        return view('pages.subscription.index', compact('subscriptions', 'features', 'limits', 'linkedFeatures'));
+        return view('pages.subscription.index', compact('subscriptions', 'features', 'limits', 'linkedFeatures','routes','featureURLS'));
     }
 
     /**
@@ -79,7 +91,7 @@ class SubscriptionController extends Controller
         
         $subscription = Subscription::find($subscription_id);
 
-        $features = Feature::where('subscription_id', $subscription_id)->get();
+        $features = Feature::get();
 
         $subscribers = Subscriber::join('users','active_subscriptions.user_id','users.id')
         ->join('businesses','users.id','businesses.user_id')
