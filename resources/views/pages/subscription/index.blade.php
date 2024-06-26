@@ -933,7 +933,7 @@
 												<!--begin::Form group-->
 												<div class="form-group">
 													<div data-repeater-list="kt_feature_repeater_basic">
-														<div data-repeater-item class="form-group row mb-4">
+														<div data-repeater-item  data-repeater-item-create class="form-group row mb-4">
 															<div class="col-md-4">
 																<label class="form-label">Feature:</label>
 																<input type="email" class="form-control mb-2 mb-md-0" name="feature" style="width: 100%;" />

@@ -226,7 +226,7 @@
 
                 var formValues = [];
 
-                var repeatedItems = $('[data-repeater-item]');
+                var repeatedItems = $('[data-repeater-item-create]');
 
                 repeatedItems.each(function() {
                     var repeatedItemValues = {};
@@ -246,6 +246,7 @@
 
                     formValues.push(repeatedItemValues);
                 });
+
 
                 console.log(formValues);
 

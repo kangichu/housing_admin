@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Features;
 
 use App\Models\Route;
 use App\Models\Feature;
-use App\Models\RouteHasFeature;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\RouteHasFeature;
 use Illuminate\Support\Facades\DB;
 use App\Models\FeatureSubscription;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 
 class FeatureController extends Controller
@@ -55,13 +56,17 @@ class FeatureController extends Controller
                     ]);
 
                     // Assuming you have a relationship set up between Feature and RouteGroup
-                    foreach($feature['route_groups'] as $routeGroupName) 
-                    {
-                        $route = Route::where('url', $routeGroupName)->first();
-                        RouteHasFeature::create([
-                            'feature_id' => $actualFeature->id,
-                            'route_id' => $route->id,
-                        ]);
+                    Log::info($feature['route_groups']);
+                    if (isset($feature['route_groups']))
+                    {    
+                        foreach($feature['route_groups'] as $routeGroupName) 
+                        {
+                            $route = Route::where('url', $routeGroupName)->first();
+                            RouteHasFeature::create([
+                                'feature_id' => $actualFeature->id,
+                                'route_id' => $route->id,
+                            ]);
+                        }
                     }
                 }
 

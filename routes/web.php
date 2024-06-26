@@ -1,18 +1,19 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Settings\RouteController;
-
 use App\Http\Controllers\HomeController as Home;
-use App\Http\Controllers\Features\SubscriptionController;
+use App\Http\Controllers\Settings\RouteController;
+use App\Http\Controllers\Features\MemberController;
+use App\Http\Controllers\Features\TicketController;
 use App\Http\Controllers\Features\FeatureController;
 use App\Http\Controllers\Features\InvoiceController;
 use App\Http\Controllers\Features\SubscriberController;
 use App\Http\Controllers\Features\DescriptionController;
-use App\Http\Controllers\Features\MemberController;
+use App\Http\Controllers\Features\SubscriptionController;
 use App\Http\Controllers\Features\CommunicationController;
-use App\Http\Controllers\Features\TicketController;
 
 /*
 |--------------------------------------------------------------------------
