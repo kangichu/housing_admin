@@ -205,7 +205,6 @@
                    
                     show: function() {
                         $(this).slideDown();
-                        $(this).find('[data-kt-repeater="select2"]').select2();
                     },
 
                     hide: function(deleteElement) {
@@ -306,16 +305,12 @@
 
                 repeatedItems.each(function() {
                     var repeatedItemValues = {};
-                    var inputs = $(this).find('input, select');
+                    var inputs = $(this).find('input');
 
                     inputs.each(function() {
                         var input = $(this);
                         var inputName = input.attr('name').replace(/kt_feature_repeater_edit\[\d+\]\[/g, '').replace(/\]\[/g, '').replace(/\]/g, '');
                         var inputValue = input.val();
-
-                        if (input.is('select')) {
-                            inputValue = input.val();
-                        }
 
                         repeatedItemValues[inputName] = inputValue;
                     });

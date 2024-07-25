@@ -33,7 +33,6 @@ class SubscriptionController extends Controller
         ->select('subscription_features.*','routes.url as route_url')
         ->get();
 
-
         $linkedFeatures = Feature::join('feature_subscription','subscription_features.id','feature_subscription.feature_id')
         ->select('subscription_features.*','feature_subscription.subscription_id')
         ->get();
