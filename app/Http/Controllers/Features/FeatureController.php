@@ -57,15 +57,28 @@ class FeatureController extends Controller
 
                     // Assuming you have a relationship set up between Feature and RouteGroup
                     Log::info($feature['route_groups']);
-                    if (isset($feature['route_groups']))
-                    {    
-                        foreach($feature['route_groups'] as $routeGroupName) 
-                        {
-                            $route = Route::where('url', $routeGroupName)->first();
-                            RouteHasFeature::create([
-                                'feature_id' => $actualFeature->id,
-                                'route_id' => $route->id,
-                            ]);
+                    if (isset($feature['route_groups'])) {
+                        foreach ($feature['route_groups'] as $routeGroupName) {
+                            // Check if the route group name corresponds to a group of resource routes
+                            $routes = Route::where('url', 'REGEXP', '^' . $routeGroupName . '(/|$)')
+                            ->orWhere('url', $routeGroupName)->get();
+     
+                    
+                            if ($routes->isEmpty()) {
+                                // If no routes are found with the pattern, try to get a single route
+                                $routes = collect([Route::where('url', $routeGroupName)->first()]);
+                            }
+
+                            Log::info("ROUTES: " . $routes);
+                    
+                            foreach ($routes as $route) {
+                                if ($route) {
+                                    RouteHasFeature::create([
+                                        'feature_id' => $actualFeature->id,
+                                        'route_id' => $route->id,
+                                    ]);
+                                }
+                            }
                         }
                     }
                 }
@@ -180,17 +193,30 @@ class FeatureController extends Controller
                     ]);
 
                     // Assuming you have a relationship set up between Feature and RouteGroup
-                    if (isset($feature['route_groups']))
-                    {    
-                        foreach($feature['route_groups'] as $routeGroupName) 
-                        {
-                            $route = Route::where('url', $routeGroupName)->first();
-                            RouteHasFeature::create([
-                                'feature_id' => $actualFeature->id,
-                                'route_id' => $route->id,
-                            ]);
-                        }
-                    }
+                    // if (isset($feature['route_groups'])) {
+                    //     foreach ($feature['route_groups'] as $routeGroupName) {
+                    //         // Check if the route group name corresponds to a group of resource routes
+                    //         $routes = Route::where('url', 'REGEXP', '^' . $routeGroupName . '(/|$)')
+                    //         ->orWhere('url', $routeGroupName)->get();
+     
+                    
+                    //         if ($routes->isEmpty()) {
+                    //             // If no routes are found with the pattern, try to get a single route
+                    //             $routes = collect([Route::where('url', $routeGroupName)->first()]);
+                    //         }
+
+                    //         Log::info("ROUTES: " . $routes);
+                    
+                    //         foreach ($routes as $route) {
+                    //             if ($route) {
+                    //                 RouteHasFeature::create([
+                    //                     'feature_id' => $actualFeature->id,
+                    //                     'route_id' => $route->id,
+                    //                 ]);
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
 
                 return response()->json([

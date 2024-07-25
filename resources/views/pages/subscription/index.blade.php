@@ -925,6 +925,7 @@
 						</div>
 						<div class="modal-body">
 							<div class="tab-content" id="myTabContent">
+
 								<div class="tab-pane fade show active" id="kt_tab_pane_create" role="tabpanel">
 									<form class="form" novalidate="novalidate" id="kt_modal_add_features_form">
 										<div class="scroll h-150px" style="overflow-x: hidden;">
@@ -942,9 +943,30 @@
 																<!--begin::Select-->
 																<label class="form-label">Route:</label>
 																@php
-																	$groupedRoutes = collect($routes)->groupBy(function ($route) {
-																		return $route->url; // Group by the actual URL
-																	});
+																$groupedRoutes = collect($routes)->groupBy(function ($route) {
+																	// Extract the base part of the URL (assuming $route->url provides the full URL)
+																	$urlParts = explode('/', trim($route->url, '/'));
+																	$basePart = $urlParts[0];
+																
+																	// Define common resource route patterns
+																	$resourcePatterns = [
+																		'{id}', '{id}/edit', 'create', 'edit', '{complex}', '{complex}/edit'
+																	];
+																
+																	// Check if the URL matches a resource route pattern
+																	foreach ($resourcePatterns as $pattern) {
+																		if (in_array($pattern, $urlParts) || str_contains($route->url, $pattern)) {
+																			// If it matches, group by the base part of the URL
+																			return $basePart;
+																		}
+																	}
+																
+																	// Non-resource routes are grouped individually
+																	return $route->url;
+																})->sortBy(function ($group, $key) {
+																	// Sort groups by their keys (group names)
+																	return $key;
+																});
 																@endphp
 																<select class="form-select" style="width: 100% !important" data-kt-repeater="select2" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" multiple="multiple" name="route_groups[]">
 																	<option></option>
@@ -995,7 +1017,6 @@
 											<!--begin::Repeater-->
 											@php
 												$groupedFeatures = $featureURLS->groupBy('feature');
-												$counter = 0;
 											@endphp
 
 											@foreach($groupedFeatures as $featureName => $features)
@@ -1005,39 +1026,17 @@
 													<div data-repeater-list="kt_feature_repeater_edit">
 														<div data-repeater-item data-repeater-item-edit class="form-group row mb-4">
 
-															<div class="col-md-4">
+															<div class="col-md-12">
 																<label class="form-label">Feature:</label>
 																<input type="email" class="form-control mb-2 mb-md-0" name="feature" style="width: 100%;" value="{{ $featureName }}"/>
 															</div>
 
-															<div class="col-md-8">
-																<!--begin::Select-->
-																<label class="form-label">Route:</label>
-																
-																@php
-																	$groupedRoutes = collect($routes)->groupBy(function ($route) {
-																		return $route->url; // Group by the actual URL
-																	});
-																@endphp
-
-																<select class="form-select" style="width: 100% !important" data-kt-repeater="select2" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" multiple="multiple" name="formValues[{{ $counter }}][route_groups][]">
-																	<option></option>
-																	@foreach($groupedRoutes as $url => $groupedRoute)
-																		<option value="{{ $url }}" {{ in_array($url, $features->pluck('route_url')->toArray()) ? 'selected' : '' }}>{{ $url }}</option>
-																	@endforeach
-																</select>
-
-																@php
-																	$counter++;
-																@endphp
-																<!--end::Select-->
-															</div>
 															<div class="col-md-4" style="justify-content : center">
 																<a href="javascript:;" data-repeater-delete class="btn btn-lg btn-light-danger mt-3 mt-md-8" style="widht: 100%;">
 																	<i class="la la-trash-o"></i>Delete
 																</a>
 															</div>
-														</div><br>
+														</div><br>   
 													</div>
 												</div>
 												<!--end::Form group-->
