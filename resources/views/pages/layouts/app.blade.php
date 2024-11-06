@@ -16,8 +16,8 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
         
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
-        <link rel="icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
+        <link rel="shortcut icon" href="{{ asset('home.png') }}" type="image/x-icon">
+        <link rel="icon" href="{{ asset('home.png') }}" type="image/x-icon">
         <!--begin::Fonts-->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
         <!--end::Fonts-->
@@ -160,6 +160,12 @@
 		<script src="{{ asset('dashboard/js/custom/apps/subscriptions/list/list.js') }}"></script>
 
         <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('auto-click-button').click();
+            });
+        </script>
+
+        <script type="text/javascript">
             $('#name').maxlength({
                 threshold: 60,
                 warningClass: "badge badge-primary",
@@ -213,82 +219,6 @@
                 });
             });
 
-        </script>
-
-        <script type="text/javascript">
-
-            var kt_add_feautures_button = document.querySelector("#kt_add_feautures_button");
-
-            kt_add_feautures_button.addEventListener("click", function() {
-               
-                kt_add_feautures_button.setAttribute("data-kt-indicator", "on");
-
-                var formValues = [];
-
-                var repeatedItems = $('[data-repeater-item-create]');
-
-                repeatedItems.each(function() {
-                    var repeatedItemValues = {};
-                    var inputs = $(this).find('input, select');
-
-                    inputs.each(function() {
-                        var input = $(this);
-                        var inputName = input.attr('name').replace(/kt_feature_repeater_basic\[\d+\]\[/g, '').replace(/\]\[/g, '').replace(/\]/g, '');
-                        var inputValue = input.val();
-
-                        if (input.is('select')) {
-                            inputValue = input.val();
-                        }
-
-                        repeatedItemValues[inputName] = inputValue;
-                    });
-
-                    formValues.push(repeatedItemValues);
-                });
-
-
-                console.log(formValues);
-
-                var token = $('meta[name="csrf-token"]').attr('content');
-
-                $.ajax({
-                    url: '/feature',
-                    type: 'POST',
-                    data: { '_token' : token, formValues},
-                    success: function(response) 
-                    {
-                        if(response.status == 200)
-
-                            Swal.fire({
-                                text: "Success, "+response.message,
-                                icon: "success",
-                                buttonsStyling: !1,
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-light"
-                                }
-                            }).then((function() {
-                                kt_add_feautures_button.removeAttribute("data-kt-indicator");
-                                $('#kt_modal_add_features_form').trigger("reset");
-                                $('.modal').modal('hide');
-                                location.reload(); // reload the page
-                            }));
-                    },
-                    error:function (e) {
-                        Swal.fire({
-                            text: "Sorry, looks like there are some errors detected, please try again.",
-                            icon: "error",
-                            buttonsStyling: !1,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn btn-light"
-                            }
-                        }).then((function() {
-                            kt_add_feautures_button.removeAttribute("data-kt-indicator");
-                        }));
-                    }
-                });
-            });
         </script>
 
         <script type="text/javascript">
@@ -754,89 +684,74 @@
             });
         </script>
 
-        <script type="text/javascript">
-            // Elements to indicate
-            var kt_subscription_feautures_buttons = document.querySelectorAll("#kt_subscription_feautures_button");
+<script type="text/javascript">
+    // Elements to indicate
+    var kt_subscription_feautures_buttons = document.querySelectorAll("#kt_subscription_feautures_button");
 
-            // Handle button click event
-            kt_subscription_feautures_buttons.forEach(function(kt_subscription_feautures_button) {
-                kt_subscription_feautures_button.addEventListener("click", function() {
-                    // Activate indicator
-                    kt_subscription_feautures_button.setAttribute("data-kt-indicator", "on");
+    // Handle button click event
+    kt_subscription_feautures_buttons.forEach(function(kt_subscription_feautures_button) {
+        kt_subscription_feautures_button.addEventListener("click", function() {
+            // Activate indicator
+            kt_subscription_feautures_button.setAttribute("data-kt-indicator", "on");
 
-                    let sub_id = kt_subscription_feautures_button.getAttribute('data-sub-id');
+            let sub_id = kt_subscription_feautures_button.getAttribute('data-sub-id');
 
-                    // Handle form submission
+            // Handle form submission
 
-                    // Loop through the form data and extract the form values
-                    let values = $('#kt_modal_add_subscription_features_form-'+sub_id).serializeArray().reduce((map, input) => {
-                        let value;
-                        if (map.hasOwnProperty(input.name)) {
-                            value = Array.isArray(map[input.name]) ?
-                                map[input.name] : [map[input.name]];
-                            value.push(input.value);
-                        } else {
-                            value = input.value;
-                        }
-                        map[input.name] = value;
-                        return map;
-                    }, {});
-                    
-                    // Check if all form inputs have been entered
-                    let allFieldsFilled = true;
-                    let formInputs = document.querySelectorAll("#kt_modal_add_subscription_features_form-" + sub_id + " input");
-                    formInputs.forEach(function(input) {
-                        if (input.value.trim() === "") {
-                            allFieldsFilled = false;
-                            input.classList.add("is-invalid");
-                        }
-                    });
+            // Loop through the form data and extract the form values
+            let values = $('#kt_modal_add_subscription_features_form-'+sub_id).serializeArray().reduce((map, input) => {
+                let value;
+                if (map.hasOwnProperty(input.name)) {
+                    value = Array.isArray(map[input.name]) ?
+                        map[input.name] : [map[input.name]];
+                    value.push(input.value);
+                } else {
+                    value = input.value;
+                }
+                map[input.name] = value;
+                return map;
+            }, {});
+            
+            // Check if all form inputs have been entered
+            let allFieldsFilled = true;
+            let formInputs = document.querySelectorAll("#kt_modal_add_subscription_features_form-" + sub_id + " input");
+            formInputs.forEach(function(input) {
+                if (input.value.trim() === "") {
+                    allFieldsFilled = false;
+                    input.classList.add("is-invalid");
+                }
+            });
 
-                    if (allFieldsFilled) {
+            if (allFieldsFilled) {
 
-                        let subscription_id = $('input[name = subscription_id]').val();
+                let subscription_id = $('input[name = subscription_id]').val();
 
-                        var token = $('meta[name="csrf-token"]').attr('content');
+                var token = $('meta[name="csrf-token"]').attr('content');
 
-                        $.ajax({
-                            url: '/subscription_features',
-                            type: 'POST',
-                            data: { '_token' : token, values},
-                            success: function(response) 
-                            {
-                                if(response.status == 200)
+                $.ajax({
+                    url: '/subscription_features',
+                    type: 'POST',
+                    data: { '_token' : token, values},
+                    success: function(response) 
+                    {
+                        if(response.status == 200)
 
-                                    Swal.fire({
-                                        text: "Success, "+response.message,
-                                        icon: "success",
-                                        buttonsStyling: !1,
-                                        confirmButtonText: "Ok, got it!",
-                                        customClass: {
-                                            confirmButton: "btn btn-light"
-                                        }
-                                    }).then((function() {
-                                        kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
-                                        location.reload(); // reload the page
-                                    }));
-                            },
-                            error:function (e) {
-                                Swal.fire({
-                                    text: "Sorry, looks like there are some errors detected, please try again.",
-                                    icon: "error",
-                                    buttonsStyling: !1,
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-light"
-                                    }
-                                }).then((function() {
-                                    kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
-                                }));
-                            }
-                        });
-
-                    } else{
+                            Swal.fire({
+                                text: "Success, "+response.message,
+                                icon: "success",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-light"
+                                }
+                            }).then((function() {
+                                kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
+                                location.reload(); // reload the page
+                            }));
+                    },
+                    error:function (e) {
                         Swal.fire({
-                            text: "Sorry, looks like there are some empty fields, please fill them.",
+                            text: "Sorry, looks like there are some errors detected, please try again.",
                             icon: "error",
                             buttonsStyling: !1,
                             confirmButtonText: "Ok, got it!",
@@ -847,11 +762,26 @@
                             kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
                         }));
                     }
-
-                   
                 });
-            });
-        </script>
+
+            } else{
+                Swal.fire({
+                    text: "Sorry, looks like there are some empty fields, please fill them.",
+                    icon: "error",
+                    buttonsStyling: !1,
+                    confirmButtonText: "Ok, got it!",
+                    customClass: {
+                        confirmButton: "btn btn-light"
+                    }
+                }).then((function() {
+                    kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
+                }));
+            }
+
+           
+        });
+    });
+</script>
 
         @endif
 
@@ -863,7 +793,7 @@
 
         @if(request()->is('descriptions')) 
 
-        <script>
+        <script type="text/javascript">
             $("#kt_table_descriptions").DataTable({
                 "searching": true,
                 "responsive": true,
@@ -1031,6 +961,302 @@
 
         <script src="{{ asset('dashboard/js/custom/apps/user-management/users/list/table.js' ) }}"></script>
 		<script src="{{ asset('dashboard/js/custom/apps/user-management/users/list/export-users.js' ) }}"></script>
+
+        @endif
+
+        @if(request()->is('feature') )
+
+        <script type="text/javascript">
+            document.getElementById('routeSearch').addEventListener('input', function() {
+                var searchValue = this.value.toLowerCase();
+                var routeItems = document.querySelectorAll('.route-item');
+        
+                routeItems.forEach(function(item) {
+                    var label = item.querySelector('label').textContent.toLowerCase();
+                    if (label.includes(searchValue)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            document.querySelectorAll('input[id^="routeSearch_"]').forEach(searchInput => {
+                searchInput.addEventListener('input', function() {
+                    var searchValue = this.value.toLowerCase();
+                    var form = this.closest('form');
+                    var featureId = this.id.replace('routeSearch_', '');
+                    var routeItems = form.querySelectorAll('.route-item_' + featureId);
+        
+                    routeItems.forEach(function(item) {
+                        var label = item.querySelector('label').textContent.toLowerCase();
+                        if (label.includes(searchValue)) {
+                            item.style.display = '';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('auto-click-button').click();
+            });
+        </script>
+
+        <script type="text/javascript">
+            var kt_add_feautures_button = document.querySelector("#kt_add_feautures_button");
+
+            kt_add_feautures_button.addEventListener("click", function() {
+                kt_add_feautures_button.setAttribute("data-kt-indicator", "on");
+
+                let values = $('#kt_modal_add_features_form').serializeArray().reduce((map, input) => {
+                    let value;
+                    if (map.hasOwnProperty(input.name)) {
+                        value = Array.isArray(map[input.name]) ? map[input.name] : [map[input.name]];
+                        value.push(input.value);
+                    } else {
+                        value = input.value;
+                    }
+                    map[input.name] = value;
+                    return map;
+                }, {});
+
+                // Adjust the structure for route_groups
+                if (values['route_groups[]']) {
+                    values['route_groups'] = values['route_groups[]'];
+                    delete values['route_groups[]'];
+                }
+
+                console.log(values);
+
+                var token = $('meta[name="csrf-token"]').attr('content');
+
+                $.ajax({
+                    url: '/feature',
+                    type: 'POST',
+                    data: { '_token': token, values },
+                    success: function(response) {
+                        if (response.status == 200)
+                            Swal.fire({
+                                text: "Success, " + response.message,
+                                icon: "success",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-light"
+                                }
+                            }).then(function() {
+                                kt_add_feautures_button.removeAttribute("data-kt-indicator");
+                                $('#kt_modal_add_features_form').trigger("reset");
+                                $('.modal').modal('hide');
+                                location.reload(); // reload the page
+                            });
+                    },
+                    error: function(e) {
+                        Swal.fire({
+                            text: "Sorry, looks like there are some errors detected, please try again.",
+                            icon: "error",
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-light"
+                            }
+                        }).then(function() {
+                            kt_add_feautures_button.removeAttribute("data-kt-indicator");
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            $("#kt_datatable_features").DataTable({
+                "language": {
+                "lengthMenu": "Show _MENU_",
+            },
+                "dom":
+                "<'row'" +
+                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                ">" +
+
+                "<'table-responsive'tr>" +
+
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">"
+            });
+        </script>
+
+        <script type="text/javascript">
+            document.querySelectorAll(".kt_add_feautures_button_edit").forEach(button => {
+                button.addEventListener("click", function() {
+                    var formId = this.getAttribute("id").replace("kt_add_feautures_button_edit_", "kt_modal_add_features_form_edit_");
+                    var form = document.querySelector("#" + formId);
+                    var featureId = form.querySelector('input[name="feature_id"]').value;
+                    var indicator = this;
+        
+                    indicator.setAttribute("data-kt-indicator", "on");
+        
+                    let values = $(form).serializeArray().reduce((map, input) => {
+                        let value;
+                        if (map.hasOwnProperty(input.name)) {
+                            value = Array.isArray(map[input.name]) ? map[input.name] : [map[input.name]];
+                            value.push(input.value);
+                        } else {
+                            value = input.value;
+                        }
+                        map[input.name] = value;
+                        return map;
+                    }, {});
+        
+                    // Adjust the structure for route_groups
+                    if (values['route_groups[]']) {
+                        values['route_groups'] = values['route_groups[]'];
+                        delete values['route_groups[]'];
+                    }
+        
+                    console.log(values);
+        
+                    var token = $('meta[name="csrf-token"]').attr('content');
+        
+                    $.ajax({
+                        url: '/feature/' + featureId,
+                        type: 'PUT',
+                        data: { '_token': token, values },
+                        success: function(response) {
+                            if (response.status == 200)
+                                Swal.fire({
+                                    text: "Success, " + response.message,
+                                    icon: "success",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-light"
+                                    }
+                                }).then(function() {
+                                    indicator.removeAttribute("data-kt-indicator");
+                                    $(form).trigger("reset");
+                                    $('.modal').modal('hide');
+                                    location.reload(); // reload the page
+                                });
+                        },
+                        error: function(e) {
+                            Swal.fire({
+                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                icon: "error",
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-light"
+                                }
+                            }).then(function() {
+                                indicator.removeAttribute("data-kt-indicator");
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.textarea-maxlength').maxlength({
+                    warningClass: "badge badge-warning",
+                    limitReachedClass: "badge badge-success"
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            // Element to indecate
+            var buttons = document.querySelectorAll(".kt_button_delete_features");
+
+            // Handle button click event
+            buttons.forEach(button => {
+                button.addEventListener("click", function() {
+                    // Activate indicator
+                    var featureId = this.getAttribute('data-feature-id');
+                    var token = $('meta[name="csrf-token"]').attr('content');
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!',
+                        cancelButtonText: 'No, cancel!',
+                        customClass: {
+                            confirmButton: 'btn btn-danger',
+                            cancelButton: 'btn btn-secondary'
+                        },
+                        buttonsStyling: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Activate indicator
+                            button.setAttribute("data-kt-indicator", "on");
+
+                            $.ajax({
+                                url: '/feature/' + featureId,
+                                type: 'DELETE',
+                                data: {
+                                    '_token': token
+                                },
+                                success: function(response) {
+                                    if (response.status == 200) {
+                                        Swal.fire({
+                                            title: 'Deleted!',
+                                            text: response.message,
+                                            icon: 'success',
+                                            confirmButtonText: 'Ok',
+                                            customClass: {
+                                                confirmButton: 'btn btn-light'
+                                            },
+                                            buttonsStyling: false
+                                        }).then(() => {
+                                            location.reload(); // Reload the page
+                                        });
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Error!',
+                                            text: response.message,
+                                            icon: 'error',
+                                            confirmButtonText: 'Ok',
+                                            customClass: {
+                                                confirmButton: 'btn btn-light'
+                                            },
+                                            buttonsStyling: false
+                                        });
+                                    }
+                                },
+                                error: function() {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'An error occurred while deleting the feature.',
+                                        icon: 'error',
+                                        confirmButtonText: 'Ok',
+                                        customClass: {
+                                            confirmButton: 'btn btn-light'
+                                        },
+                                        buttonsStyling: false
+                                    });
+                                },
+                                complete: function() {
+                                    // Disable indicator
+                                    button.removeAttribute("data-kt-indicator");
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
 
         @endif
 

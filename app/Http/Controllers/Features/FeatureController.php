@@ -21,7 +21,16 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        //
+        $routes = Route::get();
+
+        $features = Feature::get();
+
+        $featureURLS =  Feature::leftJoin('route_has_features', 'route_has_features.feature_id', 'subscription_features.id')
+        ->leftJoin('routes', 'routes.id', 'route_has_features.route_id')
+        ->select('subscription_features.id', 'subscription_features.feature', 'subscription_features.description', 'routes.url as route_url')
+        ->get()->groupBy('feature')->sortKeys();
+        
+        return view('pages.subscription.features.index', compact('features', 'routes', 'featureURLS'));
     }
 
     /**
@@ -43,50 +52,44 @@ class FeatureController extends Controller
     public function store(Request $request)
     {
         return DB::transaction(function () use ($request) {
-            try{
+            try {
+                // Log the incoming request data for debugging
+    
+                $features = $request->input('values');
 
-                $features = $request->formValues;
-
-                foreach($features as $feature)
-                {
-                    $feature_permission = Str::slug($feature['feature']);
-                    $actualFeature = Feature::create([
-                        'feature_permission' => $feature_permission,
-                        'feature' => $feature['feature'],
-                    ]);
-
-                    // Assuming you have a relationship set up between Feature and RouteGroup
-                    Log::info($feature['route_groups']);
-                    if (isset($feature['route_groups'])) {
-                        foreach ($feature['route_groups'] as $routeGroupName) {
-                            // Check if the route group name corresponds to a group of resource routes
-                            $routes = Route::where('url', 'REGEXP', '^' . $routeGroupName . '(/|$)')
-                            ->orWhere('url', $routeGroupName)->get();
-     
+                $feature_slug = Str::slug($features['feature']);
+                $description = $features['description'];
+       
+                $actualFeature = Feature::create([
+                    'feature_permission' => $feature_slug,
+                    'description' => $description,
+                    'feature' => $features['feature'],
+                ]);
+    
+                foreach ($features['route_groups'] as $feature) {
                     
-                            if ($routes->isEmpty()) {
-                                // If no routes are found with the pattern, try to get a single route
-                                $routes = collect([Route::where('url', $routeGroupName)->first()]);
-                            }
+                   // Check if the route group name corresponds to a group of resource routes
+                   $route = Route::where('url', $feature)
+                   ->orWhere('url', $feature)->first();
 
-                            Log::info("ROUTES: " . $routes);
-                    
-                            foreach ($routes as $route) {
-                                if ($route) {
-                                    RouteHasFeature::create([
-                                        'feature_id' => $actualFeature->id,
-                                        'route_id' => $route->id,
-                                    ]);
-                                }
-                            }
-                        }
+                    if (!$route) {
+                        // If no routes are found with the pattern, try to get a single route
+                        $route = collect([Route::where('url', $feature)->first()]);
                     }
-                }
 
+                    Log::info("ROUTES: " . $route);
+
+                    RouteHasFeature::create([
+                        'feature_id' => $actualFeature->id,
+                        'route_id' => $route->id,
+                    ]);
+                }
+    
                 return response()->json([
-                    'message' => 'all features have been added.',
+                    'message' => 'All features have been added.',
                     'status' => 200
                 ]);
+
             } catch (\Exception $e) {
                 return response()->json([
                     'message' => 'Failed to update features: ' . $e->getMessage(),
@@ -174,53 +177,46 @@ class FeatureController extends Controller
     public function update(Request $request)
     {
         return DB::transaction(function () use ($request) {
-            try{
-                $features = $request->formValues;
+            try {
+                // Log the incoming request data for debugging
+    
+                $features = $request->input('values');
 
-                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+                $feature_slug = Str::slug($features['feature']);
+                $description = $features['description'];
+                $feature_id = $features['feature_id'];
 
-                RouteHasFeature::truncate();
-                Feature::truncate();
+                $Feature = Feature::findOrFail($feature_id);
 
-                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                $Feature->update([
+                    'feature' => $features['feature'],
+                    'description' => $description,
+                    'feature_permission' => $feature_slug,
+                ]);
 
-                foreach($features as $feature)
-                {
-                    $feature_permission = Str::slug($feature['feature']);
-                    $actualFeature = Feature::create([
-                        'feature_permission' => $feature_permission,
-                        'feature' => $feature['feature'],
+                RouteHasFeature::where('feature_id', $feature_id)->delete();
+       
+                foreach ($features['route_groups'] as $feature) {
+                    
+                   // Check if the route group name corresponds to a group of resource routes
+                   $route = Route::where('url', $feature)
+                   ->orWhere('url', $feature)->first();
+
+                    if (!$route) {
+                        // If no routes are found with the pattern, try to get a single route
+                        $route = collect([Route::where('url', $feature)->first()]);
+                    }
+
+                    Log::info("ROUTES: " . $route);
+
+                    RouteHasFeature::create([
+                        'feature_id' => $feature_id,
+                        'route_id' => $route->id,
                     ]);
-
-                    // Assuming you have a relationship set up between Feature and RouteGroup
-                    // if (isset($feature['route_groups'])) {
-                    //     foreach ($feature['route_groups'] as $routeGroupName) {
-                    //         // Check if the route group name corresponds to a group of resource routes
-                    //         $routes = Route::where('url', 'REGEXP', '^' . $routeGroupName . '(/|$)')
-                    //         ->orWhere('url', $routeGroupName)->get();
-     
-                    
-                    //         if ($routes->isEmpty()) {
-                    //             // If no routes are found with the pattern, try to get a single route
-                    //             $routes = collect([Route::where('url', $routeGroupName)->first()]);
-                    //         }
-
-                    //         Log::info("ROUTES: " . $routes);
-                    
-                    //         foreach ($routes as $route) {
-                    //             if ($route) {
-                    //                 RouteHasFeature::create([
-                    //                     'feature_id' => $actualFeature->id,
-                    //                     'route_id' => $route->id,
-                    //                 ]);
-                    //             }
-                    //         }
-                    //     }
-                    // }
                 }
-
+    
                 return response()->json([
-                    'message' => 'all features have been updated.',
+                    'message' => 'All features have been updated.',
                     'status' => 200
                 ]);
 
@@ -280,9 +276,25 @@ class FeatureController extends Controller
      * @param  \App\Models\Feature  $feature
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Feature $feature)
+    public function destroy($id)
     {
-        //
+        return DB::transaction(function () use ($id) {
+            try {
+                $Feature = Feature::findOrFail($id);
+                RouteHasFeature::where('feature_id', $Feature->id)->delete();
+                $Feature->delete();
+    
+                return response()->json([
+                    'message' => 'Your feature has been deleted.',
+                    'status' => 200
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'message' => 'Failed to delete feature: ' . $e->getMessage(),
+                    'status' => 500
+                ]);
+            }
+        });
     }
     
 }

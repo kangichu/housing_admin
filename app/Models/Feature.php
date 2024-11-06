@@ -9,5 +9,5 @@ class Feature extends Model
 {
     protected $table = 'subscription_features';
 
-    protected $fillable = ['feature', 'feature_permission',];
+    protected $fillable = ['feature', 'feature_permission', 'description',];
 }
