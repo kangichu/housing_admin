@@ -684,74 +684,89 @@
             });
         </script>
 
-<script type="text/javascript">
-    // Elements to indicate
-    var kt_subscription_feautures_buttons = document.querySelectorAll("#kt_subscription_feautures_button");
+        <script type="text/javascript">
+            // Elements to indicate
+            var kt_subscription_feautures_buttons = document.querySelectorAll("#kt_subscription_feautures_button");
 
-    // Handle button click event
-    kt_subscription_feautures_buttons.forEach(function(kt_subscription_feautures_button) {
-        kt_subscription_feautures_button.addEventListener("click", function() {
-            // Activate indicator
-            kt_subscription_feautures_button.setAttribute("data-kt-indicator", "on");
+            // Handle button click event
+            kt_subscription_feautures_buttons.forEach(function(kt_subscription_feautures_button) {
+                kt_subscription_feautures_button.addEventListener("click", function() {
+                    // Activate indicator
+                    kt_subscription_feautures_button.setAttribute("data-kt-indicator", "on");
 
-            let sub_id = kt_subscription_feautures_button.getAttribute('data-sub-id');
+                    let sub_id = kt_subscription_feautures_button.getAttribute('data-sub-id');
 
-            // Handle form submission
+                    // Handle form submission
 
-            // Loop through the form data and extract the form values
-            let values = $('#kt_modal_add_subscription_features_form-'+sub_id).serializeArray().reduce((map, input) => {
-                let value;
-                if (map.hasOwnProperty(input.name)) {
-                    value = Array.isArray(map[input.name]) ?
-                        map[input.name] : [map[input.name]];
-                    value.push(input.value);
-                } else {
-                    value = input.value;
-                }
-                map[input.name] = value;
-                return map;
-            }, {});
-            
-            // Check if all form inputs have been entered
-            let allFieldsFilled = true;
-            let formInputs = document.querySelectorAll("#kt_modal_add_subscription_features_form-" + sub_id + " input");
-            formInputs.forEach(function(input) {
-                if (input.value.trim() === "") {
-                    allFieldsFilled = false;
-                    input.classList.add("is-invalid");
-                }
-            });
+                    // Loop through the form data and extract the form values
+                    let values = $('#kt_modal_add_subscription_features_form-'+sub_id).serializeArray().reduce((map, input) => {
+                        let value;
+                        if (map.hasOwnProperty(input.name)) {
+                            value = Array.isArray(map[input.name]) ?
+                                map[input.name] : [map[input.name]];
+                            value.push(input.value);
+                        } else {
+                            value = input.value;
+                        }
+                        map[input.name] = value;
+                        return map;
+                    }, {});
+                    
+                    // Check if all form inputs have been entered
+                    let allFieldsFilled = true;
+                    let formInputs = document.querySelectorAll("#kt_modal_add_subscription_features_form-" + sub_id + " input");
+                    formInputs.forEach(function(input) {
+                        if (input.value.trim() === "") {
+                            allFieldsFilled = false;
+                            input.classList.add("is-invalid");
+                        }
+                    });
 
-            if (allFieldsFilled) {
+                    if (allFieldsFilled) {
 
-                let subscription_id = $('input[name = subscription_id]').val();
+                        let subscription_id = $('input[name = subscription_id]').val();
 
-                var token = $('meta[name="csrf-token"]').attr('content');
+                        var token = $('meta[name="csrf-token"]').attr('content');
 
-                $.ajax({
-                    url: '/subscription_features',
-                    type: 'POST',
-                    data: { '_token' : token, values},
-                    success: function(response) 
-                    {
-                        if(response.status == 200)
+                        $.ajax({
+                            url: '/subscription_features',
+                            type: 'POST',
+                            data: { '_token' : token, values},
+                            success: function(response) 
+                            {
+                                if(response.status == 200)
 
-                            Swal.fire({
-                                text: "Success, "+response.message,
-                                icon: "success",
-                                buttonsStyling: !1,
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-light"
-                                }
-                            }).then((function() {
-                                kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
-                                location.reload(); // reload the page
-                            }));
-                    },
-                    error:function (e) {
+                                    Swal.fire({
+                                        text: "Success, "+response.message,
+                                        icon: "success",
+                                        buttonsStyling: !1,
+                                        confirmButtonText: "Ok, got it!",
+                                        customClass: {
+                                            confirmButton: "btn btn-light"
+                                        }
+                                    }).then((function() {
+                                        kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
+                                        location.reload(); // reload the page
+                                    }));
+                            },
+                            error:function (e) {
+                                Swal.fire({
+                                    text: "Sorry, looks like there are some errors detected, please try again.",
+                                    icon: "error",
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-light"
+                                    }
+                                }).then((function() {
+                                    kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
+                                }));
+                            }
+                        });
+
+                    } else{
                         Swal.fire({
-                            text: "Sorry, looks like there are some errors detected, please try again.",
+                            text: "Sorry, looks like there are some empty fields, please fill them.",
                             icon: "error",
                             buttonsStyling: !1,
                             confirmButtonText: "Ok, got it!",
@@ -762,26 +777,11 @@
                             kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
                         }));
                     }
+
+                
                 });
-
-            } else{
-                Swal.fire({
-                    text: "Sorry, looks like there are some empty fields, please fill them.",
-                    icon: "error",
-                    buttonsStyling: !1,
-                    confirmButtonText: "Ok, got it!",
-                    customClass: {
-                        confirmButton: "btn btn-light"
-                    }
-                }).then((function() {
-                    kt_subscription_feautures_button.removeAttribute("data-kt-indicator");
-                }));
-            }
-
-           
-        });
-    });
-</script>
+            });
+        </script>
 
         @endif
 
@@ -1256,6 +1256,281 @@
                     });
                 });
             });
+        </script>
+
+        @endif
+
+        @if(request()->is('socials'))
+
+        <script src="{{ asset('dashboard/plugins/custom/tinymce/tinymce.bundle.js') }}"></script>
+
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('auto-click-button').click();
+            });
+        </script>
+
+        <script type="text/javascript">
+            $("#kt_table_socials").DataTable({
+                "language": {
+                "lengthMenu": "Show _MENU_",
+            },
+                "dom":
+                "<'row'" +
+                "<'col-sm-6 d-flex align-items-center justify-conten-start'l>" +
+                "<'col-sm-6 d-flex align-items-center justify-content-end'f>" +
+                ">" +
+
+                "<'table-responsive'tr>" +
+
+                "<'row'" +
+                "<'col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start'i>" +
+                "<'col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end'p>" +
+                ">"
+            });
+        </script>
+
+        <script type="text/javascript">
+            var options = {
+                selector: "#kt_post",
+                plugins: "lists advlist autolink charmap print preview hr anchor pagebreak searchreplace wordcount visualblocks visualchars insertdatetime nonbreaking save table directionality emoticons template paste textpattern",
+                toolbar: "undo redo | bold italic underline strikethrough | bullist numlist outdent indent | code | insertTagsButton",
+                menubar: false, // Disable the menu bar
+                setup: function (editor) {
+                    editor.ui.registry.addButton('insertTagsButton', {
+                        text: 'Insert Tags',
+                        onAction: function () {
+                            var tags = $('#kt_tags').val(); // Get tags from Tagify input
+                            var tagValues = JSON.parse(tags).map(tag => `#${tag.value.trim()}`).join(' ');
+                            editor.insertContent(`<p>${tagValues}</p>`);
+                        }
+                    });
+                }
+            };
+        
+            if (KTApp.isDarkMode()) {
+                options["skin"] = "oxide-dark";
+                options["content_css"] = "dark";
+            }
+        
+            tinymce.init(options);
+        </script>
+        
+        <script type="text/javascript">
+            // The DOM elements you wish to replace with Tagify
+            var kt_tags = document.querySelector("#kt_tags");
+
+            // Initialize Tagify components on the above inputs
+            new Tagify(kt_tags);
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+
+                var selects = document.querySelectorAll('select');
+                
+                selects.forEach(select => {
+                    $(select).select2({
+                        placeholder: "Select an option",
+                        allowClear: true,
+                        dropdownParent: $("#kt_modal_add_post")
+                    });
+                });
+
+                $("#kt_datepicker_schedule").flatpickr({
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                });
+
+                $("#kt_datepicker_repeat_ends").flatpickr({
+                    enableTime: true,
+                    dateFormat: "Y-m-d H:i",
+                });
+            });
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+        
+                // Element to indicate
+                var button = document.querySelector("#kt_button_description");
+        
+                // Handle button click event
+                button.addEventListener("click", function() {
+                    // Activate indicator
+                    button.setAttribute("data-kt-indicator", "on");
+        
+                    // Get form values
+                    var platform = $('#platform').val();
+                    var tags = $('#kt_tags').val();
+                    var schedule = $('#kt_datepicker_schedule').val();
+                    var repeat = $('#repeat').val();
+                    var status = $('#status').val();
+                    var repeatEvery = $('#repeat_every').val();
+                    var repeatEnds = $('#kt_datepicker_repeat_ends').val();
+                    var avatar = $('input[name="avatar"]')[0].files[0]; // Get the image file
+        
+                    var token = $('meta[name="csrf-token"]').attr('content');
+        
+                    let values = $('#kt_modal_add_post_form').serializeArray().reduce((map, input) => {
+                        let value;
+                        if (map.hasOwnProperty(input.name)) {
+                            value = Array.isArray(map[input.name]) ? map[input.name] : [map[input.name]];
+                            value.push(input.value);
+                        } else {
+                            value = input.value;
+                        }
+                        map[input.name] = value;
+                        return map;
+                    }, {});
+        
+                    // Add TinyMCE content to values
+                    values['kt_post'] = tinymce.get('kt_post').getContent();
+        
+                    // Validate form fields
+                    var validationErrors = validateFormFields({
+                        platform: platform,
+                        tags: tags,
+                        schedule: schedule,
+                        repeat: repeat,
+                        status: status,
+                        repeatEvery: repeatEvery,
+                        repeatEnds: repeatEnds,
+                        kt_post: values['kt_post']
+                    });
+        
+                    if (validationErrors.length > 0) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Validation Error',
+                            text: validationErrors.join('\n'),
+                            buttonsStyling: !1,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-light"
+                            }
+                        });
+                        button.removeAttribute("data-kt-indicator");
+                        return;
+                    }
+
+                    // If all fields are valid, submit the form via AJAX
+                    var formData = new FormData();
+                    formData.append('_token', token);
+                    for (var key in values) {
+                        if (values.hasOwnProperty(key)) {
+                            formData.append(key, values[key]);
+                        }
+                    }
+                    if (avatar) {
+                        formData.append('avatar', avatar);
+                    }
+        
+                    // If all fields are valid, submit the form via AJAX
+                    $.ajax({
+                        url: '/socials', // Replace with your actual post URL
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: response.message,
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-light"
+                                    }
+                                }).then(function() {
+                                    location.reload(); // Reload the page or redirect as needed
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message,
+                                    buttonsStyling: !1,
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-light"
+                                    }
+                                }).then(function() {
+                                    button.removeAttribute("data-kt-indicator");
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while submitting the form. Please try again.',
+                                buttonsStyling: !1,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-light"
+                                }
+                            }).then(function() {
+                                button.removeAttribute("data-kt-indicator");
+                            });
+                        }
+                    });
+        
+                });
+        
+                // Initialize Select2 for platform
+                $('#platform').select2({
+                    placeholder: "Select an option",
+                    allowClear: true,
+                    dropdownParent: $("#kt_modal_add_post")
+                });
+        
+                // Initialize date pickers
+                $('#kt_datepicker_schedule').datetimepicker({
+                    format: 'Y-m-d H:i'
+                });
+                $('#kt_datepicker_repeat_ends').datetimepicker({
+                    format: 'Y-m-d H:i'
+                });
+            });
+        
+            function validateFormFields(fields) {
+                var errors = [];
+        
+                if (!fields.platform || fields.platform.length === 0) {
+                    errors.push('Please select at least one platform.');
+                }
+        
+                if (!fields.tags) {
+                    errors.push('Please enter tags.');
+                }
+        
+                if (!fields.status) {
+                    errors.push('Please enter status.');
+                }
+        
+                if (!fields.schedule) {
+                    errors.push('Please pick a schedule date and time.');
+                }
+        
+                if (fields.repeat === "1") {
+                    if (!fields.repeatEvery) {
+                        errors.push('Please select the repeat interval.');
+                    }
+        
+                    if (!fields.repeatEnds) {
+                        errors.push('Please pick the repeat end date and time.');
+                    }
+                }
+        
+                if (!fields.kt_post) {
+                    errors.push('Please enter the post content.');
+                }
+        
+                return errors;
+            }
         </script>
 
         @endif

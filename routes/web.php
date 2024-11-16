@@ -14,6 +14,7 @@ use App\Http\Controllers\Features\SubscriberController;
 use App\Http\Controllers\Features\DescriptionController;
 use App\Http\Controllers\Features\SubscriptionController;
 use App\Http\Controllers\Features\CommunicationController;
+use App\Http\Controllers\Features\SocialMediaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,8 @@ Route::get('home', [Home::class, 'index'])->name('home');
 
         Route::post('/export', [MemberController::class, 'export'])->name('export');
 
+        Route::get('/member_subscription/{id}', [MemberController::class, 'subscription']);
+
 /*
 |--------------------------------------------------------------------------
 | Members
@@ -98,3 +101,12 @@ Route::get('home', [Home::class, 'index'])->name('home');
 */
 
     Route::resource('tickets', TicketController::class); 
+
+
+/*
+|--------------------------------------------------------------------------
+| Socoal Media
+|--------------------------------------------------------------------------
+*/
+
+    Route::resource('socials', SocialMediaController::class); 

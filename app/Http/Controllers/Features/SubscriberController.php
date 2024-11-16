@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Features;
 
 use App\Models\Subscriber;
-use App\Models\Subscription;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

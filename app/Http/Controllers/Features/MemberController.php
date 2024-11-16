@@ -3,13 +3,17 @@
 namespace App\Http\Controllers\Features;
 
 use PDF;
+use Carbon\Carbon;
 use App\Models\Member;
 use App\Models\Rating;
+use App\Models\Billing;
 use Illuminate\Http\Request;
 use App\Exports\MembersExport;
+use App\Models\BillingHistory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Crypt;
 
 class MemberController extends Controller
 {
@@ -74,21 +78,44 @@ class MemberController extends Controller
         return view('pages.member.index', compact('members', 'businessesWithAverageRatings', 'ratings', 'responses'));
 
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    
+    public function subscription($encryptedId)
     {
-        //
+        $decryptedMemberId = Crypt::decryptString($encryptedId);
+    
+        $billings = Billing::where('user_id', $decryptedMemberId)->get();
+      
+        $billing_history = BillingHistory::join('active_subscriptions','billing_history.active_subscription_id','active_subscriptions.id')
+            ->join('subscriptions','active_subscriptions.subscription_id','subscriptions.id')
+            ->select(
+                'billing_history.*',
+                'subscriptions.amount as subscription_price',
+                'subscriptions.type as subscription_type',
+                'active_subscriptions.id as active_subscriptions_id',
+                'active_subscriptions.expiry_date_time as expiry_date_time',
+                'active_subscriptions.status as status',
+                'active_subscriptions.footer as footer',
+                'active_subscriptions.reference_id as reference_id',
+                'active_subscriptions.user_id as user_id',
+            )
+            ->where('billing_history.user_id', $decryptedMemberId)
+            ->get();
+    
+        $currentMonthHistory = $billing_history->filter(function ($history) {
+            return Carbon::parse($history->created_at)->isCurrentMonth();
+        });
+    
+        $currentYearHistory = $billing_history->filter(function ($history) {
+            return Carbon::parse($history->created_at)->isCurrentYear();
+        });
+    
+    
+        return view('pages.member.subscription.index', compact('billings', 'billing_history', 'currentMonthHistory', 'currentYearHistory'));
     }
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $requestj
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)

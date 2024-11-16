@@ -50,28 +50,6 @@
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 	<!--begin::Container-->
 	<div class="container-xxl" id="kt_content_container">
-		@if (session('error'))
-            <div class="alert fade show alert-danger">
-                <!--begin::Wrapper-->
-                <div class="d-flex flex-column">
-                    <!--begin::Content-->
-                    <span>{{ session('error') }}</span>
-                    <!--end::Content-->
-                </div>
-                <!--end::Wrapper-->
-            </div>
-        @endif
-        @if (session('success'))
-            <div class="alert fade show alert-success">
-                <!--begin::Wrapper-->
-                <div class="d-flex flex-column">
-                    <!--begin::Content-->
-                    <span>{{ session('success') }}</span>
-                    <!--end::Content-->
-                </div>
-                <!--end::Wrapper-->
-            </div>
-        @endif
 
 		<!--begin::Content-->
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
