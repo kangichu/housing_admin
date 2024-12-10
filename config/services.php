@@ -30,11 +30,38 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // 'twitter' => [
+    //     'api_key' => env('TWITTER_API_KEY'),
+    //     'api_key_secret' => env('TWITTER_API_KEY_SECRET'),
+    //     'access_token' => env('TWITTER_ACCESS_TOKEN'),
+    //     'access_token_secret' => env('TWITTER_ACCESS_TOKEN_SECRET'),
+    //     'bearer_token' => env('TWITTER_BEARER_TOKEN'),
+    //     'client_id' => env('TWITTER_CLIENT_ID'),
+    //     'client_secret' => env('TWITTER_CLIENT_SECRET'),
+    //     'refresh_token' => env('TWITTER_REFRESH_TOKEN'),
+
+    // ],
+
     'twitter' => [
-        'api_key' => env('TWITTER_API_KEY'),
-        'api_key_secret' => env('TWITTER_API_KEY_SECRET'),
+        'client_id' => env('TWITTER_CLIENT_ID'),
+        'client_secret' => env('TWITTER_CLIENT_SECRET'),
         'access_token' => env('TWITTER_ACCESS_TOKEN'),
         'access_token_secret' => env('TWITTER_ACCESS_TOKEN_SECRET'),
+        'redirect' => env('TWITTER_REDIRECT_URI'),
     ],
+
+    'facebook' => [
+        'client_id' => env('FACEBOOK_APP_ID'),
+        'client_secret' => env('FACEBOOK_APP_SECRET'),
+        'access_token' => env('FACEBOOK_ACCESS_TOKEN'),
+        'redirect' => env('FACEBOOK_REDIRECT_URI'),
+    ],
+
+    'linkedin' => [
+        'client_id' => env('LINKEDIN_CLIENT_ID'),
+        'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
+        'redirect' => env('LINKEDIN_REDIRECT_URI'),
+    ],
+    
 
 ];

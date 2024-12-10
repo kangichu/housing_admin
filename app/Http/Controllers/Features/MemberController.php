@@ -112,6 +112,27 @@ class MemberController extends Controller
     
         return view('pages.member.subscription.index', compact('billings', 'billing_history', 'currentMonthHistory', 'currentYearHistory'));
     }
+
+    public function badges($encryptedId)
+    {
+        $decryptedMemberId = Crypt::decryptString($encryptedId);
+
+        $members = Member::leftjoin('businesses','users.id','businesses.user_id')
+        ->select('users.*','businesses.id as business_id', 'businesses.business_name')
+        ->where('users.id', $decryptedMemberId)
+        ->first();
+        
+        $ratings = Rating::leftJoin('reviews','ratings.id','reviews.ratings_id')
+        ->where('ratings.business_id', $members->business_id)
+        ->select('ratings.*', DB::raw('COUNT(reviews.id) as review_count'))
+        ->addSelect('reviews.user_id as liked_rating_user_id')
+        
+        ->groupBy('ratings.id','liked_rating_user_id')
+        ->get();
+
+
+        return view('pages.member.badges.index', compact('members', 'ratings'));
+    }
     /**
      * Store a newly created resource in storage.
      *

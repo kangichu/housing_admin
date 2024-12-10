@@ -21,11 +21,12 @@ class CreateSocialMediaTable extends Migration
             $table->string('image_path')->nullable();
             $table->string('status');
             $table->string('platform');
-            $table->string('tags')->nullable();
+            $table->json('tags')->nullable();
             $table->timestamp('schedule')->nullable();
             $table->boolean('repeat')->default(false);
             $table->string('repeat_every')->nullable();
             $table->timestamp('repeat_ends')->nullable();
+            $table->integer('count')->default(0);
             $table->timestamps();
         });
     }

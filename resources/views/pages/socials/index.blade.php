@@ -88,7 +88,7 @@
                         <!--end::Add Post-->
                     </div>
                     <!--end::Toolbar-->
-                    <!--begin::Modal - Add task-->
+                    <!--begin::Modal - Add Post-->
                     <div class="modal fade" id="kt_modal_add_post" tabindex="-1" aria-hidden="true">
                         <!--begin::Modal dialog-->
                         <div class="modal-dialog modal-dialog-centered mw-650px">
@@ -125,11 +125,10 @@
                                                 <label class="required fw-bold fs-6 mb-2">Platform</label>
                                                 <!--end::Label-->
                                                 <!--begin::Input-->
-                                                <select class="form-select form-select-solid" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" data-dropdown-parent="#kt_modal_add_post" name="platform" id="platform" multiple>
+                                                <select class="form-select form-select-solid platform" data-control="select2" data-placeholder="Select an option" data-allow-clear="true" name="platform" id="platform" multiple>
                                                     <option></option>
                                                     <option value="Facebook">Facebook</option>
                                                     <option value="Twitter">Twitter</option>
-                                                    <option value="Instagram">Instagram</option>
                                                     <option value="LinkedIn">LinkedIn</option>
                                                 </select>
                                                 <!--end::Input-->
@@ -137,7 +136,7 @@
                                             <!--end::Input group-->
                                             <div class="row">
                                                 <!--begin::Input group-->
-                                                <div class="col-md-6 fv-row mb-7">
+                                                <div class="col-md-8 fv-row mb-7">
                                                     <!--begin::Label-->
                                                     <label class="required fw-bold fs-6 mb-2">Tags</label>
                                                     <!--end::Label-->
@@ -147,7 +146,7 @@
                                                 </div>
                                                 <!--end::Input group-->
                                                 <!--begin::Input group-->
-                                                <div class="col-md-6 fv-row mb-7">
+                                                <div class="col-md-4 fv-row mb-7">
                                                     <!--begin::Label-->
                                                     <label class="required fw-bold fs-6 mb-2">Schedule</label>
                                                     <!--end::Label-->
@@ -250,7 +249,7 @@
                                            
                                             <!--begin::Input group-->
                                             <div class="fv-row mb-7">
-                                                <textarea id="kt_post" name="kt_post" class="tox-target">
+                                                <textarea id="kt_post" name="kt_post" class="tox-target kt_post">
                                                 </textarea>
                                             </div>
                                             <!--end::Input group-->
@@ -292,7 +291,7 @@
                         </div>
                         <!--end::Modal dialog-->
                     </div>
-                    <!--end::Modal - Add task-->
+                    <!--end::Modal - Add Post-->
                 </div>
 			</div>
 			<!--end::Card header-->
@@ -310,10 +309,7 @@
                                 </div>
                             </th>
                             <th class="min-w-225px">Post</th>
-                            <th class="min-w-125px">Platform</th>
-                            <th class="min-w-125px">Status</th>
-                            <th class="min-w-125px">Schedule</th>
-                            <th class="text-end min-w-100px">Actions</th>
+                            <th class="text-center">Actions</th>
                         </tr>
 						<!--end::Table row-->
 					</thead>
@@ -329,62 +325,69 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex flex-column align-items-start">
                                     <div class="d-flex justify-content-start flex-column">
-                                        <a href="#" class="fw-bolder text-hover-primary mb-1">{!!$social->post !!}</a>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex justify-content-start flex-column">
-                                        <span class="fw-bolder text-hover-primary mb-1">{{ $social->platform }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex justify-content-start flex-column">
-                                        <span class="fw-bolder text-hover-primary mb-1">{{ $social->status }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="d-flex justify-content-start flex-column">
-                                        <span class="fw-bolder text-hover-primary mb-1">{{ $social->schedule }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex justify-content-end flex-shrink-0">
-                                    <a href="{{ route('socials.edit', $social->id) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
-                                        <span class="svg-icon svg-icon-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M21.7071 2.29289C22.0976 2.68342 22.0976 3.31658 21.7071 3.70711L20.4142 5H18V7.41421L21.5858 11H20V13H17V16H15V17.5858L18.5858 21.1716L17.1716 22.5858L13.5858 18.9999H12V20.5858L10.4142 19H9V15H6V13H3V10H2V8H3V5.41421L5.41421 3H7V2H9V3H11V6H14V8H15.4142L18 5.41421V4H19.4142L21.7071 2.70711C22.0976 2.31658 22.0976 2.68342 21.7071 2.29289ZM15 8V6H13V8H15ZM13 10H15V12H13V10ZM11 8H9V10H11V8ZM9 12H11V14H9V12ZM11 16H9V18H11V16ZM11 20H9V22H11V20ZM13 18H15V20H13V18ZM17 14H19V16H17V14Z" fill="black" />
-                                            </svg>
+                                        <span class="fw-bolder text-hover-primary mb-1">
+                                            {!!$social->post !!} <br>
+                                            @if($social->image)
+                                                <div class="card-xl-stretch mb-5">
+                                                    <!--begin::Overlay-->
+                                                    <a class="d-block overlay" href="#">
+                                                        <!--begin::Image-->
+                                                        <div class="overlay-wrapper bgi-no-repeat bgi-position-center bgi-size-cover card-rounded min-h-300px" style="background-image:url('/storage/social_media/{{$social->image}}')"></div>
+                                                        <!--end::Image-->
+                                                        <!--begin::Action-->
+                                                        <div class="overlay-layer card-rounded bg-dark bg-opacity-25">
+                                                            <i class="bi bi-eye-fill fs-2x text-white"></i>
+                                                        </div>
+                                                        <!--end::Action-->
+                                                    </a>
+                                                    <!--end::Overlay-->
+                                                </div>
+                                            @endif
                                         </span>
-                                        <!--end::Svg Icon-->
-                                    </a>
-                                    <a href="{{ route('socials.destroy', $social->id) }}" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm" onclick="event.preventDefault(); document.getElementById('delete-social-{{ $social->id }}').submit();">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-                                        <span class="svg-icon svg-icon-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path d="M3 5.99988C3 5.73476 3.10536 5.48043 3.29289 5.29289C3.68342 4.90237 4.31658 4.90237 4.70711 5.29289L12 12.5858L19.2929 5.29289C19.6834 4.90237 20.3166 4.90237 20.7071 5.29289C21.0976 5.68342 21.0976 6.31658 20.7071 6.70711L13.4142 14.0001L20.7071 21.293C21.0976 21.6835 21.0976 22.3166 20.7071 22.7071C20.3166 23.0976 19.6834 23.0976 19.2929 22.7071L12 15.4142L4.70711 22.7071C4.31658 23.0976 3.68342 23.0976 3.29289 22.7071C2.90237 22.3166 2.90237 21.6835 3.29289 21.293L10.5858 14.0001L3.29289 6.70711C3.10536 6.51957 3 6.26524 3 5.99988Z" fill="black" />
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon-->
-                                    </a>
-                                    <form id="delete-social-{{ $social->id }}" action="{{ route('socials.destroy', $social->id) }}" method="POST" style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-contentt-between">
+                                        <div class="d-flex align-items-center me-4">
+                                            <div class="d-flex justify-content-start flex-column">
+                                                <span class="fw-bolder text-hover-primary mb-1"><span class="badge badge-light-primary">Scheduled For:</span> {{ $social->platform }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center me-4">
+                                            <div class="d-flex justify-content-start flex-column">
+                                                <span class="fw-bolder text-hover-primary mb-1"><span class="badge badge-light-primary">Status:</span> {{ ucfirst($social->status) }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center me-4">
+                                            <div class="d-flex justify-content-start flex-column">
+                                                <span class="fw-bolder text-hover-primary mb-1"><span class="badge badge-light-primary">Scheduled on:</span> {{ $social->schedule }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="d-flex justify-content-start flex-column">
+                                                <span class="fw-bolder text-hover-primary mb-1"><span class="badge badge-light-primary">Repeat:</span> @if($social->repeat == 0) No @else Yes @endif</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            </td>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-light-danger me-10 w-100" id="kt_button_delete_{{ $social->referral_code }}">
+                                    <span class="indicator-label">
+                                        Delete
+                                    </span>
+                                    <span class="indicator-progress">
+                                        Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
+                                <form id="delete-social-{{ $social->referral_code }}" action="{{ route('socials.destroy', $social->referral_code) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </td>
                         </tr>
                         @endforeach
-						
 						<!--end::Table row-->
 					</tbody>
 					<!--end::Table body-->

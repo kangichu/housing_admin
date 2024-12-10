@@ -85,6 +85,8 @@ Route::get('home', [Home::class, 'index'])->name('home');
 
         Route::get('/member_subscription/{id}', [MemberController::class, 'subscription']);
 
+        Route::get('/member_badges/{id}', [MemberController::class, 'badges']);
+
 /*
 |--------------------------------------------------------------------------
 | Members

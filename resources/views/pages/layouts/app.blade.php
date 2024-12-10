@@ -1315,19 +1315,14 @@
         
             tinymce.init(options);
         </script>
-        
-        <script type="text/javascript">
-            // The DOM elements you wish to replace with Tagify
-            var kt_tags = document.querySelector("#kt_tags");
-
-            // Initialize Tagify components on the above inputs
-            new Tagify(kt_tags);
-        </script>
 
         <script type="text/javascript">
             $(document).ready(function() {
 
                 var selects = document.querySelectorAll('select');
+                var kt_datepicker_schedule = document.querySelector('#kt_datepicker_schedule');
+                var kt_datepicker_repeat_ends = document.querySelector('#kt_datepicker_repeat_ends');
+                var kt_tags = document.querySelector("#kt_tags");
                 
                 selects.forEach(select => {
                     $(select).select2({
@@ -1337,14 +1332,39 @@
                     });
                 });
 
-                $("#kt_datepicker_schedule").flatpickr({
+                new Tagify(kt_tags);
+
+                kt_datepicker_schedule.flatpickr({
                     enableTime: true,
                     dateFormat: "Y-m-d H:i",
                 });
 
-                $("#kt_datepicker_repeat_ends").flatpickr({
+                kt_datepicker_repeat_ends.flatpickr({
                     enableTime: true,
                     dateFormat: "Y-m-d H:i",
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var buttons = document.querySelectorAll("[id^='kt_button_delete_']");
+            
+                buttons.forEach(button => {
+                    button.addEventListener("click", function() {
+                        // Activate indicator
+                        button.setAttribute("data-kt-indicator", "on");
+            
+                        // Submit the form
+                        var referralCode = button.id.replace('kt_button_delete_', '');
+                        var form = document.getElementById('delete-social-' + referralCode);
+                        form.submit();
+            
+                        // Disable indicator after form submission
+                        setTimeout(function() {
+                            button.removeAttribute("data-kt-indicator");
+                        }, 3000);
+                    });
                 });
             });
         </script>

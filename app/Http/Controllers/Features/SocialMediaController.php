@@ -66,6 +66,7 @@ class SocialMediaController extends Controller
                 }
 
             } catch (\Exception $e) {
+                Log::error('An error occurred while creating the post: ' . $e->getMessage());
                 return response()->json(['status' => 'error', 'message' => 'An error occurred while creating the post.'], 500);
             }
         });
@@ -142,7 +143,7 @@ class SocialMediaController extends Controller
             'image_path' => $postImage['path'] ?? null,
             'status' => $request->input('status'),
             'platform' => $request->input('platform'),
-            'tags' => $this->formatTags($request->input('tags')),
+            'tags' =>json_encode($request->input('kt_tags')),
             'schedule' => $request->input('kt_datepicker_schedule'),
             'repeat' => $request->input('repeat'),
             'repeat_every' => $request->input('repeat_every'),
@@ -150,6 +151,7 @@ class SocialMediaController extends Controller
             'referral_code' => $refCode,
         ]);
         Log::info('Saving the social media post');
+        Log::info('Tags: ' . $socialMedia->tags);
     
         return $socialMedia->save();
     }
@@ -178,27 +180,14 @@ class SocialMediaController extends Controller
         ];
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\SocialMedia  $socialMedia
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, SocialMedia $socialMedia)
-    {
-        //
-    }
-
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\SocialMedia  $socialMedia
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SocialMedia $socialMedia)
+    public function destroy($referral_code)
     {
-        //
+        dd($referral_code);
     }
 }

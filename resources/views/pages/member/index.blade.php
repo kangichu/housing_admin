@@ -198,13 +198,7 @@
 								<!--end::Svg Icon--></a>
 								<!--begin::Menu-->
 								<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
-									@if($member->is_suspended != 1)
-									<!--begin::Menu item-->
-									<div class="menu-item px-3">
-										<a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_{{$member->id}}">Suspend</a>
-									</div>
-									<!--end::Menu item-->
-									@endif
+									
 									@if($member->account_type == 'Business')
 									<!--begin::Menu item-->
 									<div class="menu-item px-3">
@@ -213,7 +207,20 @@
 									<!--end::Menu item-->
 									<!--begin::Menu item-->
 									<div class="menu-item px-3">
+										<a href="/member_badges/{{  Crypt::encryptString($member->id)}}" class="menu-link px-3">Badges</a>
+									</div>
+									<!--end::Menu item-->
+									<!--begin::Menu item-->
+									<div class="menu-item px-3">
 										<a href="#" class="menu-link px-3" id="kt_drawer_rating_{{$member->business_id}}">Reviews</a>
+									</div>
+									<!--end::Menu item-->
+									
+									@endif
+									@if($member->is_suspended != 1)
+									<!--begin::Menu item-->
+									<div class="menu-item px-3">
+										<a href="#" class="menu-link px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_{{$member->id}}">Suspend</a>
 									</div>
 									<!--end::Menu item-->
 									@endif
