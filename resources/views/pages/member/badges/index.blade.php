@@ -51,13 +51,13 @@
 	<div class="container-xxl" id="kt_content_container">
         <!--begin::View component-->
         <div
-            id="kt_drawer_example_basic"
+            id="kt_drawer_all_badges"
 
             class="bg-white"
             data-kt-drawer="true"
             data-kt-drawer-activate="true"
-            data-kt-drawer-toggle="#kt_drawer_example_basic_button"
-            data-kt-drawer-close="#kt_drawer_example_basic_close"
+            data-kt-drawer-toggle="#kt_drawer_all_badges_button"
+            data-kt-drawer-close="#kt_drawer_all_badges_close"
             data-kt-drawer-width="500px"
         >
         <div class="card w-100 rounded-0">
@@ -75,7 +75,7 @@
                 <!--begin::Card toolbar-->
                 <div class="card-toolbar">
                     <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-light-primary" id="kt_drawer_example_basic_close">
+                    <div class="btn btn-sm btn-icon btn-active-light-primary" id="kt_drawer_all_badges_close">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -157,53 +157,80 @@
         </div>
         </div>
         <!--end::View component-->
-        <div class="row g-6 g-xl-9">
-            
-            <div class="col-md-6 col-xl-4">
-                <!--begin::Card-->
-                <a href="#" class="card border-hover-primary">
-                    <!--begin::Card header-->
-                    <div class="card-header justify-content-between border-0 pt-9">
-                        <!--begin::Card Title-->
-                        <div class="card-title m-0">
-                            <!--begin::Avatar-->
-                            <div class="symbol symbol-50px bg-light">
-                                <i class="las la-user-check fs-1 p-3"></i>
-                            </div>
-                            <!--end::Avatar-->
+        <div class="scroll h-500px" style="overflow-x: hidden">
+            <div class="row g-6 g-xl-9">
+                @foreach($badges as $badge)
+                    @if(($badge->slug == 'verified-manager' && $member->is_verified == null) || 
+                        ($badge->slug == 'top-listing-manager' && $message == 'highest') || 
+                        ($badge->slug == 'highly-rated' && $ratings == 'Highly Rated') || 
+                        ($badge->slug == 'medium-rated' && $ratings == 'Medium Rated') || 
+                        ($badge->slug == 'poorly-rated' && $ratings == 'Poorly Rated'))
+                        <div class="col-md-6 col-xl-4">
+                            <!--begin::Card-->
+                            <a href="#" class="card border-hover-primary">
+                                <!--begin::Card header-->
+                                <div class="card-header justify-content-between border-0 pt-9">
+                                    <!--begin::Card Title-->
+                                    <div class="card-title m-0">
+                                        <!--begin::Avatar-->
+                                        <div class="symbol symbol-50px bg-light">
+                                            <i class="{{ $badge->icon }}"></i>
+                                        </div>
+                                        <!--end::Avatar-->
+                                    </div>
+                                    <!--end::Card Title-->
+                                    <!--begin::Card toolbar-->
+                                    <div class="card-toolbar">
+                                        @if($member->is_verified == null && $badge->slug == 'verified-manager')
+                                            <span class="badge badge-light-primary fw-bolder me-auto px-4 py-3">In Progress</span>
+                                        @else
+                                            <span class="badge badge-light-success fw-bolder me-auto px-4 py-3">Completed</span>
+                                        @endif
+                                    </div>
+                                    <!--end::Card toolbar-->
+                                </div>
+                                <!--end:: Card header-->
+                                <!--begin:: Card body-->
+                                <div class="card-body p-9">
+                                    <!--begin::Name-->
+                                    <div class="fs-3 fw-bolder text-dark">{{ $badge->name }}</div>
+                                    <!--end::Name-->
+                                    <!--begin::Description-->
+                                    <p class="text-gray-400 fw-bold fs-5 mt-1 mb-7">{{ $badge->description }}</p>
+                                    <!--end::Description-->
+                                    <!--begin::Progress-->
+                                    <div class="h-4px w-100 bg-light mb-5" data-bs-toggle="tooltip" title="" data-bs-original-title="This project @if($member->is_verified == null && $badge->slug == 'verified-manager') 50% @else 100% @endif completed">
+                                        <div class="bg-primary rounded h-4px" role="progressbar" 
+                                            @if($member->is_verified == null && $badge->slug == 'verified-manager')
+                                            style="width: 50%" aria-valuenow="50" 
+                                            @else
+                                            style="width: 100%" aria-valuenow="100" 
+                                            @endif
+                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <!--end::Progress-->
+                                    @if($member->is_verified == null && $badge->slug == 'verified-manager')
+                                        <small>Pending Manager Details Verification</small>
+                                        <button type="button" class="btn btn-sm btn-light-primary mt-4 w-100" id="kt_button_run_verification">
+                                            <span class="indicator-label">
+                                                Run Verification
+                                            </span>
+                                            <span class="indicator-progress">
+                                                Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                            </span>
+                                        </button>
+                                    @endif
+                                </div>
+                                <!--end:: Card body-->
+                            </a>
+                            <!--end::Card-->
                         </div>
-                        <!--end::Car Title-->
-                        <!--begin::Card toolbar-->
-                        <div class="card-toolbar">
-                            <span class="badge badge-light-primary fw-bolder me-auto px-4 py-3">In Progress</span>
-                        </div>
-                        <!--end::Card toolbar-->
-                    </div>
-                    <!--end:: Card header-->
-                    <!--begin:: Card body-->
-                    <div class="card-body p-9">
-                        <!--begin::Name-->
-                        <div class="fs-3 fw-bolder text-dark">Verified Manager</div>
-                        <!--end::Name-->
-                        <!--begin::Description-->
-                        <p class="text-gray-400 fw-bold fs-5 mt-1 mb-7">For managers who complete identity/business verification.</p>
-                        <!--end::Description-->
-                        <!--begin::Progress-->
-                        <div class="h-4px w-100 bg-light mb-5" data-bs-toggle="tooltip" title="" data-bs-original-title="This project 50% completed">
-                            <div class="bg-primary rounded h-4px" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <!--end::Progress-->
-                        <small>Pending Manager Details Verification</small>
-                        <button class="btn btn-sm btn-light-primary mt-4 w-100">Run Verification</button>
-                    </div>
-                    <!--end:: Card body-->
-                </a>
-                <!--end::Card-->
+                    @endif
+                @endforeach
             </div>
-
         </div>
 
-        <button id="kt_drawer_example_basic_button" class="btn btn-sm btn-light-primary mt-5">All Badges</button>
+        <button id="kt_drawer_all_badges_button" class="btn btn-sm btn-light-info float-right mt-5" style="float: right;">All Badges</button>
 	</div>
 	<!--end::Container-->
 </div>

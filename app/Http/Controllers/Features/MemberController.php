@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Features;
 
 use PDF;
 use Carbon\Carbon;
+use App\Models\Badge;
 use App\Models\Member;
 use App\Models\Rating;
 use App\Models\Billing;
+use App\Models\Listing;
+use App\Models\MainUser;
 use Illuminate\Http\Request;
 use App\Exports\MembersExport;
 use App\Models\BillingHistory;
@@ -115,23 +118,92 @@ class MemberController extends Controller
 
     public function badges($encryptedId)
     {
-        $decryptedMemberId = Crypt::decryptString($encryptedId);
+        $decryptedMemberId = $this->decryptMemberId($encryptedId);
+        $member = $this->getMemberWithBusiness($decryptedMemberId);
+        $ratings = $this->getRatingsForMember($member->id);
+        $member = $this->getMainUser($member->user_id);
+        $message = $this->getMemberListingMessage($member->id);
+        $badges = Badge::all();
 
-        $members = Member::leftjoin('businesses','users.id','businesses.user_id')
-        ->select('users.*','businesses.id as business_id', 'businesses.business_name')
-        ->where('users.id', $decryptedMemberId)
-        ->first();
-        
-        $ratings = Rating::leftJoin('reviews','ratings.id','reviews.ratings_id')
-        ->where('ratings.business_id', $members->business_id)
-        ->select('ratings.*', DB::raw('COUNT(reviews.id) as review_count'))
-        ->addSelect('reviews.user_id as liked_rating_user_id')
-        
-        ->groupBy('ratings.id','liked_rating_user_id')
-        ->get();
+        return view('pages.member.badges.index', compact('member', 'ratings', 'message', 'badges'));
+    }
+    
+    private function decryptMemberId($encryptedId)
+    {
+        return Crypt::decryptString($encryptedId);
+    }
+    
+    private function getMemberWithBusiness($decryptedMemberId)
+    {
+        return Member::leftjoin('businesses', 'users.id', 'businesses.user_id')
+            ->select('businesses.*', 'users.id as user_id')
+            ->where('users.id', $decryptedMemberId)
+            ->first();
+    }
+    
+    private function getRatingsForMember($businessId)
+    {
+        $ratings = Rating::leftJoin('reviews', 'ratings.id', 'reviews.ratings_id')
+            ->where('ratings.business_id', $businessId)
+            ->select('ratings.*', DB::raw('COUNT(reviews.id) as review_count'))
+            ->addSelect('reviews.user_id as liked_rating_user_id')
+            ->groupBy('ratings.id', 'liked_rating_user_id')
+            ->get();
+    
+        // Define the mapping for string ratings to numerical values
+        $ratingMapping = [
+            'Fair' => 4.5,
+            'Satisfied' => 4,
+            'Unsure' => 3,
+            'Disappointed' => 2,
+            'Aggrevated' => 1
+        ];
+    
+        // Count the ratings based on the mapped values
+        $highlyRatedCount = $ratings->filter(function ($rating) use ($ratingMapping) {
+            return isset($ratingMapping[$rating->rating]) && $ratingMapping[$rating->rating] >= 4.5;
+        })->count();
+    
+        $mediumRatedCount = $ratings->filter(function ($rating) use ($ratingMapping) {
+            return isset($ratingMapping[$rating->rating]) && $ratingMapping[$rating->rating] >= 3 && $ratingMapping[$rating->rating] < 4.5;
+        })->count();
+    
+        $poorlyRatedCount = $ratings->filter(function ($rating) use ($ratingMapping) {
+            return isset($ratingMapping[$rating->rating]) && $ratingMapping[$rating->rating] <= 2;
+        })->count();
 
+        $ratingStatus = 'neutral';
+        if ($highlyRatedCount >= 1) {
+            $ratingStatus = 'Highly Rated';
+        } elseif ($mediumRatedCount >= 1) {
+            $ratingStatus = 'Medium Rated';
+        } elseif ($poorlyRatedCount >= 1) {
+            $ratingStatus = 'Poorly Rated';
+        }
+    
+        return $ratingStatus;
+    }
 
-        return view('pages.member.badges.index', compact('members', 'ratings'));
+    private function getMainUser($userId)
+    {
+        return MainUser::findOrFail($userId);
+    }
+    
+    private function getMemberListingMessage($memberId)
+    {
+        $memberListingsCount = Listing::where('availability', 'Available')
+            ->where('user_id', $memberId)
+            ->count();
+    
+        $highestListingsCount = Listing::where('availability', 'Available')
+            ->selectRaw('user_id, COUNT(*) as count')
+            ->groupBy('user_id')
+            ->orderBy('count', 'desc')
+            ->first();
+    
+        $isHighest = $highestListingsCount && $highestListingsCount->user_id == $memberId;
+    
+        return $isHighest ? 'highest' : 'not yet';
     }
     /**
      * Store a newly created resource in storage.
