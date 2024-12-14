@@ -1438,16 +1438,15 @@
 
 @endif
 
-
 @if(request()->is('member_badges/*'))
 
 <script type="text/javascript">
-    // Element to indecate
     var button = document.querySelector("#kt_button_run_verification");
 
-    // Handle button click event
     button.addEventListener("click", function() {
-        // Activate indicator
+
+        var memberId = button.getAttribute("data-member-id");
+
         Swal.fire({
             title: 'Are you sure?',
             text: "Do you want to proceed with the verification?",
@@ -1457,15 +1456,12 @@
             cancelButtonText: 'No, cancel!'
         }).then((result) => {
             if (result.isConfirmed) {
-                // Activate indicator
                 button.setAttribute("data-kt-indicator", "on");
 
-                // Disable indicator after 3 seconds
                 setTimeout(function() {
                     button.removeAttribute("data-kt-indicator");
                 }, 3000);
 
-                // Optionally, you can add additional actions here
                 Swal.fire(
                     'Confirmed!',
                     'Your verification has started.',

@@ -60,111 +60,113 @@
             data-kt-drawer-close="#kt_drawer_all_badges_close"
             data-kt-drawer-width="500px"
         >
-        <div class="card w-100 rounded-0">
-            <!--begin::Card header-->
-            <div class="card-header justify-content-between pe-5">
-                <!--begin::Title-->
-                <div class="card-title">
-                    <!--begin::User-->
-                    <div class="d-flex justify-content-center flex-column me-3">
-                        <a href="#" class="fs-4 fw-bolder text-gray-900 text-hover-primary me-1 lh-1">All Badges</a>
+            <div class="card w-100 rounded-0">
+                <!--begin::Card header-->
+                <div class="card-header justify-content-between pe-5">
+                    <!--begin::Title-->
+                    <div class="card-title">
+                        <!--begin::User-->
+                        <div class="d-flex justify-content-center flex-column me-3">
+                            <a href="#" class="fs-4 fw-bolder text-gray-900 text-hover-primary me-1 lh-1">All Badges</a>
+                        </div>
+                        <!--end::User-->
                     </div>
-                    <!--end::User-->
-                </div>
-                <!--end::Title-->
-                <!--begin::Card toolbar-->
-                <div class="card-toolbar">
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-light-primary" id="kt_drawer_all_badges_close">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black"></rect>
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black"></rect>
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
+                    <!--end::Title-->
+                    <!--begin::Card toolbar-->
+                    <div class="card-toolbar">
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-light-primary" id="kt_drawer_all_badges_close">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black"></rect>
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black"></rect>
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
                     </div>
-                    <!--end::Close-->
+                    <!--end::Card toolbar-->
                 </div>
-                <!--end::Card toolbar-->
+                <!--end::Card header-->
+                <!--begin::Card body-->
+                <div class="card-body hover-scroll-overlay-y">
+                    <div class="my-5">
+                        <h1 class="text-center mb-4">Property Manager Badges</h1>
+                        <p class="text-center mb-5">Our badges help you identify trustworthy and high-performing property managers. Here’s what each badge represents:</p>
+                
+                        <div class="row gy-4">
+                            <div class="col-md-6">
+                                <h3>Verified Manager</h3>
+                                <p>Awarded to managers who have completed identity or business verification.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Top Listing Manager</h3>
+                                <p>Given to managers with the highest number of active listings.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Trusted for X Years</h3>
+                                <p>Awarded to managers with a consistent presence on the platform for 1, 2, 3, or more years.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Highly Rated</h3>
+                                <p>Managers with an average rating above 4.5 from user reviews.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Poor Rated</h3>
+                                <p>Identifies managers with consistently low ratings (below 2 out of 5).</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Responsive Manager</h3>
+                                <p>For managers who respond to inquiries within 24 hours.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Fast Leasing/Selling Manager</h3>
+                                <p>Awarded to managers whose listings are leased or sold within 30 days.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Outstanding Customer Service</h3>
+                                <p>Given to managers who receive positive feedback for excellent service.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Eco-Friendly Properties</h3>
+                                <p>Awarded to managers who list properties with sustainable or energy-efficient features.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Premium Listings</h3>
+                                <p>For managers specializing in high-value or luxury properties.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Most Active Manager</h3>
+                                <p>Awarded to managers with frequent listings and regular user engagement.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Community Builder</h3>
+                                <p>For managers who actively engage with users, respond to reviews, or answer questions.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h3>Elite Manager</h3>
+                                <p>A prestigious badge combining "Verified Manager" and "Highly Rated" badges for top performers.</p>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <!--end::Card body-->
             </div>
-            <!--end::Card header-->
-            <!--begin::Card body-->
-            <div class="card-body hover-scroll-overlay-y">
-                <div class="my-5">
-                    <h1 class="text-center mb-4">Property Manager Badges</h1>
-                    <p class="text-center mb-5">Our badges help you identify trustworthy and high-performing property managers. Here’s what each badge represents:</p>
-            
-                    <div class="row gy-4">
-                        <div class="col-md-6">
-                            <h3>Verified Manager</h3>
-                            <p>Awarded to managers who have completed identity or business verification.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Top Listing Manager</h3>
-                            <p>Given to managers with the highest number of active listings.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Trusted for X Years</h3>
-                            <p>Awarded to managers with a consistent presence on the platform for 1, 2, 3, or more years.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Highly Rated</h3>
-                            <p>Managers with an average rating above 4.5 from user reviews.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Poor Rated</h3>
-                            <p>Identifies managers with consistently low ratings (below 2 out of 5).</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Responsive Manager</h3>
-                            <p>For managers who respond to inquiries within 24 hours.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Fast Leasing/Selling Manager</h3>
-                            <p>Awarded to managers whose listings are leased or sold within 30 days.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Outstanding Customer Service</h3>
-                            <p>Given to managers who receive positive feedback for excellent service.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Eco-Friendly Properties</h3>
-                            <p>Awarded to managers who list properties with sustainable or energy-efficient features.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Premium Listings</h3>
-                            <p>For managers specializing in high-value or luxury properties.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Most Active Manager</h3>
-                            <p>Awarded to managers with frequent listings and regular user engagement.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Community Builder</h3>
-                            <p>For managers who actively engage with users, respond to reviews, or answer questions.</p>
-                        </div>
-                        <div class="col-md-6">
-                            <h3>Elite Manager</h3>
-                            <p>A prestigious badge combining "Verified Manager" and "Highly Rated" badges for top performers.</p>
-                        </div>
-                    </div>
-                </div>
-            
-            </div>
-            <!--end::Card body-->
-        </div>
         </div>
         <!--end::View component-->
         <div class="scroll h-500px" style="overflow-x: hidden">
             <div class="row g-6 g-xl-9">
                 @foreach($badges as $badge)
-                    @if(($badge->slug == 'verified-manager' && $member->is_verified == null) || 
+                    @if(
+                        ($badge->slug == 'verified-manager' && $member->is_verified == null) || 
                         ($badge->slug == 'top-listing-manager' && $message == 'highest') || 
                         ($badge->slug == 'highly-rated' && $ratings == 'Highly Rated') || 
                         ($badge->slug == 'medium-rated' && $ratings == 'Medium Rated') || 
-                        ($badge->slug == 'poorly-rated' && $ratings == 'Poorly Rated'))
+                        ($badge->slug == 'poorly-rated' && $ratings == 'Poorly Rated')
+                    )
                         <div class="col-md-6 col-xl-4">
                             <!--begin::Card-->
                             <a href="#" class="card border-hover-primary">
@@ -173,8 +175,11 @@
                                     <!--begin::Card Title-->
                                     <div class="card-title m-0">
                                         <!--begin::Avatar-->
-                                        <div class="symbol symbol-50px bg-light">
-                                            <i class="{{ $badge->icon }}"></i>
+                                        <div class="symbol symbol-50px bg-light p-3">
+                                            {{-- <i class="{{ $badge->icon }} fs-1 p-3"></i> --}}
+                                            <span class="svg-icon svg-icon-3x cursor-pointer @if($badge->slug == 'verified-manager') svg-icon-success @endif @if($badge->slug == 'top-listing-manager') svg-icon-warning @endif @if($badge->slug == 'highly-rated') svg-icon-danger @endif @if($badge->slug == 'medium-rated') svg-icon-info @endif @if($badge->slug == 'poorly-rated') svg-icon-secondary @endif">
+                                                {!! $badge->icon !!}
+                                            </span>
                                         </div>
                                         <!--end::Avatar-->
                                     </div>
@@ -211,7 +216,7 @@
                                     <!--end::Progress-->
                                     @if($member->is_verified == null && $badge->slug == 'verified-manager')
                                         <small>Pending Manager Details Verification</small>
-                                        <button type="button" class="btn btn-sm btn-light-primary mt-4 w-100" id="kt_button_run_verification">
+                                        <button type="button" class="btn btn-sm btn-light-primary mt-4 w-100" id="kt_button_run_verification" data-member-id="{{$member->id}}">
                                             <span class="indicator-label">
                                                 Run Verification
                                             </span>
