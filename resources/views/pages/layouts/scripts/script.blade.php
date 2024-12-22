@@ -1535,28 +1535,48 @@
         var token = $('meta[name="csrf-token"]').attr('content');
 
         if (isValid) {
-            // Send data over AJAX
-            $.ajax({
-                url: '/member/registration', // Replace with your endpoint URL
-                method: 'POST',
-                data:  {'_token': token, values},
-                success: function(response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Form submitted successfully!'
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to proceed with the verification?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, proceed!',
+                cancelButtonText: 'No, cancel!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/member/registration', // Replace with your endpoint URL
+                        method: 'POST',
+                        data:  {'_token': token, values},
+                        success: function(response) {
+                            if(respose.status == 200)
+                            {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'Member registered successfully!',
+                                    confirmButtonText: 'Yes, proceed!'
+                                }).then((function() {
+                                    button.removeAttribute("data-kt-indicator");
+                                    location.reload(); // Reload the page
+                                }));
+                            }
+                        },
+                        error: function(error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Error submitting form. Please try again.',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, proceed!',
+                                cancelButtonText: 'No, cancel!'
+                            });
+                        },
+                        complete: function() {
+                            // Disable indicator after AJAX call completes
+                            button.removeAttribute("data-kt-indicator");
+                        }
                     });
-                },
-                error: function(error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error submitting form. Please try again.'
-                    });
-                },
-                complete: function() {
-                    // Disable indicator after AJAX call completes
-                    button.removeAttribute("data-kt-indicator");
                 }
             });
         } else {
@@ -1638,6 +1658,45 @@
             }
         });
     }
+</script>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const businessDetails = document.getElementById('business_details');
+        const individualDetails = document.getElementById('individual_details');
+        const roleRadios = document.getElementsByName('user_role');
+
+        businessDetails.style.display = 'none';
+        individualDetails.style.display = 'none';
+
+        function toggleDetails() {
+            const businessInputs = businessDetails.querySelectorAll('input, textarea');
+            const individualInputs = individualDetails.querySelectorAll('input, textarea');
+
+            if (document.getElementById('kt_modal_update_role_option_0').checked) 
+            {
+                individualDetails.style.display = 'block';
+                businessDetails.style.display = 'none';
+
+                individualInputs.forEach(input => input.setAttribute('required', 'required'));
+                businessInputs.forEach(input => input.removeAttribute('required'));
+
+            } else if (document.getElementById('kt_modal_update_role_option_1').checked) 
+            {
+                individualDetails.style.display = 'none';
+                businessDetails.style.display = 'block';
+
+                businessInputs.forEach(input => input.setAttribute('required', 'required'));
+                individualInputs.forEach(input => input.removeAttribute('required'));
+            }
+        }
+
+        roleRadios.forEach(radio => {
+            radio.addEventListener('change', toggleDetails);
+        });
+
+        toggleDetails();
+    });
 </script>
 
 @endif

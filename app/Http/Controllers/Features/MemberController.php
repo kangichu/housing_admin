@@ -12,11 +12,14 @@ use App\Models\Listing;
 use App\Models\Business;
 use App\Models\MainUser;
 use Illuminate\Support\Str;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use App\Exports\MembersExport;
 use App\Models\BillingHistory;
 use App\Jobs\SendWelcomeMailJob;
+use App\Models\ActiveSubscription;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -227,6 +230,7 @@ class MemberController extends Controller
             'values.last' => 'required|string|max:255',
             'values.mobile' => 'required|string|max:15',
             'values.email' => 'required|string|email|max:255|unique:users,email',
+            'values.user_role' => 'required',
         ];
     
         // Define additional rules for business accounts
@@ -243,9 +247,10 @@ class MemberController extends Controller
         $individualRules = [
             'values.national_id' => 'required|string|max:20',
         ];
-    
+
         // Determine the account type and merge the appropriate rules
-        $accountType = $request->input('account_type');
+        $accountType = $request->values['user_role'];
+
         if ($accountType === 'Business') {
             $rules = array_merge($commonRules, $businessRules);
         } elseif ($accountType === 'individual') {
@@ -267,6 +272,7 @@ class MemberController extends Controller
         }
 
         // Create the user
+        Log::info('Creating User account.');
         $user = $this->create($request->all());
     
         // Return a JSON response
@@ -290,6 +296,12 @@ class MemberController extends Controller
                 $full_name = $data['values']['first'] . ' ' . $data['values']['last'];
                 $password = $this->generateSecurePassword(8);
 
+                Log::info('Creating User account.');
+
+                // Check the role's guard name
+                $role = Role::where('name', 'business')->first();
+                Log::info('Role guard name: ' . $role->name);
+
                 $user = MainUser::create([
                     'first_name' => $data['values']['first'],
                     'last_name' => $data['values']['last'],
@@ -300,7 +312,31 @@ class MemberController extends Controller
                     'password' => Hash::make($password),
                 ]);
 
-                $user->assignRole('business');
+
+                // Ensure the role has the correct guard before assigning
+                DB::table('model_has_roles')->insert([
+                    'role_id' => $role->id,
+                    'model_type' => MainUser::class,
+                    'model_id' => $user->id,
+                ]);
+
+                Log::info('User account created successfully.');
+
+                if($data['values']['demo_account'] == 1)
+                {
+                    Log::info('User account is a demo account.');
+
+                    $referenceNumber = $this->generateReferenceNumber();
+
+                    $transaction = new \stdClass();
+                    $transaction->id = uniqid();
+                    $transaction->created_at = Carbon::now();
+                    $transaction->user_id = $user->id;
+                    $transaction->reference_number = $referenceNumber;
+                    $account_type = $data['values']['user_role'];
+                    
+                    $this->assignSubscription($transaction, $user, $account_type);
+                }
 
                 $this->createBusiness($data, $user->id);
 
@@ -310,7 +346,10 @@ class MemberController extends Controller
 
                 Log::info('User account created successfully.');
                 
-                return $user;
+                return response()->json([
+                    'message' => 'Member has been successfully created.',
+                    'status' => 200
+                ]);
                 
             } catch (\Throwable $th) {
                 //throw $th;
@@ -334,18 +373,18 @@ class MemberController extends Controller
     protected function createBusiness($data, $userId)
     {
         Business::create([
-            'account_type' => $data['account_type'],
+            'account_type' => $data['values']['user_role'],
             'business_name' => $data['values']['business_name'],
             'registration_number' => $data['values']['registration_number'],
             'date_of_incorporation' => Carbon::createFromFormat('m/d/Y', $data['values']['date_of_incorporation'])->format('Y-m-d'),
             'business_description' => $data['values']['business_description'],
             'business_site' => $data['values']['business_site'],
             'business_email' => $data['values']['business_email'],
-            'ise_demo_account' =>  $data['values']['demo_account'] ?? null,
+            'is_demo_account' =>  $data['values']['demo_account'] ?? null,
             'user_id' => $userId,
         ]);
 
-        if ($data['account_type'] == "individual") {
+        if ($data['values']['user_role'] == "individual") {
             indentificationNumber::create([
                 'identification_number' => $data['values']['national_id'],
                 'user_id' => $userId,
@@ -395,6 +434,50 @@ class MemberController extends Controller
         $isExists = Business::where('business_email',$email)->exists();
         
         return response()->json(['exists' => $isExists]);
+    }
+
+    protected function generateReferenceNumber()
+    {
+        return uniqid('ref-', true);
+    }
+
+    protected function assignSubscription($transaction, $user, $account_type)
+    {
+        Log::info('Creating active subscription');
+    
+        $today = \Carbon\Carbon::now();
+        $subscription = Subscription::where([ 'account_type' => $account_type, 'type' => 'Enterprise' ])->first();
+        
+        if (!$subscription) {
+            Log::error('Subscription not found.');
+            throw new \Exception('Subscription not found.');
+        }
+    
+        $expiry_date = $today->copy()->addWeek();
+        
+        $diff_in_days = $expiry_date->diffInDays($today);
+        $expiry_date_time = $expiry_date->toDateTimeString();
+    
+        $footer = 'demo_account';
+        $added_by = $user->id;
+    
+        $activeSubscription = ActiveSubscription::create([
+            'subscription_id' => $subscription->subscription_id,
+            'start_date' => $today,
+            'end_date' => $expiry_date,
+            'expiry_date_time' => $expiry_date_time,
+            'duration' => $diff_in_days,
+            'footer' => $footer,
+            'status' => 'active',
+            'notification_sent' => 0,
+            'reference_id' => $transaction->reference_number,
+            'user_id' =>  $user->id,
+            'added_by' => $added_by,
+        ]);
+    
+        Log::info('Active subscription created successfully');
+    
+        return $activeSubscription;
     }
 
 }

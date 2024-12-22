@@ -67,7 +67,7 @@
 </div>
 <!--end::Toolbar-->
 <!--begin::Group actions-->
-<div class="d-flex justify-content-end align-items-center d-none me-5" data-kt-user-table-toolbar="selected">
+<div class="d-flex justify-content-end align-items-center d-none me-3" data-kt-user-table-toolbar="selected">
     <div class="fw-bolder me-5">
     <span class="me-2" data-kt-user-table-select="selected_count"></span>Selected</div>
     <button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected">Delete Selected</button>
@@ -240,73 +240,6 @@
 
                         <div class="separator separator-dashed mb-5"></div>
 
-                        <!--begin::Business Details-->
-                        <div class="row mt-5">
-                            <!--begin::Input group-->
-                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
-                                <!--begin::Label-->
-                                <label class="required fw-bold fs-6 mb-2">Business Name</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" name="business_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Name" required>
-                                <!--end::Input-->
-                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
-                                <!--begin::Label-->
-                                <label class="required fw-bold fs-6 mb-2">Business Registration Number</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" name="registration_number" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Registration Number" required>
-                                <!--end::Input-->
-                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-12">
-                                <!--begin::Label-->
-                                <label class="required fw-bold fs-6 mb-2">Date of Incorporation</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input name="date_of_incorporation" id="kt_date_of_incorporation" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Date of Incorporation" required readonly>
-                                <!--end::Input-->
-                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-12">
-                                <!--begin::Label-->
-                                <label class="required fw-bold fs-6 mb-2">Business Description</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <textarea name="business_description" class="form-control form-control-lg form-control-solid" rows="3" id="kt_docs_maxlength_business_description" maxlength="500" required></textarea>
-                                <!--end::Input-->
-                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
-                                <!--begin::Label-->
-                                <label class="required fw-bold fs-6 mb-2">Business Site</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="link" name="business_site" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Site" required>
-                                <!--end::Input-->
-                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
-                            <!--end::Input group-->
-                            <!--begin::Input group-->
-                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
-                                <!--begin::Label-->
-                                <label class="required fw-bold fs-6 mb-2">Business Email</label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="email" name="business_email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Email" onblur="businessduplicateEmail(this)" required>
-                                <!--end::Input-->
-                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--end::Business Details-->
-
-                        <div class="separator separator-dashed mb-5"></div>
-
                         <!--begin::Input group-->
                         <div class="mt-5 mb-15">
                             <!--begin::Label-->
@@ -318,7 +251,7 @@
                                 <!--begin::Radio-->
                                 <div class="form-check form-check-custom form-check-solid">
                                     <!--begin::Input-->
-                                    <input class="form-check-input me-3" name="user_role" type="radio" value="individual" id="kt_modal_update_role_option_0" checked="checked" required>
+                                    <input class="form-check-input me-3" name="user_role" type="radio" value="individual" id="kt_modal_update_role_option_0" required>
                                     <!--end::Input-->
                                     <!--begin::Label-->
                                     <label class="form-check-label" for="kt_modal_update_role_option_0">
@@ -351,6 +284,94 @@
                             <!--end::Roles-->
                         </div>
                         <!--end::Input group-->
+
+                        <div class="separator separator-dashed mb-5"></div>
+
+                        <!--begin::Business Details-->
+                        <div class="row mt-5">
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-12">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Business Name</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" name="business_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Name" required>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                            <div class="col-md-12" id="business_details">
+                                <div class="row">
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-7 fv-plugins-icon-container col-md-12">
+                                        <!--begin::Label-->
+                                        <label class="required fw-bold fs-6 mb-2">Business Registration Number</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" name="registration_number" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Registration Number">
+                                        <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-7 fv-plugins-icon-container col-md-12">
+                                        <!--begin::Label-->
+                                        <label class="required fw-bold fs-6 mb-2">Date of Incorporation</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input name="date_of_incorporation" id="kt_date_of_incorporation" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Date of Incorporation" readonly>
+                                        <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-7 fv-plugins-icon-container col-md-12">
+                                        <!--begin::Label-->
+                                        <label class="required fw-bold fs-6 mb-2">Business Description</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <textarea name="business_description" class="form-control form-control-lg form-control-solid" rows="3" id="kt_docs_maxlength_business_description" maxlength="500"></textarea>
+                                        <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                        <!--begin::Label-->
+                                        <label class="required fw-bold fs-6 mb-2">Business Site</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="link" name="business_site" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Site">
+                                        <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                    <!--end::Input group-->
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                        <!--begin::Label-->
+                                        <label class="required fw-bold fs-6 mb-2">Business Email</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="email" name="business_email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Email" onblur="businessduplicateEmail(this)">
+                                        <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                    <!--end::Input group-->
+                                </div>
+                            </div>
+                            <div class="col-md-12" id="individual_details">
+                                <!--begin::Input group-->
+                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fw-bold fs-6 mb-2">National Identification Number</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" name="national_id" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Registration Number">
+                                    <!--end::Input-->
+                                <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                                <!--end::Input group-->
+                            </div>
+                            
+                        </div>
+                        <!--end::Business Details-->
+
+                        <div class="separator separator-dashed mb-5"></div>
+
+                        
                         <div class="fv-row mb-7 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid">
                             <!--begin::Wrapper-->
                             <div class="d-flex flex-stack">
