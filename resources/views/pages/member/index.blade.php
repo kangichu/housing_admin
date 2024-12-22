@@ -53,7 +53,7 @@
 		<!--begin::Card-->
 		<div class="card">
 			<!--begin::Card header-->
-			<div class="card-header border-0 pt-6">
+			<div class="card-header justify-content-between border-0 pt-6">
 				<!--begin::Card title-->
 				<div class="card-title">
 					<!--begin::Search-->
@@ -76,6 +76,7 @@
 					@include('pages.member.include.filter')
 				</div>
 				<!--end::Card toolbar-->
+
 			</div>
 			<!--end::Card header-->
 			<!--begin::Card body-->

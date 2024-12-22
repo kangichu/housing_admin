@@ -67,7 +67,7 @@
 </div>
 <!--end::Toolbar-->
 <!--begin::Group actions-->
-<div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">
+<div class="d-flex justify-content-end align-items-center d-none me-5" data-kt-user-table-toolbar="selected">
     <div class="fw-bolder me-5">
     <span class="me-2" data-kt-user-table-select="selected_count"></span>Selected</div>
     <button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected">Delete Selected</button>
@@ -151,3 +151,255 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - New Card-->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">
+    <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+    <span class="svg-icon svg-icon-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black"></rect>
+            <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black"></rect>
+        </svg>
+    </span>
+    <!--end::Svg Icon-->Add Member
+</button>
+<!--begin::Modal -  New Member-->
+<div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true" style="display: none;">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-650px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header" id="kt_modal_add_user_header">
+                <!--begin::Modal title-->
+                <h2 class="fw-bolder">Add Member</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="black"></rect>
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="black"></rect>
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body scroll-y mx-5 mx-xl-15 my-7">
+                <!--begin::Form-->
+                <form id="kt_modal_add_user_form" class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#">
+                    <!--begin::Scroll-->
+                    <div class="d-flex flex-column scroll-y me-n7 pe-7" id="kt_modal_add_user_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_user_header" data-kt-scroll-wrappers="#kt_modal_add_user_scroll" data-kt-scroll-offset="300px" style="max-height: 465px;">
+                        
+                        <!--begin::User Details-->
+                        <div class="row">
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">First Name</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" name="first" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="First name" required>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Last Name</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" name="last" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Last name" required>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Email</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="email" name="email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="example@domain.com"  onblur="duplicateEmail(this)" required>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Phone Number</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="number" name="mobile" class="form-control form-control-solid mb-3 mb-lg-0" required>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--end::User Details-->
+
+                        <div class="separator separator-dashed mb-5"></div>
+
+                        <!--begin::Business Details-->
+                        <div class="row mt-5">
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Business Name</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" name="business_name" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Name" required>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Business Registration Number</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" name="registration_number" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Registration Number" required>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-12">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Date of Incorporation</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input name="date_of_incorporation" id="kt_date_of_incorporation" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Date of Incorporation" required readonly>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-12">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Business Description</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <textarea name="business_description" class="form-control form-control-lg form-control-solid" rows="3" id="kt_docs_maxlength_business_description" maxlength="500" required></textarea>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Business Site</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="link" name="business_site" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Site" required>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="fv-row mb-7 fv-plugins-icon-container col-md-6">
+                                <!--begin::Label-->
+                                <label class="required fw-bold fs-6 mb-2">Business Email</label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="email" name="business_email" class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Business Email" onblur="businessduplicateEmail(this)" required>
+                                <!--end::Input-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div></div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--end::Business Details-->
+
+                        <div class="separator separator-dashed mb-5"></div>
+
+                        <!--begin::Input group-->
+                        <div class="mt-5 mb-15">
+                            <!--begin::Label-->
+                            <label class="required fw-bold fs-6 mb-5">Role</label>
+                            <!--end::Label-->
+                            <!--begin::Roles-->
+                            <!--begin::Input row-->
+                            <div class="d-flex fv-row">
+                                <!--begin::Radio-->
+                                <div class="form-check form-check-custom form-check-solid">
+                                    <!--begin::Input-->
+                                    <input class="form-check-input me-3" name="user_role" type="radio" value="individual" id="kt_modal_update_role_option_0" checked="checked" required>
+                                    <!--end::Input-->
+                                    <!--begin::Label-->
+                                    <label class="form-check-label" for="kt_modal_update_role_option_0">
+                                        <div class="fw-bolder text-gray-800">Individual</div>
+                                        <div class="text-gray-600">For individuals looking to rent out or sell their listings</div>
+                                    </label>
+                                    <!--end::Label-->
+                                </div>
+                                <!--end::Radio-->
+                            </div>
+                            <!--end::Input row-->
+                            <div class="separator separator-dashed my-5"></div>
+                            <!--begin::Input row-->
+                            <div class="d-flex fv-row">
+                                <!--begin::Radio-->
+                                <div class="form-check form-check-custom form-check-solid">
+                                    <!--begin::Input-->
+                                    <input class="form-check-input me-3" name="user_role" type="radio" value="agency" id="kt_modal_update_role_option_1" required>
+                                    <!--end::Input-->
+                                    <!--begin::Label-->
+                                    <label class="form-check-label" for="kt_modal_update_role_option_1">
+                                        <div class="fw-bolder text-gray-800">Agency</div>
+                                        <div class="text-gray-600">For agencies managing multiple listings or working on behalf of others</div>
+                                    </label>
+                                    <!--end::Label-->
+                                </div>
+                                <!--end::Radio-->
+                            </div>
+                            <!--end::Input row-->
+                            <!--end::Roles-->
+                        </div>
+                        <!--end::Input group-->
+                        <div class="fv-row mb-7 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid">
+                            <!--begin::Wrapper-->
+                            <div class="d-flex flex-stack">
+                                <!--begin::Label-->
+                                <div class="me-5">
+                                    <label class="required fs-6 fw-bold">Demo Account</label>
+                                    <div class="fs-7 fw-bold text-muted">is this a demo account being created?</div>
+                                </div>
+                                <!--end::Label-->
+                                <!--begin::Checkboxes-->
+                                <div class="d-flex">
+                                    <!--begin::Checkbox-->
+                                    <label class="form-check form-check-custom form-check-solid">
+                                        <!--begin::Input-->
+                                        <input class="form-check-input h-20px w-20px" type="checkbox" value="1" name="demo_account">
+                                        <!--end::Input-->
+                                        <!--begin::Label-->
+                                        <span class="form-check-label fw-bold">Yes</span>
+                                        <!--end::Label-->
+                                    </label>
+                                    <!--end::Checkbox-->
+                                </div>
+                                <!--end::Checkboxes-->
+                            </div>
+                            <!--begin::Wrapper-->
+                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <!--end::Scroll-->
+                    <!--begin::Actions-->
+                    <div class="text-center pt-15">
+                        <button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">Discard</button>
+                        <button type="button" class="btn btn-primary me-10" id="kt_button_submit_member_details">
+                            <span class="indicator-label">
+                                Submit
+                            </span>
+                            <span class="indicator-progress">
+                                Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
+                    <!--end::Actions-->
+                <div></div></form>
+                <!--end::Form-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - New Member-->

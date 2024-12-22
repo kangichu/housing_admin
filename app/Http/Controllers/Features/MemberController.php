@@ -9,14 +9,21 @@ use App\Models\Member;
 use App\Models\Rating;
 use App\Models\Billing;
 use App\Models\Listing;
+use App\Models\Business;
 use App\Models\MainUser;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\MembersExport;
 use App\Models\BillingHistory;
+use App\Jobs\SendWelcomeMailJob;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\indentificationNumber;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Validator;
 
 class MemberController extends Controller
 {
@@ -205,15 +212,146 @@ class MemberController extends Controller
     
         return $isHighest ? 'highest' : 'not yet';
     }
+    
     /**
-     * Store a newly created resource in storage.
+     * Handle a registration request for the application.
      *
-     * @param  \Illuminate\Http\Request  $requestj
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function register(Request $request)
     {
-        //
+        // Define common validation rules
+        $commonRules = [
+            'values.first' => 'required|string|max:255',
+            'values.last' => 'required|string|max:255',
+            'values.mobile' => 'required|string|max:15',
+            'values.email' => 'required|string|email|max:255|unique:users,email',
+        ];
+    
+        // Define additional rules for business accounts
+        $businessRules = [
+            'values.business_name' => 'required|string|max:255',
+            'values.registration_number' => 'required|string|max:255',
+            'values.date_of_incorporation' => 'required|date_format:m/d/Y',
+            'values.business_description' => 'required|string|max:1000',
+            'values.business_site' => 'required|string|max:255',
+            'values.business_email' => 'required|string|email|max:255',
+        ];
+    
+        // Define additional rules for individual accounts
+        $individualRules = [
+            'values.national_id' => 'required|string|max:20',
+        ];
+    
+        // Determine the account type and merge the appropriate rules
+        $accountType = $request->input('account_type');
+        if ($accountType === 'Business') {
+            $rules = array_merge($commonRules, $businessRules);
+        } elseif ($accountType === 'individual') {
+            $rules = array_merge($commonRules, $individualRules);
+        } else {
+            $rules = $commonRules;
+        }
+    
+        // Validate the request data
+        $validator = Validator::make($request->all(), $rules);
+    
+        // Handle validation failures
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+                'status' => 422
+            ], 422);
+        }
+
+        // Create the user
+        $user = $this->create($request->all());
+    
+        // Return a JSON response
+        return response()->json([
+            'message' => 'User registered successfully',
+            'status' => 200
+        ]);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return \App\User
+     */
+    protected function create(array $data)
+    {
+        return DB::transaction(function () use ($data) {
+            try {
+
+                $full_name = $data['values']['first'] . ' ' . $data['values']['last'];
+                $password = $this->generateSecurePassword(8);
+
+                $user = MainUser::create([
+                    'first_name' => $data['values']['first'],
+                    'last_name' => $data['values']['last'],
+                    'full_name_slug' => Str::slug($full_name),
+                    'mobile' => $data['values']['mobile'],
+                    'email' => $data['values']['email'],
+                    'account_type' => 'Business',
+                    'password' => Hash::make($password),
+                ]);
+
+                $user->assignRole('business');
+
+                $this->createBusiness($data, $user->id);
+
+                Log::info('Dispatching User Email Verification Email.');
+
+                dispatch(new SendWelcomeMailJob($user, $password)); // Dispatch the job
+
+                Log::info('User account created successfully.');
+                
+                return $user;
+                
+            } catch (\Throwable $th) {
+                //throw $th;
+                Log::info($th);
+            }
+        }); // The second parameter is optional and defines the number of attempts to perform the transaction
+        
+    }
+
+    protected function generateSecurePassword($length) 
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+    
+    protected function createBusiness($data, $userId)
+    {
+        Business::create([
+            'account_type' => $data['account_type'],
+            'business_name' => $data['values']['business_name'],
+            'registration_number' => $data['values']['registration_number'],
+            'date_of_incorporation' => Carbon::createFromFormat('m/d/Y', $data['values']['date_of_incorporation'])->format('Y-m-d'),
+            'business_description' => $data['values']['business_description'],
+            'business_site' => $data['values']['business_site'],
+            'business_email' => $data['values']['business_email'],
+            'ise_demo_account' =>  $data['values']['demo_account'] ?? null,
+            'user_id' => $userId,
+        ]);
+
+        if ($data['account_type'] == "individual") {
+            indentificationNumber::create([
+                'identification_number' => $data['values']['national_id'],
+                'user_id' => $userId,
+                'status' => 'Pending',
+            ]);
+        }
     }
 
     public function export(Request $request)
@@ -241,48 +379,22 @@ class MemberController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Member  $member
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Member $member)
-    {
-        //
+    public function checkEmail(Request $request){
+
+        $email = $request->input('email');
+        
+        $isExists = MainUser::where('email',$email)->exists();
+
+        return response()->json(['exists' => $isExists]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Member  $member
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Member $member)
-    {
-        //
+    public function businesscheckemail(Request $request){
+
+        $email = $request->input('email');
+        
+        $isExists = Business::where('business_email',$email)->exists();
+        
+        return response()->json(['exists' => $isExists]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Member  $member
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Member $member)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Member  $member
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Member $member)
-    {
-        //
-    }
 }

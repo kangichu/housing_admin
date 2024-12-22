@@ -1479,3 +1479,165 @@
 </script>
 
 @endif
+
+@if(request()->is('members'))
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('auto-click-button').click();
+    });
+</script>
+
+<script type="text/javascript">
+    // Element to indicate
+    var button = document.querySelector("#kt_button_submit_member_details");
+
+    $("#kt_date_of_incorporation").daterangepicker({
+        singleDatePicker: true,
+        showDropdowns: true,
+        maxYear: parseInt(moment().format("YYYY"),10)
+    });
+
+    $('#kt_docs_maxlength_business_description').maxlength({
+        warningClass: "badge badge-warning",
+        limitReachedClass: "badge badge-success"
+    });
+    
+
+    // Handle button click event
+    button.addEventListener("click", function() {
+        // Activate indicator
+        button.setAttribute("data-kt-indicator", "on");
+
+        let values = $('#kt_modal_add_user_form').serializeArray().reduce((map, input) => {
+            let value;
+            if (map.hasOwnProperty(input.name)) {
+                value = Array.isArray(map[input.name]) ? map[input.name] : [map[input.name]];
+                value.push(input.value);
+            } else {
+                value = input.value;
+            }
+            map[input.name] = value;
+            return map;
+        }, {});
+
+        // Validate form inputs
+        let isValid = true;
+        $('#kt_modal_add_user_form input[required]').each(function() {
+            if (!$(this).val()) {
+                isValid = false;
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        });
+
+        var token = $('meta[name="csrf-token"]').attr('content');
+
+        if (isValid) {
+            // Send data over AJAX
+            $.ajax({
+                url: '/member/registration', // Replace with your endpoint URL
+                method: 'POST',
+                data:  {'_token': token, values},
+                success: function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Form submitted successfully!'
+                    });
+                },
+                error: function(error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error submitting form. Please try again.'
+                    });
+                },
+                complete: function() {
+                    // Disable indicator after AJAX call completes
+                    button.removeAttribute("data-kt-indicator");
+                }
+            });
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Validation Error',
+                text: 'Please fill all required fields.'
+            });
+            // Disable indicator if validation fails
+            button.removeAttribute("data-kt-indicator");
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    function duplicateEmail(element){
+        var email = $(element).val();
+        
+        var token = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            type: "POST",
+            url: '{{url('checkemail')}}',
+            data: {'_token' : token, email:email},
+            dataType: "json",
+            success: function(res) {
+                if(res.exists)
+                {
+                    Swal.fire({
+                        text: "Sorry, looks like that email is taken, please try another.",
+                        icon: "error",
+                        buttonsStyling: !1,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-light"
+                        }
+                    }).then((function() {
+                        $(element).val('');
+                        @if(request()->is('register*')) document.getElementById('kt_sign_up_submit').disabled = true; @endif
+                        @if(request()->is('business*')) $('button[data-kt-stepper-action="next"]').prop('disabled', true); @endif
+                    }));
+                } else {
+                    @if(request()->is('register*')) document.getElementById('kt_sign_up_submit').disabled = false; @endif
+                    @if(request()->is('business*'))  $('button[data-kt-stepper-action="next"]').prop('disabled', false); @endif
+                }
+            },
+            error: function (jqXHR, exception) {
+
+            }
+        });
+    }
+
+    function businessduplicateEmail(element){
+        var email = $(element).val();
+        var token = $('meta[name="csrf-token"]').attr('content');
+
+        $.ajax({
+            type: "POST",
+            url: '{{url('businesscheckemail')}}',
+            data: {'_token' : token, email:email},
+            dataType: "json",
+            success: function(res) {
+                if(res.exists){
+                    Swal.fire({
+                        text: "Sorry, looks like that email is taken, please try another.",
+                        icon: "error",
+                        buttonsStyling: !1,
+                        confirmButtonText: "Ok, got it!",
+                        customClass: {
+                            confirmButton: "btn btn-light"
+                        }
+                    }).then((function() {
+                        KTUtil.scrollTop()
+                    }));
+                }
+            },
+            error: function (jqXHR, exception) {
+
+            }
+        });
+    }
+</script>
+
+@endif

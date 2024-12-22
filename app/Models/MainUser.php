@@ -10,4 +10,9 @@ class MainUser extends Model
     use HasFactory;
 
     public $table = 'users';
+
+    public function business()
+    {
+        return $this->hasOne(Business::class, 'user_id');
+    }
 }

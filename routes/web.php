@@ -87,6 +87,12 @@ Route::get('home', [Home::class, 'index'])->name('home');
 
         Route::get('/member_badges/{id}', [MemberController::class, 'badges']);
 
+        Route::post('/member/registration', [MemberController::class, 'register']);
+
+        Route::post('checkemail', [MemberController::class, 'checkEmail']);
+
+        Route::post('businesscheckemail', [MemberController::class, 'businesscheckemail']);
+
 /*
 |--------------------------------------------------------------------------
 | Members
