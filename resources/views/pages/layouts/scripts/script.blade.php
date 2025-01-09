@@ -1679,7 +1679,10 @@
                 businessDetails.style.display = 'none';
 
                 individualInputs.forEach(input => input.setAttribute('required', 'required'));
-                businessInputs.forEach(input => input.removeAttribute('required'));
+                businessInputs.forEach(input => {
+                    input.removeAttribute('required');
+                    input.value = ''; // Clear the input value
+                });
 
             } else if (document.getElementById('kt_modal_update_role_option_1').checked) 
             {
@@ -1687,7 +1690,10 @@
                 businessDetails.style.display = 'block';
 
                 businessInputs.forEach(input => input.setAttribute('required', 'required'));
-                individualInputs.forEach(input => input.removeAttribute('required'));
+                individualInputs.forEach(input => {
+                    input.removeAttribute('required');
+                    input.value = ''; // Clear the input value
+                });
             }
         }
 
